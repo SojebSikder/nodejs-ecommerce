@@ -21,7 +21,7 @@ export class IndexController {
   async show(req: Request, res: Response) {
     const id = req.params.id;
     const result = await IndexService.getInstance().show(id);
-    res.locals.title = `${result.title} - ${env("APP_NAME")}`;
+    res.locals.title = `${result.name} - ${env("APP_NAME")}`;
     res.render("post/postSingle", { post: result });
   }
 

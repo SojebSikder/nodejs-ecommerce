@@ -10,21 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// just for testing
 model Data {
   id    Int     @id @default(autoincrement())
   title String?
   text  String?
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
 }
 
 model Profile {
@@ -35,10 +25,97 @@ model Profile {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  name     String?
-  password String   @db.VarChar(255)
-  posts    Post[]
-  profile  Profile?
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  username  String?
+  full_name String?
+  password  String     @db.VarChar(255)
+  profile   Profile?
+  orders    Order[]
+  Address   Address[]
+  Product   Product[]
+  ApiToken  ApiToken[]
+}
+
+model ApiToken {
+  id     Int    @id @default(autoincrement())
+  token  String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
+}
+
+model Address {
+  id      Int     @id @default(autoincrement())
+  street  String?
+  city    String?
+  country String?
+  user    User    @relation(fields: [userId], references: [id])
+  userId  Int     @unique
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @db.VarChar(255)
+  price       Int
+  stock       Int?
+  brand       String?  @db.VarChar(255)
+  description String?
+  published   Boolean  @default(false)
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
+
+  category     Category?      @relation(fields: [categoryId], references: [id])
+  categoryId   Int?
+  keywords     String?
+  OrderItem    OrderItem?
+  ProductImage ProductImage[]
+  cart         cart[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String    @db.VarChar(255)
+  slug      String    @db.VarChar(255)
+  products  Product[]
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  url       String?
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    String      @db.VarChar(255)
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int
+  OrderItem OrderItem[]
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quantity  Int
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int      @unique
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int
+}
+
+model cart {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quantity  Int
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int      @unique
 }

@@ -1,10 +1,17 @@
-<%- include('../partials/header'); -%> <%- include('../partials/navbar'); -%>
+<%- include('../partials/header'); -%>
+  <%- include('../partials/navbar'); -%>
 
-<div class="container">
-  <article>
-    <h1><%= post.title %></h1>
-    <p><%= post.content %></p>
-  </article>
-</div>
+    <div class="container">
+      <article>
+        <h1>
+          <%= post.name %>
+        </h1>
+        <p>
+          <%= post.description %>
+        </p>
 
-<%- include('../partials/footer'); -%>
+        <a class="btn btn-primary" href="/cart/add/<%= post.id %>">Add to Cart.</a>
+      </article>
+    </div>
+
+    <%- include('../partials/footer'); -%>

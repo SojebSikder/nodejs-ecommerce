@@ -1,13 +1,13 @@
 <%- include('partials/header'); -%> <%- include('partials/navbar'); -%>
 
 <div class="container">
-  <h1>Welcome to Nodejs Blog</h1>
+  <h1>Buy here with joy</h1>
   <% for(var i=0; i < posts.length; i++) { %>
 
   <article>
-    <h1><%= posts[i].title %></h1>
-    <p><%= posts[i].content %></p>
-    <a class="btn btn-primary" href="/post/<%= posts[i].id %>">Read more.</a>
+    <h1><%= posts[i].name %></h1>
+    <p><%= posts[i].description %></p>
+    <a class="btn btn-primary" href="/product/<%= posts[i].id %>">View Product.</a>
   </article>
   <hr />
   <br />

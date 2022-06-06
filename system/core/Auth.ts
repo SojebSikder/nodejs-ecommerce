@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
+import { appConfig } from "../../config/app";
 import { authConfig } from "../../config/auth";
-import { env } from "../util/env";
 
 export class Auth {
   constructor() {}
@@ -12,17 +12,30 @@ export class Auth {
    * @param next
    * @returns
    */
-  static authToken(req, res, next) {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-    if (token == null) return res.sendStatus(401);
+  static authToken(callback?, options?) {
+    const [apiToken] = options || [];
+    return (req, res, next) => {
+      let token;
+      if (apiToken) {
+        token = apiToken;
+      } else {
+        const authHeader = req.headers["authorization"];
+        token = authHeader && authHeader.split(" ")[1];
+        if (token == null) return res.sendStatus(401);
+      }
 
-    jwt.verify(token, authConfig.guards.jwt.secret, (err, user) => {
-      console.log(err);
-      if (err) return res.sendStatus(403);
-      req.user = user;
-      next();
-    });
+      jwt.verify(token, authConfig.guards.jwt.secret, (err, data) => {
+        if (callback && typeof callback === "function") {
+          callback(err, data, req, res);
+        } else {
+          console.log(err);
+          if (err) return res.sendStatus(403);
+          req.user = data;
+        }
+
+        next();
+      });
+    };
   }
 
   /**
@@ -52,16 +65,35 @@ export class Auth {
   }
 
   /**
-   * Get decoded data from jwt token
+   * Get decoded data from cookie using jwt token
    * @returns
    */
-  static get(signedCookies) {
+  static userByCookie(signedCookies) {
     let cookies = Object.keys(signedCookies).length > 0 ? signedCookies : null;
 
     if (cookies) {
       try {
-        const token = cookies[env("COOKIE_NAME")];
-        const decoded = jwt.verify(token, env("JWT_SECRET"));
+        const token = cookies[appConfig.cookieName];
+        const decoded = jwt.verify(token, authConfig.guards.jwt.secret);
+
+        return decoded;
+      } catch (err) {
+        return err;
+      }
+    } else {
+      return null;
+    }
+  }
+  /**
+   * Get decoded data using jwt token
+   * @returns
+   */
+  static user(apiToken?) {
+    let token = apiToken || null;
+
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, authConfig.guards.jwt.secret);
 
         return decoded;
       } catch (err) {

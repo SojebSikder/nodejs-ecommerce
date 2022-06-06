@@ -71,14 +71,12 @@ export class UserController {
       const email = req.body.email;
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-      const user = {
-        name: name,
-        email: email,
-        password: hashedPassword,
-      };
-
       const result = await prisma.user.create({
-        data: user,
+        data: {
+          username: name,
+          email: email,
+          password: hashedPassword,
+        },
       });
 
       res.render("auth/login", {

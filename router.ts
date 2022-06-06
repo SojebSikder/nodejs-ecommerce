@@ -2,7 +2,7 @@
 import { Express, Request, Response } from "express";
 
 // internal imports
-import postRouter from "./routes/postRouter";
+import productRouter from "./routes/productRouter";
 import userRouter from "./routes/userRouter";
 // admin routes
 import adminIndexRouter from "./routes/admin/indexRouter";
@@ -14,7 +14,7 @@ import { decorateHtmlResponse } from "./middlewares/common/decorateHtmlResponse"
  * @param {*} app
  */
 export function routes(app: Express) {
-  app.use(postRouter);
+  app.use(productRouter);
   app.use(decorateHtmlResponse(), userRouter);
   app.use("/admin", adminIndexRouter);
 

@@ -38,7 +38,7 @@ export class UserService {
           // prepare the user object to generate token
           const userObject = {
             userid: user.id,
-            username: user.name,
+            username: user.username,
             email: user.email,
           };
 

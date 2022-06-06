@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { Product } from "../../models/Product";
 import { Auth } from "../../system/core";
 
 const prisma = new PrismaClient();
 
-export class PostService {
-  private static _instance: PostService;
+export class ProductService {
+  private static _instance: ProductService;
   /**
    * Create instance
    */
@@ -19,7 +20,7 @@ export class PostService {
    * show all data
    */
   public async index() {
-    const result = await prisma.post.findMany();
+    const result = await prisma.product.findMany();
     return result;
   }
 
@@ -30,7 +31,7 @@ export class PostService {
    */
   async show(arg_id: string) {
     const id = arg_id;
-    const result = await prisma.post.findFirst({
+    const result = await prisma.product.findFirst({
       where: {
         id: Number(id),
       },
@@ -44,19 +45,24 @@ export class PostService {
    * @param res
    */
   async store(req: Request, res: Response) {
-    const title = req.body.title;
-    const content = req.body.content;
+    const name = req.body.name;
+    const price = req.body.price;
 
-    const user = Auth.get(req.signedCookies);
+    const user = Auth.userByCookie(req.signedCookies);
+    if (!user) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
 
-    const post = {
-      title: title,
-      content: content,
-      authorId: user.userid,
-    };
-
-    const result = await prisma.post.create({
-      data: post,
+    const result = await prisma.product.create({
+      data: {
+        authorId: user.userid,
+        name: name,
+        price: price,
+        stock: 100,
+        published: true,
+      },
     });
   }
 }

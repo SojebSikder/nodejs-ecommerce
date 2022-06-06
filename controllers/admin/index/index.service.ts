@@ -19,7 +19,7 @@ export class IndexService {
    * show all data
    */
   public async index() {
-    const result = await prisma.post.findMany();
+    const result = await prisma.product.findMany();
     return result;
   }
 
@@ -30,7 +30,7 @@ export class IndexService {
    */
   async show(arg_id: string) {
     const id = arg_id;
-    const result = await prisma.post.findFirst({
+    const result = await prisma.product.findFirst({
       where: {
         id: Number(id),
       },
@@ -47,16 +47,16 @@ export class IndexService {
     const title = req.body.title;
     const content = req.body.content;
 
-    const user = Auth.get(req.signedCookies);
+    const user = Auth.userByCookie(req.signedCookies);
 
-    const post = {
-      title: title,
-      content: content,
-      authorId: user.userid,
-    };
+    // const post = {
+    //   title: title,
+    //   content: content,
+    //   authorId: user.userid,
+    // };
 
-    const result = await prisma.post.create({
-      data: post,
-    });
+    // const result = await prisma.product.create({
+    //   data: post,
+    // });
   }
 }
