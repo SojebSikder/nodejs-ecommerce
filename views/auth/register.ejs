@@ -1,0 +1,52 @@
+<%- include('../partials/header'); -%> <%- include('../partials/navbar'); -%>
+<div class="container">
+  <h1>Register here</h1>
+
+  <% if(message){ %>
+  <h3><%= message %></h3>
+  <% } %>
+
+  <form action="/register" method="post">
+    <div class="mb-3">
+      <label for="name" class="form-label">Username</label>
+      <input
+        id="name"
+        type="name"
+        name="name"
+        class="form-control"
+        placeholder="name"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        class="form-control"
+        placeholder="name@example.com"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        class="form-control"
+        placeholder="********"
+      />
+    </div>
+    <div class="mb-3">
+      <input
+        type="submit"
+        value="Register"
+        class="btn btn-primary"
+        name="submit"
+      />
+      <a href="/login">Login</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer'); -%>

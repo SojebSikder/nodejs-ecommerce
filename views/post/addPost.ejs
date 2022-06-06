@@ -1,0 +1,29 @@
+<%- include('../partials/header'); -%> <%- include('../partials/navbar'); -%>
+<div class="container">
+  <h1>Post blog</h1>
+  <h2><%= message %></h2>
+  <form action="/post/add" method="post">
+    <div class="mb-3">
+      <input
+        class="form-control"
+        placeholder="Write title"
+        type="text"
+        name="title"
+      />
+    </div>
+
+    <div class="mb-3">
+      <textarea
+        class="form-control"
+        placeholder="Write something..."
+        name="content"
+        id=""
+        cols="30"
+        rows="10"
+      ></textarea>
+      <input class="btn btn-primary" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer'); -%>
