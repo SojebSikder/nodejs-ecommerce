@@ -1,17 +1,33 @@
 <%- include('../partials/header'); -%>
   <%- include('../partials/navbar'); -%>
 
-    <div class="container">
-      <article>
-        <h1>
-          <%= post.name %>
-        </h1>
-        <p>
-          <%= post.description %>
-        </p>
+    <div class="container" style="margin-top: 80px">
+      <div class="row justify-content-md-center">
 
-        <a class="btn btn-primary" href="/cart/add/<%= post.id %>">Add to Cart.</a>
-      </article>
+        <!-- product card start -->
+        <div class="card w-50" style="width: 18rem">
+          <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[0].url %>" alt="Card image cap" />
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= post.name %>
+            </h5>
+            <p class="card-text">
+              <%= post.description %>
+            </p>
+
+
+            <div style="margin-left: 10px;">
+              <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart">
+                <input type="hidden" class="btn btn-primary" name="product_id" value=" <%= post.id %>"></a>
+                <input type="submit" class="btn btn-primary" value="Add to cart"></a>
+                <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- product card end -->
+
+      </div>
     </div>
 
     <%- include('../partials/footer'); -%>

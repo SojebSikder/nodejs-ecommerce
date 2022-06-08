@@ -39,6 +39,9 @@ export class ProductService {
       where: {
         id: Number(id),
       },
+      include: {
+        ProductImage: true,
+      },
     });
     return result;
   }
