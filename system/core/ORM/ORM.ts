@@ -1,9 +1,5 @@
 import { DB } from "../../database/facade/DB";
-import {
-  arrayToString,
-  arrayToStringWithQ,
-  inArray,
-} from "../../helper/ArrayHelper";
+import { ArrayHelper } from "../../helper/ArrayHelper";
 
 export class ORM {
   /**
@@ -51,7 +47,7 @@ export class ORM {
    * Fetch query data
    */
   public async get(columns = ["*"]) {
-    const column = arrayToString(columns);
+    const column = ArrayHelper.arrayToString(columns);
     const data = await DB.select(
       `select ${column} from ${this.table} ${this.whereC}`
     );
@@ -64,7 +60,7 @@ export class ORM {
   public async all(columns = ["*"]) {
     let column;
     if (Array.isArray(columns)) {
-      column = arrayToString(columns);
+      column = ArrayHelper.arrayToString(columns);
     } else {
       column = columns;
     }
@@ -78,8 +74,8 @@ export class ORM {
   public async create(objectData = {}) {
     let keys, values;
 
-    keys = arrayToString(Object.keys(objectData));
-    values = arrayToStringWithQ(Object.values(objectData));
+    keys = ArrayHelper.arrayToString(Object.keys(objectData));
+    values = ArrayHelper.arrayToStringWithQ(Object.values(objectData));
 
     const data = await DB.insert(
       `insert ${this.table} (${keys}) values (${values})`
@@ -117,7 +113,7 @@ export class ORM {
     const properties = Reflect.ownKeys(this);
 
     for (const property of properties) {
-      if (!inArray(property, ["table", "whereC"])) {
+      if (!ArrayHelper.inArray(property, ["table", "whereC"])) {
         propsToImplode[property] = this[property];
       }
     }
@@ -128,8 +124,10 @@ export class ORM {
     if (this.whereC == null) {
       let sqlQuery = "";
 
-      const keys = arrayToString(Object.keys(propsToImplode));
-      const values = arrayToStringWithQ(Object.values(propsToImplode));
+      const keys = ArrayHelper.arrayToString(Object.keys(propsToImplode));
+      const values = ArrayHelper.arrayToStringWithQ(
+        Object.values(propsToImplode)
+      );
 
       sqlQuery = `INSERT INTO  ${tableName} (${keys}) VALUES  (${values})`;
 
