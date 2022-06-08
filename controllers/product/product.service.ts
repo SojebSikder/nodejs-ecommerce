@@ -20,7 +20,11 @@ export class ProductService {
    * show all data
    */
   public async index() {
-    const result = await prisma.product.findMany();
+    const result = await prisma.product.findMany({
+      include: {
+        ProductImage: true,
+      },
+    });
     return result;
   }
 

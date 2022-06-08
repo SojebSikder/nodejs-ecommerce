@@ -11,6 +11,7 @@ export class ProductController {
   async index(req: Request, res: Response) {
     const result = await ProductService.getInstance().index();
 
+    console.log(result);
     res.render("index", { posts: result });
   }
 

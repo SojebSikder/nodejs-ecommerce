@@ -1,17 +1,44 @@
-<%- include('partials/header'); -%> <%- include('partials/navbar'); -%>
+<%- include('partials/header'); -%>
+  <%- include('partials/navbar'); -%>
 
-<div class="container">
-  <h1>Buy here with joy</h1>
-  <% for(var i=0; i < posts.length; i++) { %>
+    <div class="container">
+      <h1>Buy here with joy</h1>
+      <div class="row justify-content-md-center">
+        <% for(var i=0; i < posts.length; i++) { %>
 
-  <article>
-    <h1><%= posts[i].name %></h1>
-    <p><%= posts[i].description %></p>
-    <a class="btn btn-primary" href="/product/<%= posts[i].id %>">View Product.</a>
-  </article>
-  <hr />
-  <br />
-  <% } %>
-</div>
 
-<%- include('partials/footer'); -%>
+          <!-- product card start -->
+          <div class="card" style="width: 18rem; margin: 10px;">
+
+            <a href="/product/<%= posts[i].id %>">
+
+              <!-- display images -->
+              <% for(let image in posts[i].ProductImage){ %>
+                <img class="card-img-top" src="/uploads/products/<%= posts[i].ProductImage[image].url %>"
+                  alt=" <%= posts[i].name %>" />
+                <% } %>
+            </a>
+
+            <div class="card-body">
+              <h5 class="card-title"> <a href="/product/<%= posts[i].id %>">
+                  <%= posts[i].name %>
+                </a> </h5>
+              <p class="card-text">
+                <%= posts[i].description %>
+              </p>
+
+              <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="{{ url('cart') }}">
+
+                <input type="hidden" class="btn btn-primary" name="product_id" value="{{ $row->id }}"></a>
+                <input type="submit" class="btn btn-primary" value="Add to cart"></a>
+                <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
+              </form>
+            </div>
+          </div>
+          <!-- product card end -->
+          <br />
+          <% } %>
+      </div>
+    </div>
+
+    <%- include('partials/footer'); -%>
