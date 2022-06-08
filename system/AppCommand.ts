@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import fs_sync from "fs";
 import { Command } from "./core";
+import { StringHelper } from "./helper/StringHelper";
 
 const controller_path = "controllers";
 /**
@@ -172,7 +173,7 @@ export class AppCommand {
    * create controller command
    */
   public static createController(controllerName) {
-    controllerName = `${controllerName}Controller`;
+    controllerName = StringHelper.cfirst(`${controllerName}Controller`);
     const data = `import { Request, Response } from "express";
 
 export class ${controllerName}{
@@ -194,7 +195,7 @@ export class ${controllerName}{
    * create service command
    */
   public static createService(serviceName) {
-    serviceName = `${serviceName}Service`;
+    serviceName = StringHelper.cfirst(`${serviceName}Service`);
     const data = `import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { Auth } from "../../system/core";
