@@ -1,7 +1,7 @@
 import express from "express";
-import { IndexController } from "../../controllers/admin/index/index.controller";
+import { IndexController } from "../../app/controllers/admin/index/index.controller";
 
-import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
+import { decorateHtmlResponse } from "../../app/middlewares/common/decorateHtmlResponse";
 
 const router = express.Router();
 const indexController = new IndexController();

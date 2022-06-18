@@ -4,8 +4,8 @@ import { Auth } from "../../../system/core";
 
 const prisma = new PrismaClient();
 
-export class IndexService {
-  private static _instance: IndexService;
+export class CartService {
+  private static _instance: CartService;
   /**
    * Create instance
    */
@@ -19,7 +19,7 @@ export class IndexService {
    * show all data
    */
   public async index() {
-    const result = await prisma.product.findMany();
+    const result = await prisma.cart.findMany();
     return result;
   }
 
@@ -30,7 +30,7 @@ export class IndexService {
    */
   async show(arg_id: string) {
     const id = arg_id;
-    const result = await prisma.product.findFirst({
+    const result = await prisma.cart.findFirst({
       where: {
         id: Number(id),
       },
@@ -44,19 +44,17 @@ export class IndexService {
    * @param res
    */
   async store(req: Request, res: Response) {
-    const title = req.body.title;
-    const content = req.body.content;
+    const productId = req.body.productId;
+    const quantity = req.body.quantity;
 
     const user = Auth.userByCookie(req.signedCookies);
 
-    // const post = {
-    //   title: title,
-    //   content: content,
-    //   authorId: user.userid,
-    // };
-
-    // const result = await prisma.product.create({
-    //   data: post,
-    // });
+    const result = await prisma.cart.create({
+      data: {
+        productId: productId,
+        userId: user.userid,
+        quantity: quantity,
+      },
+    });
   }
 }

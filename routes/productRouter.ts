@@ -1,7 +1,7 @@
 import express from "express";
-import { ProductController } from "../controllers/product/product.controller";
+import { ProductController } from "../app/controllers/product/product.controller";
 
-import { decorateHtmlResponse } from "../middlewares/common/decorateHtmlResponse";
+import { decorateHtmlResponse } from "../app/middlewares/common/decorateHtmlResponse";
 
 const router = express.Router();
 const controller = new ProductController();

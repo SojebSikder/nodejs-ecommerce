@@ -6,13 +6,13 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
 
-// internal importss
+// internal imports
 import { appConfig } from "./config/app";
 import { routes } from "./router";
 import { env } from "./system/util";
 
 // middleware
-import { logger } from "./middlewares/logger";
+import { logger } from "./app/middlewares/logger";
 
 // initialize
 dotenv.config();
@@ -30,6 +30,7 @@ app.set("views", "./views");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(env("COOKIE_SECRET")));
+
 
 // custom middleware
 app.use(logger);

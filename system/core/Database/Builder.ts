@@ -49,7 +49,7 @@ export class Builder {
         attr += attributes[i];
       }
       attr = attr.trim();
-      const sql = "CREATE TABLE IF NOT EXISTS $table ($attr) ;"; //ENGINE = InnoDB
+      const sql = `CREATE TABLE IF NOT EXISTS ${table} (${attr});`; //ENGINE = InnoDB
       this.db.insert(sql);
 
       this.table = table;
@@ -63,7 +63,7 @@ export class Builder {
       }
 
       attr = attr.trim();
-      const sql = `CREATE TABLE $table (${attr}) ;`; //ENGINE = InnoDB
+      const sql = `CREATE TABLE ${table} (${attr});`; //ENGINE = InnoDB
       this.db.insert(sql);
 
       this.table = table;

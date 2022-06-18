@@ -7,7 +7,7 @@ import userRouter from "./routes/userRouter";
 // admin routes
 import adminIndexRouter from "./routes/admin/indexRouter";
 // middleware
-import { decorateHtmlResponse } from "./middlewares/common/decorateHtmlResponse";
+import { decorateHtmlResponse } from "./app/middlewares/common/decorateHtmlResponse";
 
 /**
  * Init all routes

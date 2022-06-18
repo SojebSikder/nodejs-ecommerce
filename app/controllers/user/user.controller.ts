@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { env } from "../../system/util";
+import { env } from "../../../system/util";
 import { UserService } from "./user.service";
 
 const prisma = new PrismaClient();

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { env } from "../../system/util";
-import { ProductService } from "./product.service";
+import { env } from "../../../../system/util";
+import { IndexService } from "./index.service";
 
-export class ProductController {
+export class IndexController {
   /**
    * show all data
    * @param req
    * @param res
    */
   async index(req: Request, res: Response) {
-    const result = await ProductService.getInstance().index();
-    res.render("index", { posts: result });
+    const result = await IndexService.getInstance().index();
+    res.render("admin/index");
   }
 
   /**
@@ -20,7 +20,7 @@ export class ProductController {
    */
   async show(req: Request, res: Response) {
     const id = req.params.id;
-    const result = await ProductService.getInstance().show(id);
+    const result = await IndexService.getInstance().show(id);
     res.locals.title = `${result.name} - ${env("APP_NAME")}`;
     res.render("post/postSingle", { post: result });
   }
@@ -30,13 +30,13 @@ export class ProductController {
    * @param req
    * @param res
    */
-  async store(req: Request, res: Response) {
-    await ProductService.getInstance().store(req, res);
+  store = async (req: Request, res: Response) => {
+    await IndexService.getInstance().store(req, res);
 
     res.render("post/addPost", {
       message: "Post has been added successfully",
     });
-  }
+  };
 
   /**
    * show add post page

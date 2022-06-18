@@ -3,7 +3,8 @@ import fs_sync from "fs";
 import { Command } from "./core";
 import { StringHelper } from "./helper/StringHelper";
 
-const controller_path = "controllers";
+const controller_path = "app/controllers";
+const model_path = "app/models";
 /**
  * App console command
  *
@@ -37,8 +38,16 @@ export class AppCommand {
         });
       });
     })
-      .describe("Test command")
-      .usage("test");
+      .describe("Example command")
+      .usage("ask");
+
+    /**
+     * Display application version
+     */
+    Command.set("-v", function () {
+      const pkg = require("../package.json");
+      Command.success(`Version: ${pkg.version}`);
+    });
 
     /**
      * Create Controller and service together
@@ -72,6 +81,28 @@ export class AppCommand {
     })
       .describe("Create Controller and service together")
       .usage("make:module [module_Name]");
+
+    /**
+     * Create eloqount Model
+     */
+    Command.set("make:model", async function () {
+      try {
+        const name = Command.args(3);
+        await fs.writeFile(
+          `${model_path}/${name}.ts`,
+
+          AppCommand.createModel(AppCommand.parseFileNameFromPath(name))
+        );
+        Command.success(
+          `${AppCommand.parseFileNameFromPath(name)} model created succesfully`
+        );
+      } catch (err) {
+        Command.danger(err);
+      }
+    })
+      .describe("Create eloqount model")
+      .usage("make:model [model_Name]");
+
     /**
      * Create Controller
      */
@@ -94,6 +125,7 @@ export class AppCommand {
     })
       .describe("Create controller")
       .usage("make:controller [controller_Name]");
+
     /**
      * Create Service
      */
@@ -170,6 +202,24 @@ export class AppCommand {
   }
 
   /**
+   * create eloqount model command
+   */
+  public static createModel(modelName) {
+    modelName = StringHelper.cfirst(`${modelName}`);
+    const data = `import { ORM } from "../../system/core/ORM";
+
+export class ${modelName} extends ORM{
+  // define custom table name like this:
+  // constructor() {
+  //   super("table_name");
+  // }
+}
+ 
+ `;
+    return data;
+  }
+
+  /**
    * create controller command
    */
   public static createController(controllerName) {
@@ -180,7 +230,7 @@ export class ${controllerName}{
   /**
    * show all data
    * @param req
-   * @param res
+   * @param res../../system/core
    */
   async index(req: Request, res: Response) {
     res.send("Hello world");
@@ -198,7 +248,7 @@ export class ${controllerName}{
     serviceName = StringHelper.cfirst(`${serviceName}Service`);
     const data = `import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { Auth } from "../../system/core";
+import { Auth } from "../../../system/core";
 
 const prisma = new PrismaClient();
 
