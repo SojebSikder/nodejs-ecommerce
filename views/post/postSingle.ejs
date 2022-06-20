@@ -6,24 +6,26 @@
 
         <!-- product card start -->
         <div class="card w-50" style="width: 18rem">
-          <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[0].url %>" alt="Card image cap" />
-          <div class="card-body">
-            <h5 class="card-title">
-              <%= post.name %>
-            </h5>
-            <p class="card-text">
-              <%= post.description %>
-            </p>
+          <% if(post.ProductImage.length> 0){ %>
+            <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[0].url %>" alt="Card image cap" />
+            <% } %>
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= post.name %>
+                </h5>
+                <p class="card-text">
+                  <%= post.description %>
+                </p>
 
 
-            <div style="margin-left: 10px;">
-              <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart">
-                <input type="hidden" class="btn btn-primary" name="product_id" value=" <%= post.id %>"></a>
-                <input type="submit" class="btn btn-primary" value="Add to cart"></a>
-                <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
-              </form>
-            </div>
-          </div>
+                <div style="margin-left: 10px;">
+                  <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart">
+                    <input type="hidden" class="btn btn-primary" name="product_id" value=" <%= post.id %>"></a>
+                    <input type="submit" class="btn btn-primary" value="Add to cart"></a>
+                    <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
+                  </form>
+                </div>
+              </div>
         </div>
         <!-- product card end -->
 

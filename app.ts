@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(appConfig.cookieSecret));
 
 // custom middleware
-app.use(logger);
+
 
 //routes
 routes(app);

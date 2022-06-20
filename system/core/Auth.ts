@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { appConfig } from "../../config/app";
 import { authConfig } from "../../config/auth";
+import { env } from "../util";
 
 /**
  * Auth class
@@ -8,14 +9,23 @@ import { authConfig } from "../../config/auth";
  * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class Auth {
-  constructor() {}
-
   /**
    * authToken middleware. using this authenticate using jwt token
    * @param req
    * @param res
    * @param next
    * @returns
+   *
+   * @example
+   * // Example of authToken middleware
+   * import { Auth } from "../system";
+   * router.get("/profile", Auth.authToken(), controller.index);
+   * // Example with callback function
+   * import { Auth } from "../system";
+   * router.get("/profile", Auth.authToken((err, data, req, res)=>{
+   *  if(err) return res.sendStatus(403);
+   *  req.user = data;
+   * }), controller.index);
    */
   static authToken(callback?, options?) {
     const [apiToken] = options || [];
@@ -24,16 +34,35 @@ export class Auth {
       if (apiToken) {
         token = apiToken;
       } else {
+        // access token from request header
         const authHeader = req.headers["authorization"];
-        token = authHeader && authHeader.split(" ")[1];
-        if (token == null) return res.sendStatus(401);
+        if (authHeader) {
+          token = authHeader && authHeader.split(" ")[1];
+        } else {
+          // access token from cookies
+          const cookies =
+            Object.keys(req.signedCookies).length > 0
+              ? req.signedCookies
+              : null;
+          if (cookies) {
+            token = cookies[appConfig.cookieName];
+          }
+        }
+      }
+      // if (token == null) return res.sendStatus(401);
+      if (token == null) {
+        if (callback && typeof callback === "function") {
+          callback(null, null, req, res);
+        } else {
+          return res.sendStatus(401);
+        }
       }
 
+      // verify token
       jwt.verify(token, authConfig.guards.jwt.secret, (err, data) => {
         if (callback && typeof callback === "function") {
           callback(err, data, req, res);
         } else {
-          console.log(err);
           if (err) return res.sendStatus(403);
           req.user = data;
         }

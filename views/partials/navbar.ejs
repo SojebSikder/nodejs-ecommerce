@@ -23,11 +23,11 @@
 
             <% if(loggedInUser) {%>
               <li class="nav-item">
-                <a class="nav-link" href="/product/add">Add Post</a>
+                <a class="nav-link" href="/product/add">Add Product</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/profile">
-                  <%- loggedInUser.username %>
+                  <%= loggedInUser.username %>
                 </a>
               </li>
               <li class="nav-item">

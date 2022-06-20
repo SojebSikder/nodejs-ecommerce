@@ -21,6 +21,11 @@ export class ProductService {
    */
   public async index() {
     const result = await prisma.product.findMany({
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
       include: {
         ProductImage: true,
       },
@@ -57,6 +62,13 @@ export class ProductService {
     const price = Number(req.body.price);
     const stock = Number(req.body.stock);
     const published = req.body.published;
+    let publishedValue;
+
+    if (published) {
+      publishedValue = true;
+    } else {
+      publishedValue = false;
+    }
 
     const user = Auth.userByCookie(req.signedCookies);
     if (!user) {
@@ -72,7 +84,7 @@ export class ProductService {
         description: description,
         price: price,
         stock: stock,
-        published: published,
+        published: publishedValue,
       },
     });
   }

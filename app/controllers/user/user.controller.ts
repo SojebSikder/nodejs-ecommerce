@@ -5,6 +5,8 @@ import { env } from "../../../system/util";
 import { UserService } from "./user.service";
 import { Controller, Get, Post } from "../../../system/decorator";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
+import { Auth } from "../../../system";
+import { authorization } from "../../middlewares/authorization";
 
 const prisma = new PrismaClient();
 
@@ -25,7 +27,7 @@ export class UserController {
     const result = await UserService.getInstance().login(email, password);
 
     if (result.statusCode === 200) {
-      // after sucessfull login set cookie
+      // after sucessfull login set cookie and localstorage
       res.cookie(env("COOKIE_NAME"), result.token, {
         maxAge: env("JWT_EXPIRY"),
         httpOnly: true,
@@ -86,7 +88,9 @@ export class UserController {
     });
   }
 
-  @Get("profile", { middleware: [decorateHtmlResponse()] })
+  @Get("profile", {
+    middleware: [decorateHtmlResponse("Profile"), authorization()],
+  })
   showProfilePage(req: Request, res: Response) {
     res.render("profile/index");
   }
