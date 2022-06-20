@@ -2,6 +2,9 @@ import { Model } from "../../core/Model";
 
 /**
  * DB facade
+ * @class DB
+ * @extends {Model}
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class DB extends Model {
   /**

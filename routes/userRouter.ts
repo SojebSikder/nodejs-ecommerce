@@ -22,11 +22,8 @@ router.get("/logout", controller.logout);
 //   }, "asa"),
 //   controller.showProfilePage
 // );
-router.get(
-  "/profile",
-  function(req, res){
-      res.send(Auth.userByCookie(req.signedCookies))
-  }
-);
+router.get("/profile", function (req, res) {
+  res.send(Auth.userByCookie(req.signedCookies));
+});
 
 export default router;

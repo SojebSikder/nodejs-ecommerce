@@ -1,8 +1,13 @@
 import readline, { ReadLine } from "readline";
+import dotenv from "dotenv";
 import { AppCommand } from "../../AppCommand";
 
+// initialize dotenv
+dotenv.config();
 /**
  * Command Class
+ * @class Command
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class Command {
   public static customCmd;

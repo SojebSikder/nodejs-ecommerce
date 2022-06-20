@@ -1,4 +1,9 @@
 import { IAdapter } from "../database/drivers/iAdapter";
+/**
+ * Dbase class for handling database
+ * @class Dbase
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ */
 export class Dbase {
   protected adapter: IAdapter;
 
@@ -7,7 +12,7 @@ export class Dbase {
   }
 
   // Select or Read data
-  public select = async(query) => {
+  public select = async (query) => {
     return await this.adapter.select(query);
   };
 

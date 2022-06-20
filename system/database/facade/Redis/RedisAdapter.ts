@@ -2,6 +2,11 @@ import { createClient } from "redis";
 // redis imports
 import { dbConfig } from "../../../../config/database";
 
+/**
+ * Redis adapter class
+ * @class RedisAdapter
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ */
 export class RedisAdapter {
   public host = dbConfig.connection.redis.default.host;
   public username = dbConfig.connection.redis.default.username;

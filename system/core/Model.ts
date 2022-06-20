@@ -1,6 +1,12 @@
 import { Builder } from "../core/Database/Builder";
 import { Dbase } from "../database/Dbase";
 
+/**
+ * Model class
+ * @class Model
+ * @extends {Builder}
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ */
 export class Model extends Builder {
   /**
    * db property

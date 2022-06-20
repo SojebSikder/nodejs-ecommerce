@@ -1,5 +1,10 @@
 import { RedisAdapter } from "./RedisAdapter";
 
+/**
+ * Redis facade class.
+ * @class Redis
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ */
 export class Redis {
   constructor() {}
   public static async connect() {

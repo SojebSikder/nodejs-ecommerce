@@ -2,6 +2,11 @@ import jwt from "jsonwebtoken";
 import { appConfig } from "../../config/app";
 import { authConfig } from "../../config/auth";
 
+/**
+ * Auth class
+ * @class Auth
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ */
 export class Auth {
   constructor() {}
 

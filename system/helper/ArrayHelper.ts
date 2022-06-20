@@ -1,5 +1,7 @@
 /**
  * ArrayHelper class file.
+ * @class ArrayHelper
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class ArrayHelper {
   /**

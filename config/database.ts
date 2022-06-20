@@ -1,4 +1,6 @@
 import { env } from "../system/util";
+import dotenv from "dotenv"
+dotenv.config();
 
 export const dbConfig = {
   /**

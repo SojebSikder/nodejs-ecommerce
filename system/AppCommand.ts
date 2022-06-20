@@ -6,9 +6,9 @@ import { StringHelper } from "./helper/StringHelper";
 const controller_path = "app/controllers";
 const model_path = "app/models";
 /**
- * App console command
- *
- * Reserved for app
+ * App console command. Reserved for app
+ * @class AppCommand
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class AppCommand {
   /**
@@ -230,7 +230,7 @@ export class ${controllerName}{
   /**
    * show all data
    * @param req
-   * @param res../../system/core
+   * @param res
    */
   async index(req: Request, res: Response) {
     res.send("Hello world");

@@ -4,6 +4,8 @@ import { LocalAdapter } from "./Disk/drivers/LocalAdapter";
 
 /**
  * Storage class for handling storage
+ * @class Storage
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class Storage {
   private static _instance: Storage;

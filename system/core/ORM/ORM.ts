@@ -1,6 +1,24 @@
 import { DB } from "../../database/facade/DB";
 import { ArrayHelper } from "../../helper/ArrayHelper";
 
+/**
+ * ORM class
+ * @class ORM
+ * @extends {DB}
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ * @example
+ * import { ORM } from "../../system/core/ORM";
+ * import { Data } from "../models/Data";
+ * class Data extends ORM {
+ *  title: string;
+ *  text: string;
+ * }
+ * @example
+ * const data = new Data();
+ * data.title = "Hello World";
+ * data.text = "This is a test";
+ * await data.save();
+ */
 export class ORM {
   /**
    * The table associated with the model.

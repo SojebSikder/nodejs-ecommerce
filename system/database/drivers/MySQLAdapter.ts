@@ -3,6 +3,12 @@ import mysql from "mysql";
 import { dbConfig } from "../../../config/database";
 import { IAdapter } from "./iAdapter";
 
+/**
+ * MySQL adapter class
+ * @class MySQLAdapter
+ * @implements {IAdapter}
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ */
 export class MySQLAdapter implements IAdapter {
   public host = dbConfig.connection.mysql.host;
   public user = dbConfig.connection.mysql.username;

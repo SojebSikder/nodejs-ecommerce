@@ -5,3 +5,4 @@ export * from "./Disk";
 export * from "./Storage";
 export * from "./Mail";
 export * from "./Command";
+export * from "./Router";

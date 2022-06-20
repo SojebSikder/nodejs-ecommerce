@@ -3,5 +3,6 @@
  * Command Console
  */
 import { Command } from "./system/core";
-import "./command/console";
+import "./routes/console";
+
 Command.execute();

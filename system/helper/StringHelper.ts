@@ -1,5 +1,7 @@
 /**
  * StringHelper
+ * @class StringHelper
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class StringHelper {
   /**

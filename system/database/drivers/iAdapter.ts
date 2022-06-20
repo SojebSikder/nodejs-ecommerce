@@ -1,5 +1,7 @@
 /**
  * IAdapter interface
+ * @interface IAdapter
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export interface IAdapter {
   select($query);
@@ -11,4 +13,3 @@ export interface IAdapter {
 
   statement($query);
 }
-
