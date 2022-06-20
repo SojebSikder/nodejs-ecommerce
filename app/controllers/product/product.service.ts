@@ -53,7 +53,10 @@ export class ProductService {
    */
   async store(req: Request, res: Response) {
     const name = req.body.name;
-    const price = req.body.price;
+    const description = req.body.description || "";
+    const price = Number(req.body.price);
+    const stock = Number(req.body.stock);
+    const published = req.body.published;
 
     const user = Auth.userByCookie(req.signedCookies);
     if (!user) {
@@ -66,9 +69,10 @@ export class ProductService {
       data: {
         authorId: user.userid,
         name: name,
+        description: description,
         price: price,
-        stock: 100,
-        published: true,
+        stock: stock,
+        published: published,
       },
     });
   }

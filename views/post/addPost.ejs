@@ -1,29 +1,40 @@
-<%- include('../partials/header'); -%> <%- include('../partials/navbar'); -%>
-<div class="container">
-  <h1>Post blog</h1>
-  <h2><%= message %></h2>
-  <form action="/post/add" method="post">
-    <div class="mb-3">
-      <input
-        class="form-control"
-        placeholder="Write title"
-        type="text"
-        name="title"
-      />
+<%- include('../partials/header'); -%>
+  <%- include('../partials/navbar'); -%>
+    <div class="container">
+      <form action="/product/add" method="post">
+        <div class="d-flex p-2 d-flex justify-content-between">
+          <h1>Upload Product</h1>
+
+          <!-- publish button -->
+          <div class="form-check">
+            <input class="form-check-input" name="published" type="checkbox" id="flexCheckDefault" checked>
+            <label class="form-check-label" for="flexCheckDefault">
+              Publish
+            </label>
+          </div>
+
+        </div>
+
+        <h2>
+          <%= message %>
+        </h2>
+
+        <div class="mb-3">
+          <input class="form-control" placeholder="Enter name" type="text" name="name" />
+        </div>
+        <div class="mb-3">
+          <input class="form-control" placeholder="Enter price" type="number" name="price" />
+        </div>
+        <div class="mb-3">
+          <input class="form-control" placeholder="Enter stock" type="number" name="stock" />
+        </div>
+
+        <div class="mb-3">
+          <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30"
+            rows="10"></textarea>
+          <input class="btn btn-primary" type="submit" value="Submit" />
+        </div>
+      </form>
     </div>
 
-    <div class="mb-3">
-      <textarea
-        class="form-control"
-        placeholder="Write something..."
-        name="content"
-        id=""
-        cols="30"
-        rows="10"
-      ></textarea>
-      <input class="btn btn-primary" type="submit" value="Submit" />
-    </div>
-  </form>
-</div>
-
-<%- include('../partials/footer'); -%>
+    <%- include('../partials/footer'); -%>

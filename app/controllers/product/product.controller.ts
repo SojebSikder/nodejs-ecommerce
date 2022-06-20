@@ -9,6 +9,7 @@ export class ProductController {
   @Get("", { middleware: [decorateHtmlResponse()] })
   async index(req: Request, res: Response) {
     const result = await ProductService.getInstance().index();
+
     res.render("index", { posts: result });
   }
 

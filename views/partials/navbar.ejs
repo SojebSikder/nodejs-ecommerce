@@ -11,23 +11,32 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/register">Register</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/product/add">Add Post</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/profile">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">Logout</a>
-        </li>
+        <% if(!loggedInUser){ %>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+          </li>
+          <% } %>
 
-        <!-- <li class="nav-item dropdown">
+
+            <% if(loggedInUser) {%>
+              <li class="nav-item">
+                <a class="nav-link" href="/product/add">Add Post</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/profile">
+                  <%- loggedInUser.username %>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+              <% } %>
+
+
+                <!-- <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
