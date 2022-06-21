@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { appConfig } from "../../config/app";
 import { authConfig } from "../../config/auth";
-import { env } from "../util";
 
 /**
  * Auth class
@@ -52,23 +51,27 @@ export class Auth {
       // if (token == null) return res.sendStatus(401);
       if (token == null) {
         if (callback && typeof callback === "function") {
-          callback(null, null, req, res);
+          return callback("unauthorize", null, req, res);
         } else {
-          return res.sendStatus(401);
+          res.sendStatus(401);
         }
+      } else {
+        // verify token
+        jwt.verify(token, authConfig.guards.jwt.secret, (err, data) => {
+          if (callback && typeof callback === "function") {
+            if (err) {
+              return callback(err, data, req, res);
+            } else {
+              callback(err, data, req, res);
+              next();
+            }
+          } else {
+            if (err) return res.sendStatus(403);
+            req.user = data;
+          }
+          // next();
+        });
       }
-
-      // verify token
-      jwt.verify(token, authConfig.guards.jwt.secret, (err, data) => {
-        if (callback && typeof callback === "function") {
-          callback(err, data, req, res);
-        } else {
-          if (err) return res.sendStatus(403);
-          req.user = data;
-        }
-
-        next();
-      });
     };
   }
 
