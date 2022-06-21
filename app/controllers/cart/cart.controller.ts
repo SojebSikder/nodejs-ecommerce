@@ -9,7 +9,8 @@ export class CartController {
   @Get("", { middleware: [decorateHtmlResponse("Cart"), authorization()] })
   async index(req: Request, res: Response) {
     const result = await CartService.getInstance().index(req.signedCookies);
-    res.render("cart/index", { carts: result });
+    // res.render("cart/index", { carts: result });
+    res.json(result);
   }
 
   @Post("add", {

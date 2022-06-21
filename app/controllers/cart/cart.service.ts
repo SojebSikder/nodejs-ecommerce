@@ -22,19 +22,25 @@ export class CartService {
    */
   public async index(signedCookies) {
     const user = Auth.userByCookie(signedCookies);
-    const result = await prisma.cart.findMany({
-      orderBy: [
-        {
-          id: "desc",
-        },
-      ],
-      include: {
-        product: true,
-      },
-      where: {
-        userId: user.userid,
-      },
-    });
+
+    // const result = await prisma.cart.findMany({
+    //   orderBy: [
+    //     {
+    //       id: "desc",
+    //     },
+    //   ],
+    //   include: {
+    //     product: true,
+    //   },
+    //   where: {
+    //     userId: user.userid,
+    //   },
+    // });
+
+    const result = await new Cart()
+      .with("product", "productId", "id")
+      .where("userId", "=", user.userid)
+      .get();
     return result;
   }
 
