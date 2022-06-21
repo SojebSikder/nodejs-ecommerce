@@ -57,7 +57,7 @@ model Address {
 model Product {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @default(now())
   name        String   @db.VarChar(255)
   price       Int
   stock       Int?
@@ -78,7 +78,7 @@ model Product {
 model Category {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now())
   name      String    @db.VarChar(255)
   slug      String    @db.VarChar(255)
   products  Product[]
@@ -94,7 +94,7 @@ model ProductImage {
 model Order {
   id        Int         @id @default(autoincrement())
   createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  updatedAt DateTime    @default(now())
   status    String      @db.VarChar(255)
   user      User        @relation(fields: [userId], references: [id])
   userId    Int
@@ -104,7 +104,7 @@ model Order {
 model OrderItem {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   quantity  Int
   product   Product  @relation(fields: [productId], references: [id])
   productId Int      @unique
@@ -115,7 +115,7 @@ model OrderItem {
 model cart {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now())
   quantity  Int
   product   Product? @relation(fields: [productId], references: [id])
   productId Int

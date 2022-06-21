@@ -20,9 +20,21 @@ export class CartService {
   /**
    * show all data
    */
-  public async index() {
-    // const result = await prisma.cart.findMany();
-    const result = await new Cart().all();
+  public async index(signedCookies) {
+    const user = Auth.userByCookie(signedCookies);
+    const result = await prisma.cart.findMany({
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
+      include: {
+        product: true,
+      },
+      where: {
+        userId: user.userid,
+      },
+    });
     return result;
   }
 

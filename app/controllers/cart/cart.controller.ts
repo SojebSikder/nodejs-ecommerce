@@ -8,11 +8,11 @@ import { CartService } from "./cart.service";
 export class CartController {
   @Get("", { middleware: [decorateHtmlResponse("Cart"), authorization()] })
   async index(req: Request, res: Response) {
-    const result = await CartService.getInstance().index();
+    const result = await CartService.getInstance().index(req.signedCookies);
     res.render("cart/index", { carts: result });
   }
 
-  @Post("product/add", {
+  @Post("add", {
     middleware: [decorateHtmlResponse(), authorization()],
   })
   async store(req: Request, res: Response) {
@@ -29,7 +29,7 @@ export class CartController {
     res.redirect(backURL);
   }
 
-  @Get("product/:id", { middleware: [decorateHtmlResponse()] })
+  @Get(":id", { middleware: [decorateHtmlResponse()] })
   async show(req: Request, res: Response) {
     res.send("Hello world");
   }
