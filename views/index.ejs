@@ -27,9 +27,9 @@
                 <%= posts[i].description %>
               </p>
 
-              <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="{{ url('cart') }}">
+              <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart/product/add">
 
-                <input type="hidden" class="btn btn-primary" name="product_id" value="{{ $row->id }}"></a>
+                <input type="hidden" class="btn btn-primary" name="productId" value="<%= posts[i].id %> "></a>
                 <input type="submit" class="btn btn-primary" value="Add to cart"></a>
                 <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
               </form>

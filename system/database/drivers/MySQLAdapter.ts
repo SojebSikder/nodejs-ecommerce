@@ -35,7 +35,6 @@ export class MySQLAdapter implements IAdapter {
         this.error = err;
         throw err;
       }
-      console.log("Connected!");
     });
   };
 

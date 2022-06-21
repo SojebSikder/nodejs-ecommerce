@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
 import { Auth } from "../../../system/core";
+import { Cart } from "../../models/Cart";
 
 const prisma = new PrismaClient();
 
@@ -28,11 +28,11 @@ export class CartService {
    * @param req
    * @param res
    */
-  async show(arg_id: string) {
-    const id = arg_id;
+  async show(id: string) {
+    const _id = id;
     const result = await prisma.cart.findFirst({
       where: {
-        id: Number(id),
+        id: Number(_id),
       },
     });
     return result;
@@ -43,18 +43,34 @@ export class CartService {
    * @param req
    * @param res
    */
-  async store(req: Request, res: Response) {
-    const productId = req.body.productId;
-    const quantity = req.body.quantity;
+  async store({
+    productId,
+    quantity,
+    signedCookies,
+  }: {
+    productId: number;
+    quantity: number;
+    signedCookies: any;
+  }) {
+    const _productId = productId;
+    const _quantity = quantity;
 
-    const user = Auth.userByCookie(req.signedCookies);
+    const user = Auth.userByCookie(signedCookies);
 
-    const result = await prisma.cart.create({
-      data: {
-        productId: productId,
-        userId: user.userid,
-        quantity: quantity,
-      },
-    });
+    // const result = await prisma.cart.create({
+    //   data: {
+    //     productId: _productId,
+    //     userId: user.userid,
+    //     quantity: _quantity,
+    //   },
+    // });
+
+    const result = new Cart();
+    result.userId = user.userid;
+    result.productId = _productId;
+    result.quantity = _quantity;
+    await result.save();
+
+    return result;
   }
 }
