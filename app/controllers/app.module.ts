@@ -9,8 +9,7 @@ import { UserController } from "./user/user.controller";
     UserController,
     ProductController,
     CartController,
-    // Admin/index.controller.ts
-    IndexController,
+    IndexController, // Admin/index.controller.ts
   ],
 })
 export class AppModule {}

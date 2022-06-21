@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 export class CartService {
   private static _instance: CartService;
+
   /**
    * Create instance
    */
@@ -15,11 +16,13 @@ export class CartService {
     }
     return this._instance;
   }
+
   /**
    * show all data
    */
   public async index() {
-    const result = await prisma.cart.findMany();
+    // const result = await prisma.cart.findMany();
+    const result = await new Cart().all();
     return result;
   }
 

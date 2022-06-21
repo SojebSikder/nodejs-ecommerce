@@ -6,9 +6,10 @@ import { CartService } from "./cart.service";
 
 @Controller("/cart/")
 export class CartController {
-  @Get("")
+  @Get("", { middleware: [decorateHtmlResponse("Cart"), authorization()] })
   async index(req: Request, res: Response) {
-    res.send("Hello world");
+    const result = await CartService.getInstance().index();
+    res.render("cart/index", { carts: result });
   }
 
   @Post("product/add", {

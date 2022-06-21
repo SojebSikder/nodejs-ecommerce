@@ -5,7 +5,6 @@ import { env } from "../../../system/util";
 import { UserService } from "./user.service";
 import { Controller, Get, Post } from "../../../system/decorator";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
-import { Auth } from "../../../system";
 import { authorization } from "../../middlewares/authorization";
 
 const prisma = new PrismaClient();
@@ -55,7 +54,7 @@ export class UserController {
     });
   }
 
-  @Post("login", { middleware: [decorateHtmlResponse()] })
+  @Post("register", { middleware: [decorateHtmlResponse()] })
   async signup(req: Request, res: Response) {
     try {
       const name = req.body.name;
