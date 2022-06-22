@@ -153,19 +153,18 @@ export class ORM {
 
     const propsToImplode = [];
 
-    // const properties = Reflect.ownKeys(this);
-    let properties;
-    const ormProperties = ORMStorage.properties;
-    ormProperties.map((item) => {
-      if (properties == null) {
-        properties = item.method + ",";
-      } else {
-        properties += item.method + ",";
-      }
-    });
-
-    properties = properties.split(",");
-    properties = properties.slice(0, -1);
+    const properties = Reflect.ownKeys(this);
+    // let properties;
+    // const ormProperties = ORMStorage.column;
+    // ormProperties.map((item) => {
+    //   if (properties == null) {
+    //     properties = item.method + ",";
+    //   } else {
+    //     properties += item.method + ",";
+    //   }
+    // });
+    // properties = properties.split(",");
+    // properties = properties.slice(0, -1);
 
     for (const property of properties) {
       if (!ArrayHelper.inArray(property, ["table", "whereC", "_with"])) {

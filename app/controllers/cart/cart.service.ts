@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Auth } from "../../../system/core";
 import { Cart } from "../../models/Cart";
+import { Data } from "../../models/Data";
 
 const prisma = new PrismaClient();
 
@@ -85,6 +86,11 @@ export class CartService {
     //     quantity: _quantity,
     //   },
     // });
+
+    const data = new Data();
+    data.title = "test";
+    data.text = "test";
+    await data.save();
 
     const result = new Cart();
     result.userId = user.userid;

@@ -7,5 +7,9 @@ export class ORMStorage {
   /**
    * properties of orm column
    */
-  public static properties: any[] = [];
+  public static column: any[] = [];
+  /**
+   * properties of orm relation
+   */
+  public static relation: any[] = [];
 }
