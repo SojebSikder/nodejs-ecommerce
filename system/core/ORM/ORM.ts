@@ -182,7 +182,7 @@ export class ORM {
         Object.values(propsToImplode)
       );
 
-      sqlQuery = `INSERT INTO  ${tableName} (${keys}) VALUES  (${values})`;
+      sqlQuery = `INSERT INTO ${tableName} (${keys}) VALUES  (${values})`;
 
       const data = await DB.insert(sqlQuery);
       return data;

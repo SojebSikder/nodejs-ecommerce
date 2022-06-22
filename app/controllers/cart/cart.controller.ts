@@ -9,8 +9,7 @@ export class CartController {
   @Get("", { middleware: [decorateHtmlResponse("Cart"), authorization()] })
   async index(req: Request, res: Response) {
     const result = await CartService.getInstance().index(req.signedCookies);
-    // res.render("cart/index", { carts: result });
-    res.json(result);
+    res.render("cart/index", { carts: result });
   }
 
   @Post("add", {
@@ -30,6 +29,16 @@ export class CartController {
     res.redirect(backURL);
   }
 
+  @Post(":id/delete", { middleware: [decorateHtmlResponse(), authorization()] })
+  async delete(req: Request, res: Response) {
+    const id = req.params.id;
+    const result = await CartService.getInstance().delete(id);
+    if (result) {
+      res.redirect("/cart");
+    } else {
+      res.send("Something went wrong :(");
+    }
+  }
   @Get(":id", { middleware: [decorateHtmlResponse()] })
   async show(req: Request, res: Response) {
     res.send("Hello world");

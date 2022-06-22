@@ -9,22 +9,23 @@
 
       <tr>
         <td>
-          <img src="<%- carts[i].product.image %>" alt="<%- carts[i].product.name %>" width="100" height="100">
+          <img src="/uploads/products/<%= carts[i].product.ProductImage[0].url %>" alt="<%= carts[i].product.name %>" width="100" height="100">
         </td>
         <td>
           <div class="d-flex justify-content-between">
-            <h3><%- carts[i].product.name %></h3>
+            <h3> <a href="/product/<%= carts[i].product.id %>"><%= carts[i].product.name %></a></h3>
 
-            <form action="/cart/<% carts[i].id %> /delete" method="post">
+            <form action="/cart/<%= carts[i].id %>/delete" method="post">
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
 
           </div>
 
-          <p>Price: <%- carts[i].product.price %></p>
-          <p>Quantity: <%- carts[i].quantity %></p>
-          <p>Total: <%- carts[i].product.price*carts[i].quantity %></p>
+          <p>Price: <%= carts[i].product.price %></p>
+          <p>Quantity: <%= carts[i].quantity %></p>
+          <p>Total: <%= carts[i].product.price*carts[i].quantity %></p>
         </td>
+
       </tr>
 
       <% } %>

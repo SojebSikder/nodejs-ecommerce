@@ -24,27 +24,58 @@ export class CartService {
   public async index(signedCookies) {
     const user = Auth.userByCookie(signedCookies);
 
-    // const result = await prisma.cart.findMany({
-    //   orderBy: [
-    //     {
-    //       id: "desc",
-    //     },
-    //   ],
-    //   include: {
-    //     product: true,
-    //   },
-    //   where: {
-    //     userId: user.userid,
-    //   },
-    // });
+    const result = await prisma.cart.findMany({
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
+      select: {
+        id: true,
+        userId: true,
+        productId: true,
+        quantity: true,
+        product: {
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            stock: true,
+            brand: true,
+            description: true,
+            keywords: true,
+            ProductImage: {
+              select: {
+                id: true,
+                url: true,
+              },
+            },
+          },
+        },
+      },
 
-    const result = await new Cart()
-      .with("product", "productId", "id")
-      .where("userId", "=", user.userid)
-      .get();
+      where: {
+        userId: user.userid,
+      },
+    });
+
     return result;
   }
 
+  /**
+   * delete specific data
+   * @param req
+   * @param res
+   */
+  async delete(id: string) {
+    const _id = id;
+    const result = await prisma.cart.delete({
+      where: {
+        id: Number(_id),
+      },
+    });
+    return result;
+  }
   /**
    * show specific data
    * @param req
@@ -79,24 +110,13 @@ export class CartService {
 
     const user = Auth.userByCookie(signedCookies);
 
-    // const result = await prisma.cart.create({
-    //   data: {
-    //     productId: _productId,
-    //     userId: user.userid,
-    //     quantity: _quantity,
-    //   },
-    // });
-
-    const data = new Data();
-    data.title = "test";
-    data.text = "test";
-    await data.save();
-
-    const result = new Cart();
-    result.userId = user.userid;
-    result.productId = _productId;
-    result.quantity = _quantity;
-    await result.save();
+    const result = await prisma.cart.create({
+      data: {
+        productId: Number(_productId),
+        userId: Number(user.userid),
+        quantity: Number(_quantity),
+      },
+    });
 
     return result;
   }

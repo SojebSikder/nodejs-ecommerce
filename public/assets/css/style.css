@@ -21,6 +21,9 @@
   transform: rotate(180deg);
 }
 
+a {
+  text-decoration: none !important;
+}
 @media (min-width: 992px) {
   body {
     overflow: auto !important;
@@ -28,8 +31,8 @@
   .offcanvas-backdrop::before {
     display: none !important;
   }
-  main{
-      margin-left: var(--offcanvas-width);
+  main {
+    margin-left: var(--offcanvas-width);
   }
   .sidebar-nav {
     transform: none !important;
