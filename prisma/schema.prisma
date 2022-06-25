@@ -97,11 +97,11 @@ model Order {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  orderId      String @unique
+  orderId      String  @unique
   orderItemId  String
   price        String
-  delivery_fee String
-  discount     String
+  delivery_fee String?
+  discount     String?
   total        String
 
   // /**
@@ -127,10 +127,10 @@ model Order {
   // */
   status    String?
   comment   String?
-  addressId Int
-  address   Address @relation(fields: [addressId], references: [id])
+  addressId Int?
+  address   Address? @relation(fields: [addressId], references: [id])
 
-  user      User        @relation(fields: [userId], references: [id])
+  user      User?       @relation(fields: [userId], references: [id])
   userId    Int
   OrderItem OrderItem[]
 }

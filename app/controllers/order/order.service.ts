@@ -15,11 +15,18 @@ export class OrderService {
     }
     return this._instance;
   }
+
   /**
    * show all data
+   * @returns
    */
-  public async index() {
-    const result = await prisma.order.findMany();
+  public async index(signedCookies) {
+    const user = Auth.userByCookie(signedCookies);
+    const result = await prisma.order.findMany({
+      where: {
+        id: user.userId,
+      },
+    });
     return result;
   }
 
@@ -44,16 +51,35 @@ export class OrderService {
    * @param res
    */
   async store(req: Request, res: Response) {
-    const title = req.body.title;
-    const content = req.body.content;
-
     const user = Auth.userByCookie(req.signedCookies);
 
-    // const result = await prisma.order.create({
-    //   data: {
-    //     userId: user.userId,
-    //     status:
-    //   },
-    // });
+    let order_id;
+    const latestOrder = await prisma.order.findFirst({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    if (latestOrder) {
+      order_id = "HLCY" + `${latestOrder.id + 1}`.padStart(8, "0");
+    } else {
+      order_id = 1;
+    }
+
+    const result = await prisma.order.create({
+      data: {
+        userId: user.userid,
+        orderId: `${order_id}`,
+        orderItemId: "",
+        price: "100",
+        discount: "",
+        delivery_fee: "",
+        total: "",
+        paymentStatus: "",
+        paymentMode: "",
+        status: "order_placed",
+      },
+    });
+
+    return result;
   }
 }
