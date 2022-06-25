@@ -51,14 +51,25 @@ export class OrderService {
    * @param res
    */
   async store(req: Request, res: Response) {
+    const price = req.body.price;
+    const orderProductItem = req.body.orderProductItem;
+    const totalPrice = req.body.price;
+
     const user = Auth.userByCookie(req.signedCookies);
 
     let order_id;
+    let discount = "0";
+    let delivery_fee = "0";
+
+    let total = totalPrice + Number(delivery_fee);
+    total = total - price * (Number(discount) / 100);
+
     const latestOrder = await prisma.order.findFirst({
       orderBy: {
         createdAt: "desc",
       },
     });
+
     if (latestOrder) {
       order_id = "HLCY" + `${latestOrder.id + 1}`.padStart(8, "0");
     } else {
@@ -69,13 +80,13 @@ export class OrderService {
       data: {
         userId: user.userid,
         orderId: `${order_id}`,
-        orderItemId: "",
-        price: "100",
-        discount: "",
-        delivery_fee: "",
-        total: "",
-        paymentStatus: "",
-        paymentMode: "",
+        orderItemId: `${orderProductItem}`,
+        price: `${price}`,
+        discount: `${discount}`,
+        delivery_fee: `${delivery_fee}`,
+        total: `${total}`,
+        paymentStatus: "NOT_PAID",
+        paymentMode: "COD",
         status: "order_placed",
       },
     });

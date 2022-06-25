@@ -5,6 +5,7 @@
 
   <div class="p-2 d-flex justify-content-between">
     <h1>Checkout</h1>
+    <h1><%= uuid %> </h1>
   </div>
 
   <div class="row justify-content-md-center">
@@ -43,7 +44,9 @@
     </form>
   </div> -->
   <div style="background: rebeccapurple;" class="shadow p-3 mb-5 rounded p-4 h-100 d-flex align-items-center justify-content-center">
-    <a href="/order" class="btn btn-primary" type="submit">Place Order</a>
+    <form id="order_form" action="/order" method="post">
+      <a href="/order" class="btn btn-primary" type="submit">Place Order</a>
+    </form>
   </div>
 
 
