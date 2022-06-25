@@ -13,9 +13,7 @@ const prisma = new PrismaClient();
 export class UserController {
   @Get("login", { middleware: [decorateHtmlResponse("Login")] })
   async showLoginPage(req: Request, res: Response) {
-    res.render("auth/login", {
-      message: null,
-    });
+    res.render("auth/login");
   }
 
   @Post("login", { middleware: [decorateHtmlResponse("Login")] })

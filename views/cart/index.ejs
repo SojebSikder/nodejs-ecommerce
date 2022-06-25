@@ -5,9 +5,11 @@
 
   <div class="p-2 d-flex justify-content-between">
     <h1>Cart</h1>
+    <% if(carts.length > 0) {%>
     <div class="p-2">
       <a href="/order/checkout" class="btn btn-primary" type="submit">Checkout</a>
     </div>
+    <% } %>
   </div>
 
 
@@ -41,15 +43,12 @@
 
   </div>
 
-  <!-- <div class="h-100 d-flex align-items-center justify-content-center">
-    <form action="/order" method="post">
-      <button class="btn btn-primary" type="submit">Checkout</button>
-    </form>
-  </div> -->
+
+  <% if(carts.length > 0) {%>
   <div class="h-100 d-flex align-items-center justify-content-center">
     <a href="/order/checkout" class="btn btn-primary" type="submit">Checkout</a>
   </div>
-
+  <% } %>
 
 </div>
 
