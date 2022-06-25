@@ -140,9 +140,9 @@ model OrderItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   quantity  Int
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
   productId Int      @unique
-  order     Order    @relation(fields: [orderId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id])
   orderId   Int
 }
 

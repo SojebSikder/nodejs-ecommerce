@@ -93,4 +93,24 @@ export class OrderService {
 
     return result;
   }
+
+  /**
+   * store order product item
+   * @param req
+   * @param res
+   * @returns
+   */
+  async storeOrderProductItem(req: Request, res: Response) {
+    const orderId = req.body.orderId;
+    const productId = req.body.productId;
+    const quantity = req.body.quantity;
+    const result = await prisma.orderItem.create({
+      data: {
+        orderId: orderId,
+        productId: productId,
+        quantity: quantity,
+      },
+    });
+    return result;
+  }
 }

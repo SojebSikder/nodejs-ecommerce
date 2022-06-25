@@ -38,4 +38,16 @@ export class OrderController {
 
     res.send(data);
   }
+
+  @Post("/product_item", {
+    middleware: [decorateHtmlResponse("My Order"), authorization()],
+  })
+  async storeOrderProductItem(req: Request, res: Response) {
+    const data = await OrderService.getInstance().storeOrderProductItem(
+      req,
+      res
+    );
+
+    res.send("Order placed successfully");
+  }
 }
