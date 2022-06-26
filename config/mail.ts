@@ -1,5 +1,5 @@
 import { env } from "../system/util";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 dotenv.config();
 
 export const mailConfig = {
@@ -9,7 +9,10 @@ export const mailConfig = {
       port: env("MAIL_PORT", 587),
       encryption: env("MAIL_ENCRYPTION", "tls"),
       username: env("MAIL_USERNAME"),
-      password: env("MAIL_PASSWORD"),
+      // password: env("MAIL_PASSWORD"),
+      accessToken: env("MAIL_ACCESS_TOKEN"),
+      clientId: env("MAIL_CLIENT_ID"),
+      clientSecret: env("MAIL_CLIENT_SECRET"),
     },
   },
 

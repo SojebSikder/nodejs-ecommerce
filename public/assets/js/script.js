@@ -40,9 +40,27 @@ charts.forEach(function (chart) {
   });
 });
 
-
 $(document).ready(function () {
   $(".data-table").each(function (_, table) {
     $(table).DataTable();
+  });
+});
+
+// ajax call
+// process order
+$("order_form").on("submit", function (e) {
+  e.preventDefault();
+  var form = $(this);
+  var url = form.attr("action");
+  var method = form.attr("method");
+  var data = form.serialize();
+  $.ajax({
+    url: url,
+    type: method,
+    data: data,
+    success: function (data) {
+      console.log(data);
+      window.location.href = "/order/success";
+    },
   });
 });

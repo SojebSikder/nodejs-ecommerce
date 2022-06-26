@@ -34,6 +34,7 @@ export class OrderController {
     middleware: [decorateHtmlResponse("My Order"), authorization()],
   })
   async store(req: Request, res: Response) {
+    // store order
     const data = await OrderService.getInstance().store(req, res);
 
     res.send(data);

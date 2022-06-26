@@ -1,11 +1,24 @@
 import nodemailer from "nodemailer";
 import { mailConfig } from "../../../config/mail";
 
+/**
+ * Mail abstraction top of nodemailer. Using Mail class Send email
+ * @class Mail
+ * @author Sojeb Sikder <sojebsikder@gmail.com>
+ * @example
+ * const mail = Mail.to("example@email.com")
+ *  .subject("My subject")
+ *  .body("My body")
+ *  .send();
+ */
 export class Mail {
-  public static user = mailConfig.mailers.smtp.username;
-  public static pass = mailConfig.mailers.smtp.password;
   public static host = mailConfig.mailers.smtp.host;
   public static port = mailConfig.mailers.smtp.port;
+  public static user = mailConfig.mailers.smtp.username;
+
+  public static accessToken = mailConfig.mailers.smtp.accessToken;
+  public static clientId = mailConfig.mailers.smtp.clientId;
+  public static clientSecret = mailConfig.mailers.smtp.clientSecret;
 
   // mail options
   public static from = mailConfig.from.address;
@@ -15,8 +28,6 @@ export class Mail {
   public static subjectText = "";
   // body
   public static bodyText = "";
-
-  constructor() {}
 
   /**
    * Mail recepient
@@ -47,17 +58,21 @@ export class Mail {
    */
   public static send() {
     try {
-      var transporter = nodemailer.createTransport({
-        // service: "gmail",
+      let transporter = nodemailer.createTransport({
+        // host: "smtp.gmail.com",
         host: this.host,
-        port: this.port,
+        port: 465,
+        secure: true,
         auth: {
+          type: "OAuth2",
           user: this.user,
-          pass: this.pass,
+          accessToken: this.accessToken,
+          clientId: this.clientId,
+          clientSecret: this.clientSecret,
         },
       });
 
-      var mailOptions = {
+      const mailOptions = {
         from: this.from,
         to: this.recepient,
         subject: this.subjectText,

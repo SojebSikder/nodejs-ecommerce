@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { Auth } from "../../../system/core";
+import { Auth, Mail } from "../../../system/core";
 
 const prisma = new PrismaClient();
 
@@ -90,6 +90,18 @@ export class OrderService {
         status: "order_placed",
       },
     });
+
+    // try {
+    //   // send email to user
+    //   const email = Mail.to(user.email)
+    //     .subject("Order placed successfully")
+    //     .body("Order placed successfully")
+    //     .send();
+
+    //   console.log(email);
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     return result;
   }

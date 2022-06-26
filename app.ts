@@ -9,8 +9,6 @@ import { Server } from "socket.io";
 // internal imports
 import { appConfig } from "./config/app";
 import { routes } from "./routes/web";
-// middleware imports
-import { logger } from "./app/middlewares/logger";
 
 // initialize
 dotenv.config();
