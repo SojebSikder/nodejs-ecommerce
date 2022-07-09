@@ -1,4 +1,4 @@
-import { Command } from "../system";
+import { Command } from "../system/core";
 import { Inspiring } from "../system/Inspire";
 
 /**

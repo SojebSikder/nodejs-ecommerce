@@ -83,6 +83,33 @@ export class ORM {
   }
 
   /**
+   * Fetch query single data
+   */
+  public async first(columns = ["*"]) {
+    let column;
+    if (Array.isArray(columns)) {
+      column = ArrayHelper.arrayToString(columns);
+    } else {
+      column = columns;
+    }
+    const data = await DB.selectOne(`select ${column} from ${this.table}`);
+    return data;
+  }
+  /**
+   * Fetch query data first
+   */
+  public async getOne(columns = ["*"]) {
+    const column = ArrayHelper.arrayToString(columns);
+    let query;
+    if (this._with == null) {
+      query = `select ${column} from ${this.table} ${this.whereC}`;
+    } else {
+      query = `select ${column} from ${this.table} ${this._with} ${this.whereC}`;
+    }
+    const data = await DB.selectOne(query);
+    return data;
+  }
+  /**
    * Fetch query data
    */
   public async get(columns = ["*"]) {
@@ -155,7 +182,7 @@ export class ORM {
 
     const properties = Reflect.ownKeys(this);
     // let properties;
-    // const ormProperties = ORMStorage.column;
+    // const ormProperties = ORMStorage.properties;
     // ormProperties.map((item) => {
     //   if (properties == null) {
     //     properties = item.method + ",";
@@ -182,7 +209,7 @@ export class ORM {
         Object.values(propsToImplode)
       );
 
-      sqlQuery = `INSERT INTO ${tableName} (${keys}) VALUES  (${values})`;
+      sqlQuery = `INSERT INTO  ${tableName} (${keys}) VALUES  (${values})`;
 
       const data = await DB.insert(sqlQuery);
       return data;

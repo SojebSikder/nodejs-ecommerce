@@ -1,3 +1,4 @@
+export * from "./Bihongo";
 export * from "./Auth";
 export * from "./Model";
 export * from "./ORM";
@@ -6,3 +7,4 @@ export * from "./Storage";
 export * from "./Mail";
 export * from "./Command";
 export * from "./Router";
+export * from "./WebSocket";

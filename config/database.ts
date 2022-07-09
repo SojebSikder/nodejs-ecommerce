@@ -1,5 +1,5 @@
 import { env } from "../system/util";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 dotenv.config();
 
 export const dbConfig = {
@@ -14,9 +14,20 @@ export const dbConfig = {
      */
     mysql: {
       driver: "mysql",
-      url: env("DATABASE_URL"),
+      url: env("DATABASE_URL", null),
       host: env("DB_HOST", "127.0.0.1"),
       port: env("DB_PORT", "3306"),
+      database: env("DB_DATABASE", "nodejs"),
+      username: env("DB_USERNAME", "root"),
+      password: env("DB_PASSWORD", ""),
+    },
+
+    pgsql: {
+      driver: "pgsql",
+      url: env("DATABASE_URL", null),
+      host: env("DB_HOST", "127.0.0.1"),
+      // port: env("DB_PORT", "5432"),
+      port: env("DB_PORT", "3211"),
       database: env("DB_DATABASE", "nodejs"),
       username: env("DB_USERNAME", "root"),
       password: env("DB_PASSWORD", ""),

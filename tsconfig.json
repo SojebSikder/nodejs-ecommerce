@@ -2,7 +2,7 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Language and Environment */
-    "target": "es2022",
+    "target": "es2020",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 

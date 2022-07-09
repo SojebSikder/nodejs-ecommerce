@@ -1,6 +1,7 @@
 import { dbConfig } from "../../../config/database";
 import { MySQLAdapter } from "../../database/drivers/MySQLAdapter";
 import { Dbase } from "../../database/Dbase";
+import { PostgreSQLAdapter } from "../../database/drivers/PostgreSQLAdapter";
 /**
  * Builder
  */
@@ -22,14 +23,17 @@ export class Builder {
 
     let dbsw, driver;
     if ($switch == false) {
-      dbsw = dbConfig["connection"][dbConfig["default"]]["dbdriver"];
+      dbsw = dbConfig.connection[dbConfig["default"]]["driver"];
     } else {
       dbsw = $switch;
     }
 
     switch (dbsw) {
-      case "mysqli":
+      case "mysql":
         driver = new MySQLAdapter();
+        break;
+      case "pgsql":
+        driver = new PostgreSQLAdapter();
         break;
 
       default:

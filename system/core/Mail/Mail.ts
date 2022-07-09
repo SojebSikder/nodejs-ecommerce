@@ -11,23 +11,22 @@ import { mailConfig } from "../../../config/mail";
  *  .body("My body")
  *  .send();
  */
-export class Mail {
-  public static host = mailConfig.mailers.smtp.host;
-  public static port = mailConfig.mailers.smtp.port;
-  public static user = mailConfig.mailers.smtp.username;
 
-  public static accessToken = mailConfig.mailers.smtp.accessToken;
-  public static clientId = mailConfig.mailers.smtp.clientId;
-  public static clientSecret = mailConfig.mailers.smtp.clientSecret;
+export class Mail {
+  private static host = mailConfig.mailers.smtp.host;
+  private static port = mailConfig.mailers.smtp.port;
+  private static user = mailConfig.mailers.smtp.username;
+  private static pass = mailConfig.mailers.smtp.password;
+
 
   // mail options
-  public static from = mailConfig.from.address;
+  private static from = mailConfig.from.address;
   // to: recepient
-  public static recepient = "";
+  private static recepient = "";
   // subject
-  public static subjectText = "";
+  private static subjectText = "";
   // body
-  public static bodyText = "";
+  private static bodyText = "";
 
   /**
    * Mail recepient
@@ -54,35 +53,67 @@ export class Mail {
     return this;
   }
   /**
+   * set credentials for sending email
+   */
+  public static setCredentials({ username, password }) {
+    this.user = username;
+    this.pass = password;
+    return this;
+  }
+  /**
    * send mail
    */
-  public static send() {
+  public static send(html = false) {
     try {
+      // let transporter = nodemailer.createTransport({
+      //   // host: "smtp.gmail.com",
+      //   host: this.host,
+      //   port: 465,
+      //   secure: true,
+      //   auth: {
+      //     type: "OAuth2",
+      //     user: this.user,
+      //     accessToken: this.accessToken,
+      //     refreshToken: this.refreshToken,
+      //     clientId: this.clientId,
+      //     clientSecret: this.clientSecret,
+      //   },
+      // });
       let transporter = nodemailer.createTransport({
         // host: "smtp.gmail.com",
         host: this.host,
         port: 465,
         secure: true,
         auth: {
-          type: "OAuth2",
           user: this.user,
-          accessToken: this.accessToken,
-          clientId: this.clientId,
-          clientSecret: this.clientSecret,
+          pass: this.pass,
         },
       });
 
-      const mailOptions = {
-        from: this.from,
-        to: this.recepient,
-        subject: this.subjectText,
-        text: this.bodyText,
-      };
+      let mailOptions;
+
+      if (html == true) {
+        mailOptions = {
+          from: this.from,
+          to: this.recepient,
+          subject: this.subjectText,
+          html: this.bodyText,
+        };
+      } else {
+        mailOptions = {
+          from: this.from,
+          to: this.recepient,
+          subject: this.subjectText,
+          text: this.bodyText,
+        };
+      }
 
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
+          console.log(error);
           return error;
         } else {
+          console.log("mail sent");
           return true;
         }
       });

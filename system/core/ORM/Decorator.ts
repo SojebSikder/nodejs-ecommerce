@@ -6,40 +6,18 @@ import { ORMStorage } from "./ORMStorage";
  * @returns
  */
 export function column(options?): Function {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
-    ORMStorage.column.push({
-      target: target.constructor,
-      method: propertyKey,
-      options,
-    });
-  };
-}
-// export function column(options?): Function {
-//   return function (object: Object, methodName: string) {
-//     ORMStorage.column.push({
-//       target: object.constructor,
-//       method: methodName,
-//       options,
-//     });
-//   };
-// }
-
-/**
- *
- * @param options
- * @returns
- */
-export function belongsTo(options?): Function {
   return function (object: Object, methodName: string) {
-    ORMStorage.relation.push({
-      type: "belongsTo",
+    ORMStorage.properties.push({
       target: object.constructor,
       method: methodName,
       options,
     });
   };
+}
+export function belongsTo({
+  relationTable,
+  foreignKey, // defaults to userId
+  localKey,
+}): Function {
+  return function (object: Object, methodName: string) {};
 }

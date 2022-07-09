@@ -15,6 +15,8 @@ export class MySQLAdapter implements IAdapter {
   public pass = dbConfig.connection.mysql.password;
   public dbname = dbConfig.connection.mysql.database;
 
+  public databaseUrl = dbConfig.connection.mysql.url;
+
   public connection;
   public error;
 
@@ -23,12 +25,16 @@ export class MySQLAdapter implements IAdapter {
   }
 
   private connectDB = () => {
-    this.connection = mysql.createConnection({
-      host: this.host,
-      user: this.user,
-      password: this.pass,
-      database: this.dbname,
-    });
+    if (this.databaseUrl == null) {
+      this.connection = mysql.createConnection({
+        host: this.host,
+        user: this.user,
+        password: this.pass,
+        database: this.dbname,
+      });
+    } else {
+      this.connection = mysql.createConnection(this.databaseUrl);
+    }
 
     this.connection.connect(function (err) {
       if (err) {

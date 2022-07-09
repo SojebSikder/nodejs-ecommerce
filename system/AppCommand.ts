@@ -222,21 +222,25 @@ export class ${modelName} extends ORM{
   /**
    * create controller command
    */
-  public static createController(controllerName) {
-    controllerName = StringHelper.cfirst(`${controllerName}Controller`);
-    const data = `import { Request, Response } from "express";
+  public static createController(name) {
+    const module = name;
+    const controllerName = StringHelper.cfirst(`${name}Controller`);
 
-export class ${controllerName}{
-  /**
-   * show all data
-   * @param req
-   * @param res
-   */
+    const data = `import { Request, Response } from "express";
+import { Controller, Get } from "../../../system/decorator";
+    
+@Controller("/${module}")
+export class ${controllerName} {
+  //
+  @Get("")
   async index(req: Request, res: Response) {
     res.send("Hello world");
   }
+  @Get("/about")
+  async about(req: Request, res: Response) {
+    res.send("Hello world");
+  }
 }
- 
  `;
     return data;
   }
