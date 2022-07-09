@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Auth } from "../../system/core/Auth";
+const prisma = new PrismaClient();
 
 /**
  * simple middleware for authorization
@@ -14,8 +15,6 @@ export function authorization() {
 
 export function setUser() {
   return async function (req, res, next) {
-    const prisma = new PrismaClient();
-
     const user = Auth.userByCookie(req.signedCookies);
     const result = await prisma.user.findFirst({
       where: {
