@@ -1,4 +1,5 @@
 import { Module } from "../../system/decorator";
+import { AdminProductController } from "./admin/adminProduct/product.controller";
 import { IndexController } from "./admin/index/index.controller";
 import { CartController } from "./cart/cart.controller";
 import { ExampleController } from "./example/example.controller";
@@ -14,6 +15,7 @@ import { UserController } from "./user/user.controller";
     OrderController,
     ExampleController,
     IndexController, // Admin/index.controller.ts
+    AdminProductController,
   ],
 })
 export class AppModule {}
