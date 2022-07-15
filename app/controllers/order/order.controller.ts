@@ -5,6 +5,7 @@ import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlRespo
 import { CartService } from "../cart/cart.service";
 import { OrderService } from "./order.service";
 import { v4 as uuidv4 } from "uuid";
+import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
 @Controller("/order")
 export class OrderController {
@@ -27,8 +28,15 @@ export class OrderController {
   }
 
   @Get("/success", { middleware: [decorateHtmlResponse("Success")] })
-  successPage(req: Request, res: Response) {
-    res.render("order/success");
+  async successPage(req: Request, res: Response) {
+    await PaymentDetailsService.getInstance().success({
+      PayerID: req.query.Payerid,
+      PaymentID: req.query.Payerid,
+      success_callback: () => {
+        res.send("success");
+        // res.render("order/success");
+      },
+    });
   }
 
   @Get("/cancel", { middleware: [decorateHtmlResponse("Cancel")] })

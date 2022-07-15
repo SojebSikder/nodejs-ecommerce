@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
 import { Auth } from "../../../system/core";
 import paypal from "paypal-rest-sdk";
 import { env } from "../../../system";
@@ -31,8 +30,8 @@ export class PaymentDetailsService {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: "http://localhost:3000/success",
-        cancel_url: "http://localhost:3000/cancel",
+        return_url: "http://localhost:3000/order/success",
+        cancel_url: "http://localhost:3000/order/cancel",
       },
       transactions: [
         {
@@ -40,7 +39,6 @@ export class PaymentDetailsService {
             items: [
               {
                 name: "Redhock Bar Soap",
-                sku: "001",
                 price: "25.00",
                 currency: "USD",
                 quantity: 1,

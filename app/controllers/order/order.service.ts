@@ -132,6 +132,7 @@ export class OrderService {
 
     // todo: remove product quantity from product
 
+    // send email to user
     // try {
     //   // send email to user
     //   const email = Mail.to(user.email)
@@ -161,10 +162,6 @@ export class OrderService {
     OrderItemId,
     signedCookies,
   }) {
-    // let orderId = req.body.orderId;
-    // let productId = req.body.productId;
-    // let quantity = req.body.quantity;
-    // let price = req.body.price;
     let orderItemId = OrderItemId;
     let orderId = OrderId;
     let productId = ProductId;
@@ -172,19 +169,6 @@ export class OrderService {
     let price = Price;
 
     const user = Auth.userByCookie(signedCookies);
-
-    // const cart = await prisma.cart.findFirst({
-    //   where: {
-    //     userId: user.userid,
-    //   },
-    //   include: {
-    //     product: true,
-    //   },
-    // });
-
-    // productId = cart.productId;
-    // quantity = cart.quantity;
-    // price = cart.product.price;
 
     // store to orderProductItem
     const result = await prisma.orderItem.create({
