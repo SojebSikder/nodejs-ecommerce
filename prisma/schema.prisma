@@ -72,7 +72,7 @@ model Product {
   category     Category?      @relation(fields: [categoryId], references: [id])
   categoryId   Int?
   keywords     String?
-  OrderItem    OrderItem?
+  OrderItem    OrderItem[]
   ProductImage ProductImage[]
   cart         cart[]
 }
@@ -148,7 +148,7 @@ model OrderItem {
   price       Int
   orderItemId String
   product     Product? @relation(fields: [productId], references: [id])
-  productId   Int      @unique
+  productId   Int
   order       Order?   @relation(fields: [orderId], references: [orderId])
   orderId     String
 }

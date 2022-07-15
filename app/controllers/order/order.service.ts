@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { ArrayHelper } from "../../../system";
 import { Auth, Mail } from "../../../system/core";
+import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
 const prisma = new PrismaClient();
 
@@ -121,6 +122,15 @@ export class OrderService {
         signedCookies: req.signedCookies,
       });
     });
+
+    // todo: make payment
+    await PaymentDetailsService.getInstance().store({
+      redirect_callback: (value) => {
+        res.redirect(value);
+      },
+    });
+
+    // todo: remove product quantity from product
 
     // try {
     //   // send email to user

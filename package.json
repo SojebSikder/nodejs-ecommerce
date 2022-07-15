@@ -63,6 +63,7 @@
     "@types/mysql": "^2.15.21",
     "@types/node": "^18.0.0",
     "@types/nodemailer": "^6.4.4",
+    "@types/paypal-rest-sdk": "^1.7.6",
     "@types/pg": "^8.6.5",
     "@types/supertest": "^2.0.12",
     "jest": "^28.1.1",

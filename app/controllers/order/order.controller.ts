@@ -31,6 +31,11 @@ export class OrderController {
     res.render("order/success");
   }
 
+  @Get("/cancel", { middleware: [decorateHtmlResponse("Cancel")] })
+  cancelPage(req: Request, res: Response) {
+    res.render("order/cancel");
+  }
+
   @Post("/", {
     middleware: [decorateHtmlResponse("My Order"), authorization()],
   })
