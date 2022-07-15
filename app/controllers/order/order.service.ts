@@ -111,7 +111,6 @@ export class OrderService {
     });
 
     carts.forEach(async (cart) => {
-      console.log(cart.productId);
       // store to orderProductItem first
       await this.storeOrderProductItem({
         Price: cart.product.price,
@@ -122,6 +121,7 @@ export class OrderService {
         signedCookies: req.signedCookies,
       });
     });
+
     // try {
     //   // send email to user
     //   const email = Mail.to(user.email)
