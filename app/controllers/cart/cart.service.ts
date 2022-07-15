@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { Auth } from "../../../system/core";
-import { Cart } from "../../models/Cart";
-import { Data } from "../../models/Data";
 
 const prisma = new PrismaClient();
 
@@ -109,14 +107,40 @@ export class CartService {
     const _quantity = quantity;
 
     const user = Auth.userByCookie(signedCookies);
+    let result;
 
-    const result = await prisma.cart.create({
-      data: {
-        productId: Number(_productId),
-        userId: Number(user.userid),
-        quantity: Number(_quantity),
+    // if exist then update qnty just
+    const cartExists = await prisma.cart.findFirst({
+      where: {
+        AND: [
+          {
+            productId: Number(_productId),
+          },
+          {
+            userId: user.userid,
+          },
+        ],
       },
     });
+
+    if (cartExists) {
+      result = await prisma.cart.update({
+        where: {
+          id: cartExists.id,
+        },
+        data: {
+          quantity: Number(cartExists.quantity) + Number(_quantity),
+        },
+      });
+    } else {
+      result = await prisma.cart.create({
+        data: {
+          productId: Number(_productId),
+          userId: Number(user.userid),
+          quantity: Number(_quantity),
+        },
+      });
+    }
 
     return result;
   }

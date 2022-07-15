@@ -111,13 +111,13 @@ export class OrderService {
     });
 
     carts.forEach(async (cart) => {
+      console.log(cart.productId);
       // store to orderProductItem first
       await this.storeOrderProductItem({
-        CartId: cart.id,
         Price: cart.product.price,
         ProductId: cart.productId,
         Quantity: cart.quantity,
-        OrderId: order_id,
+        OrderId: String(order_id),
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
       });
@@ -144,7 +144,6 @@ export class OrderService {
    * @returns
    */
   async storeOrderProductItem({
-    CartId,
     ProductId,
     Quantity,
     Price,
@@ -158,9 +157,9 @@ export class OrderService {
     // let price = req.body.price;
     let orderItemId = OrderItemId;
     let orderId = OrderId;
-    let productId;
-    let quantity;
-    let price;
+    let productId = ProductId;
+    let quantity = Quantity;
+    let price = Price;
 
     const user = Auth.userByCookie(signedCookies);
 
@@ -188,7 +187,7 @@ export class OrderService {
       },
     });
 
-    await prisma.cart.delete({ where: { id: CartId } });
+    await prisma.cart.deleteMany({ where: { userId: user.userid } });
     return result;
   }
 }
