@@ -123,14 +123,14 @@ export class OrderService {
       });
     });
 
+    // todo: remove product quantity from product
+
     // todo: make payment
     await PaymentDetailsService.getInstance().store({
-      redirect_callback: (value) => {
+      redirect_callback: async (value) => {
         res.redirect(value);
       },
     });
-
-    // todo: remove product quantity from product
 
     // send email to user
     // try {
@@ -144,7 +144,6 @@ export class OrderService {
     // } catch (error) {
     //   console.log(error);
     // }
-
     return result;
   }
 

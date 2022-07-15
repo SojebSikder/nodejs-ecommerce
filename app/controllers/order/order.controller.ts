@@ -30,11 +30,10 @@ export class OrderController {
   @Get("/success", { middleware: [decorateHtmlResponse("Success")] })
   async successPage(req: Request, res: Response) {
     await PaymentDetailsService.getInstance().success({
-      PayerID: req.query.Payerid,
-      PaymentID: req.query.Payerid,
+      PayerID: req.query.PayerID,
+      PaymentID: req.query.paymentId,
       success_callback: () => {
-        res.send("success");
-        // res.render("order/success");
+        res.render("order/success");
       },
     });
   }
@@ -50,7 +49,7 @@ export class OrderController {
   async store(req: Request, res: Response) {
     // store order
     const data = await OrderService.getInstance().store(req, res);
-    res.render("order/success");
+    // res.render("order/success");
   }
 
   // @Post("/product_item", {

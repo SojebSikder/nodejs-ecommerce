@@ -93,7 +93,7 @@ export class PaymentDetailsService {
           console.log(error.response);
           throw error;
         } else {
-          console.log(JSON.stringify(payment));
+          // console.log(JSON.stringify(payment));
           // res.send("Success");
           success_callback();
         }
