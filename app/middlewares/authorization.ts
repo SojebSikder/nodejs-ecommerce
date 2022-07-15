@@ -16,19 +16,24 @@ export function authorization() {
 export function setUser() {
   return async function (req, res, next) {
     const user = Auth.userByCookie(req.signedCookies);
-    const result = await prisma.user.findFirst({
-      where: {
-        id: user.userid,
-      },
-      select: {
-        id: true,
-        username: true,
-        role: true,
-        email: true,
-      },
-    });
+    if (user) {
+      const result = await prisma.user.findFirst({
+        where: {
+          id: user.userid,
+        },
+        select: {
+          id: true,
+          username: true,
+          role: true,
+          email: true,
+        },
+      });
 
-    req.user = result;
-    next();
+      req.user = result;
+      next();
+    } else {
+      req.user = "";
+      next();
+    }
   };
 }

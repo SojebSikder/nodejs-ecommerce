@@ -52,7 +52,7 @@ export class OrderService {
    */
   async store(req: Request, res: Response) {
     const price = req.body.price;
-    const orderProductItem = req.body.orderProductItem;
+    const orderItemId = req.body.orderItemId;
     const totalPrice = req.body.price;
 
     const user = Auth.userByCookie(req.signedCookies);
@@ -71,17 +71,18 @@ export class OrderService {
     });
 
     if (latestOrder) {
-      order_id = "HLCY" + `${latestOrder.id + 1}`.padStart(8, "0");
+      order_id = "ECOM" + `${latestOrder.id + 1}`.padStart(8, "0");
     } else {
-      order_id = 1;
+      order_id = "1";
     }
 
+    // store to order
     const result = await prisma.order.create({
       data: {
-        userId: user.userid,
+        userId: Number(user.userid),
         orderId: `${order_id}`,
-        orderItemId: `${orderProductItem}`,
-        price: `${price}`,
+        orderItemId: `${orderItemId}`,
+        price: price,
         discount: `${discount}`,
         delivery_fee: `${delivery_fee}`,
         total: `${total}`,
@@ -89,6 +90,13 @@ export class OrderService {
         paymentMode: "COD",
         status: "order_placed",
       },
+    });
+
+    // store to orderProductItem first
+    await this.storeOrderProductItem({
+      OrderId: order_id,
+      OrderItemId: orderItemId,
+      signedCookies: req.signedCookies,
     });
 
     // try {
@@ -112,17 +120,44 @@ export class OrderService {
    * @param res
    * @returns
    */
-  async storeOrderProductItem(req: Request, res: Response) {
-    const orderId = req.body.orderId;
-    const productId = req.body.productId;
-    const quantity = req.body.quantity;
+  async storeOrderProductItem({ OrderId, OrderItemId, signedCookies }) {
+    // let orderId = req.body.orderId;
+    // let productId = req.body.productId;
+    // let quantity = req.body.quantity;
+    // let price = req.body.price;
+    let orderItemId = OrderItemId;
+    let orderId = OrderId;
+    let productId;
+    let quantity;
+    let price;
+
+    const user = Auth.userByCookie(signedCookies);
+
+    const cart = await prisma.cart.findFirst({
+      where: {
+        userId: user.userid,
+      },
+      include: {
+        product: true,
+      },
+    });
+
+    productId = cart.productId;
+    quantity = cart.quantity;
+    price = cart.product.price;
+
+    // store to orderProductItem
     const result = await prisma.orderItem.create({
       data: {
         orderId: orderId,
         productId: productId,
         quantity: quantity,
+        price: price,
+        orderItemId: orderItemId,
       },
     });
+
+    await prisma.cart.delete({ where: { id: cart.id } });
     return result;
   }
 }

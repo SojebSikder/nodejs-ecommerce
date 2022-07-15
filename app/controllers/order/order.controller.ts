@@ -11,8 +11,8 @@ export class OrderController {
   //
   @Get("", { middleware: [decorateHtmlResponse("My Order"), authorization()] })
   async index(req: Request, res: Response) {
+    //
     const data = await OrderService.getInstance().index(req.signedCookies);
-
     res.send(data);
   }
 
@@ -20,6 +20,7 @@ export class OrderController {
     middleware: [decorateHtmlResponse("Checkout"), authorization()],
   })
   async checkoutPage(req: Request, res: Response) {
+    //
     const uuid = uuidv4();
     const result = await CartService.getInstance().index(req.signedCookies);
     res.render("order/checkout", { uuid: uuid, carts: result });
@@ -36,19 +37,17 @@ export class OrderController {
   async store(req: Request, res: Response) {
     // store order
     const data = await OrderService.getInstance().store(req, res);
-
-    res.send(data);
+    res.render("order/success");
   }
 
-  @Post("/product_item", {
-    middleware: [decorateHtmlResponse("My Order"), authorization()],
-  })
-  async storeOrderProductItem(req: Request, res: Response) {
-    const data = await OrderService.getInstance().storeOrderProductItem(
-      req,
-      res
-    );
-
-    res.send("Order placed successfully");
-  }
+  // @Post("/product_item", {
+  //   middleware: [decorateHtmlResponse("My Order"), authorization()],
+  // })
+  // async storeOrderProductItem(req: Request, res: Response) {
+  //   const data = await OrderService.getInstance().storeOrderProductItem({
+  //     OrderItemId: req.body.OrderItemId,
+  //     signedCookies: req.signedCookies,
+  //   });
+  //   res.send("Order placed successfully");
+  // }
 }
