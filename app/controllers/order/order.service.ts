@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { ArrayHelper } from "../../../system";
 import { Auth, Mail } from "../../../system/core";
 
 const prisma = new PrismaClient();
@@ -51,18 +52,35 @@ export class OrderService {
    * @param res
    */
   async store(req: Request, res: Response) {
-    const price = req.body.price;
+    let price = req.body.price;
     const orderItemId = req.body.orderItemId;
-    const totalPrice = req.body.price;
+    let totalPrice;
 
     const user = Auth.userByCookie(req.signedCookies);
+    // get price from cart
+    const carts = await prisma.cart.findMany({
+      where: {
+        userId: user.userid,
+      },
+      include: {
+        product: true,
+      },
+    });
+
+    let prices = carts.map((cart) => cart.product.price);
+
+    price = prices.reduce(
+      (previousValue, currentValue) => previousValue + currentValue
+    );
+
+    //
 
     let order_id;
     let discount = "0";
     let delivery_fee = "0";
 
-    let total = totalPrice + Number(delivery_fee);
-    total = total - price * (Number(discount) / 100);
+    totalPrice = price + Number(delivery_fee);
+    totalPrice = totalPrice - price * (Number(discount) / 100);
 
     const latestOrder = await prisma.order.findFirst({
       orderBy: {
@@ -85,20 +103,25 @@ export class OrderService {
         price: price,
         discount: `${discount}`,
         delivery_fee: `${delivery_fee}`,
-        total: `${total}`,
+        total: `${totalPrice}`,
         paymentStatus: "NOT_PAID",
         paymentMode: "COD",
         status: "order_placed",
       },
     });
 
-    // store to orderProductItem first
-    await this.storeOrderProductItem({
-      OrderId: order_id,
-      OrderItemId: orderItemId,
-      signedCookies: req.signedCookies,
+    carts.forEach(async (cart) => {
+      // store to orderProductItem first
+      await this.storeOrderProductItem({
+        CartId: cart.id,
+        Price: cart.product.price,
+        ProductId: cart.productId,
+        Quantity: cart.quantity,
+        OrderId: order_id,
+        OrderItemId: orderItemId,
+        signedCookies: req.signedCookies,
+      });
     });
-
     // try {
     //   // send email to user
     //   const email = Mail.to(user.email)
@@ -120,7 +143,15 @@ export class OrderService {
    * @param res
    * @returns
    */
-  async storeOrderProductItem({ OrderId, OrderItemId, signedCookies }) {
+  async storeOrderProductItem({
+    CartId,
+    ProductId,
+    Quantity,
+    Price,
+    OrderId,
+    OrderItemId,
+    signedCookies,
+  }) {
     // let orderId = req.body.orderId;
     // let productId = req.body.productId;
     // let quantity = req.body.quantity;
@@ -133,18 +164,18 @@ export class OrderService {
 
     const user = Auth.userByCookie(signedCookies);
 
-    const cart = await prisma.cart.findFirst({
-      where: {
-        userId: user.userid,
-      },
-      include: {
-        product: true,
-      },
-    });
+    // const cart = await prisma.cart.findFirst({
+    //   where: {
+    //     userId: user.userid,
+    //   },
+    //   include: {
+    //     product: true,
+    //   },
+    // });
 
-    productId = cart.productId;
-    quantity = cart.quantity;
-    price = cart.product.price;
+    // productId = cart.productId;
+    // quantity = cart.quantity;
+    // price = cart.product.price;
 
     // store to orderProductItem
     const result = await prisma.orderItem.create({
@@ -157,7 +188,7 @@ export class OrderService {
       },
     });
 
-    await prisma.cart.delete({ where: { id: cart.id } });
+    await prisma.cart.delete({ where: { id: CartId } });
     return result;
   }
 }
