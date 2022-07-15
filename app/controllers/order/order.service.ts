@@ -68,7 +68,7 @@ export class OrderService {
       },
     });
 
-    let prices = carts.map((cart) => cart.product.price);
+    let prices = carts.map((cart) => cart.product.price * cart.quantity);
 
     price = prices.reduce(
       (previousValue, currentValue) => previousValue + currentValue
@@ -92,7 +92,7 @@ export class OrderService {
     if (latestOrder) {
       order_id = "ECOM" + `${latestOrder.id + 1}`.padStart(8, "0");
     } else {
-      order_id = "1";
+      order_id = "ECOM00000001";
     }
 
     // store to order
@@ -111,7 +111,10 @@ export class OrderService {
       },
     });
 
-    carts.forEach(async (cart) => {
+    // store to orderProductItem to send to paypal
+    const items = [];
+
+    for (const cart of carts) {
       // store to orderProductItem first
       await this.storeOrderProductItem({
         Price: cart.product.price,
@@ -121,12 +124,20 @@ export class OrderService {
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
       });
-    });
+      items.push({
+        name: cart.product.name,
+        price: String(cart.product.price.toFixed(2)),
+        currency: "USD",
+        quantity: cart.quantity,
+      });
+    }
 
     // todo: remove product quantity from product
 
-    // todo: make payment
+    // make payment
     await PaymentDetailsService.getInstance().store({
+      items: items,
+      TotalPrice: String(totalPrice.toFixed(2)),
       redirect_callback: async (value) => {
         res.redirect(value);
       },

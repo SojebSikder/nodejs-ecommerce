@@ -30,6 +30,7 @@ export class OrderController {
   @Get("/success", { middleware: [decorateHtmlResponse("Success")] })
   async successPage(req: Request, res: Response) {
     await PaymentDetailsService.getInstance().success({
+      price: req.query.amount,
       PayerID: req.query.PayerID,
       PaymentID: req.query.paymentId,
       success_callback: () => {

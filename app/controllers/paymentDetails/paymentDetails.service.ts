@@ -23,33 +23,38 @@ export class PaymentDetailsService {
     return this._instance;
   }
 
-  async store({ redirect_callback }) {
+  async store({ TotalPrice, items, redirect_callback }) {
+    const totalPrice = TotalPrice;
+    const itemsArray = items;
+    //
     const create_payment_json = {
       intent: "sale",
       payer: {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: "http://localhost:3000/order/success",
+        return_url: "http://localhost:3000/order/success?amount=" + totalPrice,
         cancel_url: "http://localhost:3000/order/cancel",
       },
       transactions: [
         {
           item_list: {
-            items: [
-              {
-                name: "Redhock Bar Soap",
-                price: "25.00",
-                currency: "USD",
-                quantity: 1,
-              },
-            ],
+            // items: [
+            //   {
+            //     name: "Redhock Bar Soap",
+            //     price: "55.00",
+            //     currency: "USD",
+            //     quantity: 1,
+            //   },
+            // ],
+            items: itemsArray,
           },
           amount: {
             currency: "USD",
-            total: "25.00",
+            total: totalPrice,
+            // total: "55.00",
           },
-          description: "Washing Bar soap",
+          description: "Buy products",
         },
       ],
     };
@@ -67,7 +72,7 @@ export class PaymentDetailsService {
     });
   }
 
-  async success({ success_callback, PayerID, PaymentID }) {
+  async success({ price, success_callback, PayerID, PaymentID }) {
     const payerId = PayerID;
     const paymentId = PaymentID;
 
@@ -77,7 +82,8 @@ export class PaymentDetailsService {
         {
           amount: {
             currency: "USD",
-            total: "25.00",
+            // total: "25.00",
+            total: price,
           },
         },
       ],

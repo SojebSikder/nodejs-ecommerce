@@ -44,9 +44,7 @@
     <form id="order_form" action="/order" method="post">
       <input type="hidden" name="orderItemId" value="<%= uuid %> "></a>
       <select name="" id="">
-        <option value="">Cash On Delivery</option>
-        <option value="">Bkash</option>
-        <option value="">Paypal</option>
+        <option value="PAYPAL">Paypal</option>
       </select>
       <button class="btn btn-primary" type="submit">Place Order</button>
     </form>
