@@ -14,7 +14,17 @@ export class OrderController {
   async index(req: Request, res: Response) {
     //
     const data = await OrderService.getInstance().index(req.signedCookies);
-    res.send(data);
+    res.render("order/myOrder", { orders: data });
+  }
+
+  @Get("/:id", {
+    middleware: [decorateHtmlResponse("My Order"), authorization()],
+  })
+  async show(req: Request, res: Response) {
+    //
+    let id = req.params.id;
+    const data = await OrderService.getInstance().show(id);
+    res.render("order/myOrderDetails", { order: data });
   }
 
   @Get("/checkout", {

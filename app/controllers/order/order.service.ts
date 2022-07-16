@@ -28,6 +28,9 @@ export class OrderService {
       where: {
         id: user.userId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return result;
   }
@@ -41,7 +44,16 @@ export class OrderService {
     const id = arg_id;
     const result = await prisma.order.findFirst({
       where: {
-        id: Number(id),
+        orderId: String(id),
+      },
+      select: {
+        OrderItem: {  
+          select: {
+            quantity: true,
+            price: true,
+            product: true,
+          },
+        },
       },
     });
     return result;

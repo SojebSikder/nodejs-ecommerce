@@ -6,7 +6,7 @@ import { env } from "../../../system";
 const prisma = new PrismaClient();
 
 paypal.configure({
-  mode: "sandbox", //sandbox or live
+  mode: env("PAYPAL_MODE"), //sandbox or live
   client_id: env("PAYPAL_CLIENT_ID"),
   client_secret: env("PAYPAL_CLIENT_SECRET"),
 });
@@ -33,8 +33,10 @@ export class PaymentDetailsService {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: "http://localhost:3000/order/success?amount=" + totalPrice,
-        cancel_url: "http://localhost:3000/order/cancel",
+        // return_url: "http://localhost:3000/order/success?amount=" + totalPrice,
+        // cancel_url: "http://localhost:3000/order/cancel",
+        return_url: `${env("APP_URL")}/order/success?amount=${totalPrice}`,
+        cancel_url: `${env("APP_URL")}/order/cancel`,
       },
       transactions: [
         {

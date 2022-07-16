@@ -1,7 +1,8 @@
-<%- include('../partials/header'); -%> 
+<%- include('../partials/header'); -%>
 <%- include('../partials/navbar'); -%>
 <div class="container">
-  <h1>Hello, everyone</h1>
+  <h1>Hello, <%= loggedInUser.username %> </h1>
+  <h2><a href="/order">My Order</a> </h2>
 </div>
 
 <%- include('../partials/footer'); -%>
