@@ -66,15 +66,4 @@ export class OrderController {
     const data = await OrderService.getInstance().show(id);
     res.render("order/myOrderDetails", { order: data });
   }
-
-  // @Post("/product_item", {
-  //   middleware: [decorateHtmlResponse("My Order"), authorization()],
-  // })
-  // async storeOrderProductItem(req: Request, res: Response) {
-  //   const data = await OrderService.getInstance().storeOrderProductItem({
-  //     OrderItemId: req.body.OrderItemId,
-  //     signedCookies: req.signedCookies,
-  //   });
-  //   res.send("Order placed successfully");
-  // }
 }

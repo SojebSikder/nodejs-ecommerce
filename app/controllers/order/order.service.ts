@@ -59,6 +59,11 @@ export class OrderService {
         orderId: String(id),
       },
       select: {
+        orderId: true,
+        createdAt: true,
+        status: true,
+        price: true,
+
         OrderItem: {
           select: {
             quantity: true,
