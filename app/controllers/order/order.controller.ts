@@ -13,7 +13,11 @@ export class OrderController {
   @Get("", { middleware: [decorateHtmlResponse("My Order"), authorization()] })
   async index(req: Request, res: Response) {
     //
-    const data = await OrderService.getInstance().index(req.signedCookies);
+    const page = req.query.page == undefined ? 1 : req.query.page;
+    const data = await OrderService.getInstance().index({
+      page: Number(page),
+      signedCookies: req.signedCookies,
+    });
     res.render("order/myOrder", { orders: data });
   }
 

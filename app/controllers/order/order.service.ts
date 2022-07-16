@@ -22,9 +22,10 @@ export class OrderService {
    * show all data
    * @returns
    */
-  public async index(signedCookies) {
+  public async index({ page = 1, signedCookies }) {
     const user = Auth.userByCookie(signedCookies);
-    const result = await prisma.order.findMany({
+
+    const paginationResult = await prisma.order.findMany({
       where: {
         id: user.userId,
       },
@@ -32,7 +33,21 @@ export class OrderService {
         createdAt: "desc",
       },
     });
-    return result;
+
+    let pagination = Math.ceil(paginationResult.length / 20);
+    let limit = 20;
+
+    const result = await prisma.order.findMany({
+      where: {
+        id: user.userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: limit * (page - 1),
+      take: limit,
+    });
+    return { data: result, pagination: pagination };
   }
 
   /**
@@ -47,7 +62,7 @@ export class OrderService {
         orderId: String(id),
       },
       select: {
-        OrderItem: {  
+        OrderItem: {
           select: {
             quantity: true,
             price: true,

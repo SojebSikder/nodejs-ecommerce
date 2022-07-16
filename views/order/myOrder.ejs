@@ -14,7 +14,7 @@
         <th>Order Total ($)</th>
         <th>Order Details</th>
       </tr>
-      <% for (let order of orders) { %>
+      <% for (let order of orders.data) { %>
       <tr>
         <td><%= order.orderId %></td>
         <td><%= order.createdAt %></td>
@@ -24,6 +24,15 @@
       </tr>
       <% } %>
     </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < orders.pagination; i++) {%>
+        <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li> -->
+        <li class="page-item"><a class="page-link" href="/order?page=<%= i+1 %> "><%= i+1 %> </a></li>
+        <!-- <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+        <% } %>
+      </ul>
+    </nav>
   </div>
 
 </div>
