@@ -28,7 +28,11 @@
       <ul class="pagination">
         <% for(let i=0; i < orders.pagination; i++) {%>
         <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/order?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
           <a class="page-link" href="/order?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
         </li>
         <% } %>
       </ul>

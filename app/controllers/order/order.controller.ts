@@ -18,17 +18,7 @@ export class OrderController {
       page: Number(page),
       signedCookies: req.signedCookies,
     });
-    res.render("order/myOrder", { orders: data });
-  }
-
-  @Get("/:id", {
-    middleware: [decorateHtmlResponse("My Order"), authorization()],
-  })
-  async show(req: Request, res: Response) {
-    //
-    let id = req.params.id;
-    const data = await OrderService.getInstance().show(id);
-    res.render("order/myOrderDetails", { order: data });
+    res.render("order/myOrder", { orders: data, page: page });
   }
 
   @Get("/checkout", {
@@ -65,6 +55,16 @@ export class OrderController {
     // store order
     const data = await OrderService.getInstance().store(req, res);
     // res.render("order/success");
+  }
+
+  @Get("/:id", {
+    middleware: [decorateHtmlResponse("My Order"), authorization()],
+  })
+  async show(req: Request, res: Response) {
+    //
+    let id = req.params.id;
+    const data = await OrderService.getInstance().show(id);
+    res.render("order/myOrderDetails", { order: data });
   }
 
   // @Post("/product_item", {
