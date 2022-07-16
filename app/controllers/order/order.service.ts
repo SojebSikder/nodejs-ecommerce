@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { ArrayHelper } from "../../../system";
 import { Auth, Mail } from "../../../system/core";
 import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
@@ -34,8 +33,8 @@ export class OrderService {
       },
     });
 
-    let pagination = Math.ceil(paginationResult.length / 20);
-    let limit = 20;
+    let limit = 15;
+    let pagination = Math.ceil(paginationResult.length / limit);
 
     const result = await prisma.order.findMany({
       where: {
@@ -52,8 +51,6 @@ export class OrderService {
 
   /**
    * show specific data
-   * @param req
-   * @param res
    */
   async show(arg_id: string) {
     const id = arg_id;
@@ -76,8 +73,6 @@ export class OrderService {
 
   /**
    * store data
-   * @param req
-   * @param res
    */
   async store(req: Request, res: Response) {
     let price = req.body.price;
