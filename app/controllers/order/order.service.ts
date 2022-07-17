@@ -164,6 +164,7 @@ export class OrderService {
 
     // make payment
     await PaymentDetailsService.getInstance().store({
+      orderID: order_id,
       items: items,
       TotalPrice: String(totalPrice.toFixed(2)),
       redirect_callback: async (value) => {
@@ -220,6 +221,32 @@ export class OrderService {
     });
 
     await prisma.cart.deleteMany({ where: { userId: user.userid } });
+    return result;
+  }
+
+  /**
+   * update specific data
+   */
+  async update({ Id, SignedCookies, status = "order_confirmed", paid = "PAID" }) {
+    const id = Id;
+    const user = Auth.userByCookie(SignedCookies);
+    const result = await prisma.order.findFirst({
+      where: {
+        orderId: String(id),
+        userId: Number(user.userid),
+      },
+    });
+    if (result) {
+      await prisma.order.update({
+        where: {
+          orderId: String(id),
+        },
+        data: {
+          paymentStatus: paid,
+          status: status,
+        },
+      });
+    }
     return result;
   }
 }

@@ -121,9 +121,11 @@ model Order {
   // * available value:
   // *
   // * 'order_placed',
+  // * 'order_confirmed',
   // * 'order_picked',
   // * 'order_on_way',
   // * 'order_delivered',
+  // * 'order_returned',
   // * 'order_cancelled',
   // * 'order_paused'
   // */

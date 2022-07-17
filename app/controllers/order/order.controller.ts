@@ -33,11 +33,19 @@ export class OrderController {
 
   @Get("/success", { middleware: [decorateHtmlResponse("Success")] })
   async successPage(req: Request, res: Response) {
+    //
+    const orderID = req.query.orderID;
     await PaymentDetailsService.getInstance().success({
       price: req.query.amount,
       PayerID: req.query.PayerID,
       PaymentID: req.query.paymentId,
-      success_callback: () => {
+      success_callback: async () => {
+        // update order status
+        await OrderService.getInstance().update({
+          Id: orderID,
+          SignedCookies: req.signedCookies,
+        });
+        // render success page
         res.render("order/success");
       },
     });

@@ -23,7 +23,8 @@ export class PaymentDetailsService {
     return this._instance;
   }
 
-  async store({ TotalPrice, items, redirect_callback }) {
+  async store({ TotalPrice, orderID, items, redirect_callback }) {
+    const orderid = orderID;
     const totalPrice = TotalPrice;
     const itemsArray = items;
     //
@@ -35,8 +36,10 @@ export class PaymentDetailsService {
       redirect_urls: {
         // return_url: "http://localhost:3000/order/success?amount=" + totalPrice,
         // cancel_url: "http://localhost:3000/order/cancel",
-        return_url: `${env("APP_URL")}/order/success?amount=${totalPrice}`,
-        cancel_url: `${env("APP_URL")}/order/cancel`,
+        return_url: `${env(
+          "APP_URL"
+        )}/order/success?amount=${totalPrice}&orderID=${orderid}`,
+        cancel_url: `${env("APP_URL")}/order/cancel?orderID=${orderid}`,
       },
       transactions: [
         {

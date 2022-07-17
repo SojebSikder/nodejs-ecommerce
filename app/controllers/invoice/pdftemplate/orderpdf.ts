@@ -1,4 +1,6 @@
-export const orderpdf = ({ totalPrice, customerName, orderId, items }) => {
+import { env } from "../../../../system";
+
+export const orderpdf = ({ totalPrice, customerName, orderId, orderStatus, items }) => {
   const today = new Date();
   return `
     <!doctype html>
@@ -86,7 +88,9 @@ export const orderpdf = ({ totalPrice, customerName, orderId, items }) => {
                    <td colspan="2">
                       <table>
                          <tr>
-                            <td class="title"><img  src="./logo.png"
+                            <td class="title"><img  src="${env(
+                              "APP_URL"
+                            )}/assets/images/logo.png"
                                style="width:100%; max-width:156px;"></td>
                             <td>
                                Date: ${`${today.getDate()}. ${
@@ -106,6 +110,9 @@ export const orderpdf = ({ totalPrice, customerName, orderId, items }) => {
                             </td>
                             <td>
                                Order Id: ${orderId}
+                            </td>
+                            <td>
+                               Order Status: ${orderStatus}
                             </td>
                          </tr>
                       </table>
@@ -128,6 +135,9 @@ export const orderpdf = ({ totalPrice, customerName, orderId, items }) => {
              </table>
              <br />
              <h1 class="justify-center">Total price: $${totalPrice}</h1>
+             <p>Generated from <a href="${env("APP_URL")}">${env(
+    "APP_NAME"
+  )}</a></p>
           </div>
        </body>
     </html>
