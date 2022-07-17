@@ -70,6 +70,20 @@ export class OrderController {
     // res.render("order/success");
   }
 
+  @Post("/pay/:id", {
+    middleware: [decorateHtmlResponse(), authorization()],
+  })
+  async pay(req: Request, res: Response) {
+    // pay for existing order
+    const id = req.params.id;
+    const data = await OrderService.getInstance().pay({
+      orderID: id,
+      signedCookies: req.signedCookies,
+      req,
+      res,
+    });
+  }
+
   @Post("/cancel/:id", {
     middleware: [decorateHtmlResponse(), authorization()],
   })

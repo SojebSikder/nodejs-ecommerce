@@ -195,6 +195,79 @@ export class OrderService {
   }
 
   /**
+   * pay for existing order
+   */
+  async pay({ orderID, signedCookies, req, res }) {
+    let orderId = orderID;
+    const orderItemId = req.body.orderItemId;
+    let totalPrice;
+
+    const user = Auth.userByCookie(signedCookies);
+    // get price from cart
+    const order = await prisma.order.findFirst({
+      where: {
+        orderId: String(orderId),
+        userId: user.userid,
+      },
+      select: {
+        orderId: true,
+        createdAt: true,
+        total: true,
+        status: true,
+        price: true,
+        OrderItem: {
+          select: {
+            price: true,
+            quantity: true,
+            product: true,
+          },
+        },
+      },
+    });
+
+    totalPrice = order.price;
+
+    // store to orderProductItem to send to paypal
+    const items = [];
+
+    for (const orderItem of order.OrderItem) {
+      // store to orderProductItem first
+      items.push({
+        name: orderItem.product.name,
+        price: String(orderItem.product.price.toFixed(2)),
+        currency: "USD",
+        quantity: orderItem.quantity,
+      });
+    }
+
+    // todo: remove product quantity from product
+
+    // make payment
+    await PaymentDetailsService.getInstance().store({
+      orderID: orderId,
+      items: items,
+      TotalPrice: String(totalPrice.toFixed(2)),
+      redirect_callback: async (value) => {
+        res.redirect(value);
+      },
+    });
+
+    // send email to user
+    // try {
+    //   // send email to user
+    //   const email = Mail.to(user.email)
+    //     .subject("Order placed successfully")
+    //     .body("Order placed successfully")
+    //     .send();
+
+    //   console.log(email);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    return;
+  }
+
+  /**
    * store order product item
    * @param req
    * @param res
