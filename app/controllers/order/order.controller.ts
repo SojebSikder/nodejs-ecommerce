@@ -63,7 +63,10 @@ export class OrderController {
   async show(req: Request, res: Response) {
     //
     let id = req.params.id;
-    const data = await OrderService.getInstance().show(id);
+    const data = await OrderService.getInstance().show({
+      Id: id,
+      SignedCookies: req.signedCookies,
+    });
     res.render("order/myOrderDetails", { order: data });
   }
 }

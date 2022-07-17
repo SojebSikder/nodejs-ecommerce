@@ -5,9 +5,9 @@ import { InvoiceService } from "./invoice.service";
 @Controller("/invoice/")
 export class InvoiceController {
   //
-  @Get("order")
+  @Get("order/:id")
   async printOrderPdf(req: Request, res: Response) {
-    const { name, price1, price2, receiptId } = req.body;
+    const id = req.params.id;
 
     const stream = res.writeHead(200, {
       "Content-Type": "application/pdf",
@@ -15,16 +15,14 @@ export class InvoiceController {
     });
 
     const result = await InvoiceService.getInstance().printOrderPdf({
+      id,
+      signedCookie: req.signedCookies,
       callback: (buffer) => {
         stream.write(buffer);
       },
       endCallback: () => {
         stream.end();
       },
-      name,
-      price1,
-      price2,
-      receiptId,
     });
   }
 }

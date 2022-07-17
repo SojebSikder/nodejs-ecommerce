@@ -52,18 +52,19 @@ export class OrderService {
   /**
    * show specific data
    */
-  async show(arg_id: string) {
-    const id = arg_id;
+  async show({ Id, SignedCookies }) {
+    const id = Id;
+    const user = Auth.userByCookie(SignedCookies);
     const result = await prisma.order.findFirst({
       where: {
         orderId: String(id),
+        userId: Number(user.userid),
       },
       select: {
         orderId: true,
         createdAt: true,
         status: true,
         price: true,
-
         OrderItem: {
           select: {
             quantity: true,

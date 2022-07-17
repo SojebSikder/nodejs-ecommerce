@@ -1,4 +1,4 @@
-export const orderpdf = ({ name, price1, price2, receiptId }) => {
+export const orderpdf = ({ totalPrice, customerName, orderId, items }) => {
   const today = new Date();
   return `
     <!doctype html>
@@ -86,10 +86,10 @@ export const orderpdf = ({ name, price1, price2, receiptId }) => {
                    <td colspan="2">
                       <table>
                          <tr>
-                            <td class="title"><img  src="https://i2.wp.com/cleverlogos.co/wp-content/uploads/2018/05/reciepthound_1.jpg?fit=800%2C600&ssl=1"
+                            <td class="title"><img  src="./logo.png"
                                style="width:100%; max-width:156px;"></td>
                             <td>
-                               Datum: ${`${today.getDate()}. ${
+                               Date: ${`${today.getDate()}. ${
                                  today.getMonth() + 1
                                }. ${today.getFullYear()}.`}
                             </td>
@@ -102,10 +102,10 @@ export const orderpdf = ({ name, price1, price2, receiptId }) => {
                       <table>
                          <tr>
                             <td>
-                               Customer name: ${name}
+                               Customer name: ${customerName}
                             </td>
                             <td>
-                               Receipt number: ${receiptId}
+                               Order Id: ${orderId}
                             </td>
                          </tr>
                       </table>
@@ -114,20 +114,20 @@ export const orderpdf = ({ name, price1, price2, receiptId }) => {
                 <tr class="heading">
                    <td>Bought items:</td>
                    <td>Price</td>
+                   <td>Quantity</td>
                 </tr>
-                <tr class="item">
-                   <td>First item:</td>
-                   <td>${price1}$</td>
-                </tr>
-                <tr class="item">
-                   <td>Second item:</td>
-                   <td>${price2}$</td>
-                </tr>
+                ${items.map((item) => {
+                  return `
+                    <tr class="item">
+                       <td>${item.product.name}</td>
+                       <td>${item.price}</td>
+                       <td>${item.quantity}</td>
+                    </tr>
+                  `;
+                })}
              </table>
              <br />
-             <h1 class="justify-center">Total price: ${
-               parseInt(price1) + parseInt(price2)
-             }$</h1>
+             <h1 class="justify-center">Total price: $${totalPrice}</h1>
           </div>
        </body>
     </html>

@@ -2,6 +2,12 @@
 
 nodejs ecommerce application
 
+## Features:
+
+- Paypal integreation
+- Order receipt pdf generation
+- And much more.
+
 ## Configure
 
 - Set up database credentials in env file
