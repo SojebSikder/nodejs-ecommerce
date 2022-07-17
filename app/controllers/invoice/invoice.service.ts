@@ -24,8 +24,10 @@ export class InvoiceService {
     const totalPrice = orderResult.price;
     const orderId = orderResult.orderId;
     const name = orderResult.user.username;
+    const paymentStatus = orderResult.paymentStatus;
 
     const html = orderpdf({
+      paymentStatus: paymentStatus,
       orderStatus: orderResult.status,
       totalPrice: totalPrice,
       customerName: name,

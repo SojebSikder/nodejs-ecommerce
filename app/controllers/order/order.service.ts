@@ -65,6 +65,7 @@ export class OrderService {
         createdAt: true,
         status: true,
         price: true,
+        paymentStatus: true,
         user: {
           select: {
             id: true,

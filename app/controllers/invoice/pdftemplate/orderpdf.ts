@@ -1,6 +1,13 @@
-import { env } from "../../../../system";
+import { env } from "../../../../system/util";
 
-export const orderpdf = ({ totalPrice, customerName, orderId, orderStatus, items }) => {
+export const orderpdf = ({
+  totalPrice,
+  customerName,
+  orderId,
+  orderStatus,
+  items,
+  paymentStatus,
+}) => {
   const today = new Date();
   return `
     <!doctype html>
@@ -113,6 +120,9 @@ export const orderpdf = ({ totalPrice, customerName, orderId, orderStatus, items
                             </td>
                             <td>
                                Order Status: ${orderStatus}
+                            </td>
+                            <td>
+                               Payment Status: ${paymentStatus}
                             </td>
                          </tr>
                       </table>
