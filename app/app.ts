@@ -2,12 +2,9 @@
 import { Express } from "express";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import { graphqlHTTP } from "express-graphql";
 // internal imports
 // middleware imports
 import { appConfig } from "../config/app";
-import { rootResolver } from "../graphql/resolvers";
-import { schema } from "../graphql/schema";
 import { setUser } from "./middlewares/authorization";
 
 /**
@@ -19,13 +16,4 @@ export function boot(app: Express) {
   app.use(cookieParser(appConfig.cookieSecret));
   // custom middleware here
   app.use(setUser());
-  // graphql endpoint
-  app.use(
-    "/graphql",
-    graphqlHTTP({
-      schema: schema,
-      rootValue: rootResolver,
-      graphiql: true,
-    })
-  );
 }
