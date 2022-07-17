@@ -65,6 +65,13 @@ export class OrderService {
         createdAt: true,
         status: true,
         price: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
         OrderItem: {
           select: {
             quantity: true,
@@ -227,7 +234,12 @@ export class OrderService {
   /**
    * update specific data
    */
-  async update({ Id, SignedCookies, status = "order_confirmed", paid = "PAID" }) {
+  async update({
+    Id,
+    SignedCookies,
+    status = "order_confirmed",
+    paid = "PAID",
+  }) {
     const id = Id;
     const user = Auth.userByCookie(SignedCookies);
     const result = await prisma.order.findFirst({

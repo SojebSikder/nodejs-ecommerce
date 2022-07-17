@@ -22,11 +22,9 @@ export class InvoiceService {
       SignedCookies: signedCookie,
     });
 
-    const user = Auth.userByCookie(signedCookie);
-
     const totalPrice = orderResult.price;
     const orderId = orderResult.orderId;
-    const name = user.username;
+    const name = orderResult.user.username;
 
     const html = orderpdf({
       orderStatus: orderResult.status,
