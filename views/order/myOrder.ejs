@@ -22,7 +22,7 @@
           <div style="display: inline;">
             <%= order.status %>
           </div>
-          <% if((order.status == "order_delivered") || (order.status == "order_cancelled")) {%>
+          <% if((order.status == "order_delivered") || (order.status == "order_confirmed") || (order.status == "order_cancelled")) {%>
 
           <% }else{ %>
           <form style="display: inline;" action="/order/pay/<%= order.orderId %> " method="post">
