@@ -11,7 +11,7 @@ export class InvoiceController {
 
     const stream = res.writeHead(200, {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment;filename=${__dirname}\\result.pdf`,
+      // "Content-Disposition": `attachment;filename=${__dirname}\\result.pdf`,
     });
 
     const result = await InvoiceService.getInstance().printOrderPdf({
@@ -26,7 +26,5 @@ export class InvoiceController {
       price2,
       receiptId,
     });
-
-    // res.sendFile(`${__dirname}\\result.pdf`);
   }
 }

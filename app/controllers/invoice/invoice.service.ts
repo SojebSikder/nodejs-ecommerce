@@ -1,9 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import fs from "fs";
 import pdf from "html-pdf";
 import { orderpdf } from "./pdftemplate/orderpdf";
-
-const prisma = new PrismaClient();
 
 export class InvoiceService {
   private static _instance: InvoiceService;
@@ -35,6 +32,7 @@ export class InvoiceService {
     });
   }
 
+  // -------------Don't scroll down.<--> Abstraction here----------------
   // direct downlaod. send chunk by chunk to user to download direct.
   public async printPdfBuffer({
     endCallback,
