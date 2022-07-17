@@ -1,6 +1,5 @@
 import fs from "fs";
 import pdf from "html-pdf";
-import { Auth } from "../../../system";
 import { OrderService } from "../order/order.service";
 import { orderpdf } from "./pdftemplate/orderpdf";
 
