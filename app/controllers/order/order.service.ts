@@ -238,7 +238,7 @@ export class OrderService {
     Id,
     SignedCookies,
     status = "order_confirmed",
-    paid = "PAID",
+    paid = "NOT_PAID",
   }) {
     const id = Id;
     const user = Auth.userByCookie(SignedCookies);

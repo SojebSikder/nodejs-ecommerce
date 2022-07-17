@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { Auth } from "../../../system";
 import { env } from "../../../system/util";
 
@@ -7,7 +8,7 @@ import { env } from "../../../system/util";
  * @returns
  */
 export function decorateHtmlResponse(page_title = null) {
-  return function (req, res, next) {
+  return function (req: Request, res: Response, next) {
     res.locals.html = true;
     if (page_title == null) {
       res.locals.title = `${env("APP_NAME")}`;
@@ -20,6 +21,8 @@ export function decorateHtmlResponse(page_title = null) {
     res.locals.errors = {};
     res.locals.data = {};
     res.locals.message = "";
+    // let fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
+
     next();
   };
 }

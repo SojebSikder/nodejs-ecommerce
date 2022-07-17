@@ -7,6 +7,7 @@ import { OrderService } from "./order.service";
 import { v4 as uuidv4 } from "uuid";
 import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
+let fullUrl;
 @Controller("/order")
 export class OrderController {
   //
@@ -18,6 +19,9 @@ export class OrderController {
       page: Number(page),
       signedCookies: req.signedCookies,
     });
+    // set urls for refer
+    fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
+    //
     res.render("order/myOrder", { orders: data, page: page });
   }
 
@@ -43,6 +47,7 @@ export class OrderController {
         // update order status
         await OrderService.getInstance().update({
           Id: orderID,
+          paid: "PAID",
           SignedCookies: req.signedCookies,
         });
         // render success page
@@ -63,6 +68,22 @@ export class OrderController {
     // store order
     const data = await OrderService.getInstance().store(req, res);
     // res.render("order/success");
+  }
+
+  @Post("/cancel/:id", {
+    middleware: [decorateHtmlResponse(), authorization()],
+  })
+  async orderCancel(req: Request, res: Response) {
+    //
+    const id = req.params.id;
+    await OrderService.getInstance().update({
+      Id: id,
+      SignedCookies: req.signedCookies,
+      status: "order_cancelled",
+    });
+
+    res.redirect(fullUrl);
+    // res.redirect("back");
   }
 
   @Get("/:id", {
