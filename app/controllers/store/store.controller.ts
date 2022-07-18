@@ -23,7 +23,19 @@ export class StoreController {
     middleware: [authorization()],
   })
   async createstore(req: Request, res: Response) {
-    await StoreService.getInstance().createStore(req.body);
-    res.send("Hello world");
+    //
+    const name = req.body.name;
+    const email = req.body.email;
+    const description = req.body.description;
+    const phone = req.body.phone;
+
+    await StoreService.getInstance().createStore({
+      name,
+      email,
+      description,
+      phone,
+      signedCookies: req.signedCookies,
+    });
+    res.redirect("/store");
   }
 }

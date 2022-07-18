@@ -20,14 +20,19 @@ export class StoreService {
    */
   public async index() {}
 
-  async createStore({ signedCookies }) {
+  async createStore({ name, email, description, phone, signedCookies }) {
     const user = Auth.userByCookie(signedCookies);
     const result = await prisma.store.create({
       data: {
         userId: user.userId,
-        storeDetails:{
-          
-        }
+        StoreDetails: {
+          create: {
+            name: name,
+            email: email,
+            description: description,
+            phone: phone,
+          },
+        },
       },
     });
 

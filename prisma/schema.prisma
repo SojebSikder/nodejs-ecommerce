@@ -138,8 +138,8 @@ model StoreDetails {
   email       String?
   description String?
   logo        String?
-  storeId     Int       @unique
-  Store       Store     @relation(fields: [storeId], references: [id])
+  storeId     Int?
+  Store       Store?    @relation(fields: [storeId], references: [id])
   storeUrlId  Int?
   storeUrl    StoreUrl? @relation(fields: [storeUrlId], references: [id])
   addressId   Int?
