@@ -81,48 +81,52 @@ export class StoreService {
     };
   }
   async updateStore({
-    name,
-    displayName,
-    email,
-    description,
-    phone,
+    name = null,
+    displayName = null,
+    email = null,
+    description = null,
+    phone = null,
+    status = null,
     signedCookies,
   }) {
     const user = Auth.userByCookie(signedCookies);
     let result;
-    let data;
+    let data = {};
     let statusCode = 200;
     let message = "";
     let success = true;
 
-    if (name == null) {
-      data = {
-        displayName: displayName,
-        email: email,
-        description: description,
-        phone: phone,
-      };
+    const storeInfo = await prisma.store.findFirst({
+      where: {
+        userId: user.userid,
+      },
+    });
 
-      const storeInfo = await prisma.store.findFirst({
-        where: {
-          userId: user.userid,
-        },
-      });
+    if (displayName) {
+      Object.assign(data, { displayName });
+    }
+    if (email) {
+      Object.assign(data, { email });
+    }
+    if (description) {
+      Object.assign(data, { description });
+    }
+    if (phone) {
+      Object.assign(data, { phone });
+    }
+    if (status) {
+      Object.assign(data, { status });
+    }
 
-      result = await prisma.storeDetails.updateMany({
-        where: {
-          storeId: storeInfo.id,
-        },
-        data: data,
-      });
-    } else {
+    if (name) {
+      Object.assign(data, { name });
       const checkStoreNameExist = await prisma.storeDetails.findFirst({
         where: {
           name: name,
         },
       });
 
-      if (!checkStoreNameExist) {
+      if (checkStoreNameExist) {
         statusCode = 400;
         message = "Store name already exist";
         success = false;
@@ -134,26 +138,14 @@ export class StoreService {
           message: message,
         };
       }
-      data = {
-        name: name,
-        displayName: displayName,
-        email: email,
-        description: description,
-        phone: phone,
-      };
-      const storeInfo = await prisma.store.findFirst({
-        where: {
-          userId: user.userid,
-        },
-      });
-
-      result = await prisma.storeDetails.updateMany({
-        where: {
-          storeId: storeInfo.id,
-        },
-        data: data,
-      });
     }
+
+    result = await prisma.storeDetails.updateMany({
+      where: {
+        storeId: storeInfo.id,
+      },
+      data: data,
+    });
 
     return {
       statusCode: statusCode,

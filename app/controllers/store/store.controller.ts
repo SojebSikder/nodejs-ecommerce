@@ -76,15 +76,29 @@ export class StoreController {
     const email = req.body.email;
     const description = req.body.description;
     const phone = req.body.phone;
+    const storecommand = req.body.storecommand || null;
 
-    const result = await StoreService.getInstance().updateStore({
-      name,
-      displayName,
-      email,
-      description,
-      phone,
-      signedCookies: req.signedCookies,
-    });
+    let result;
+    if (storecommand) {
+      result = await StoreService.getInstance().updateStore({
+        name,
+        displayName,
+        email,
+        description,
+        phone,
+        signedCookies: req.signedCookies,
+        
+      });
+    } else {
+      result = await StoreService.getInstance().updateStore({
+        name,
+        displayName,
+        email,
+        description,
+        phone,
+        signedCookies: req.signedCookies,
+      });
+    }
 
     const updated = await StoreService.getInstance().index({
       signedCookies: req.signedCookies,
