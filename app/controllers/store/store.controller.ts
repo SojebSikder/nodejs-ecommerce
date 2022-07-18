@@ -51,7 +51,7 @@ export class StoreController {
     });
   }
 
-  @Get("/edit", {
+  @Get("/editstore", {
     middleware: [authorization(), decorateHtmlResponse("Edit store")],
   })
   async updatestorePage(req: Request, res: Response) {
@@ -61,7 +61,7 @@ export class StoreController {
     res.render("store/editStore", { store: result });
   }
 
-  @Put("/edit", {
+  @Post("/editstore", {
     middleware: [authorization(), decorateHtmlResponse("Create store")],
   })
   async updatestore(req: Request, res: Response) {
@@ -81,8 +81,13 @@ export class StoreController {
       signedCookies: req.signedCookies,
     });
 
+    const updated = await StoreService.getInstance().index({
+      signedCookies: req.signedCookies,
+    });
+
     res.render("store/editStore", {
       message: result.message,
+      store: updated,
     });
   }
 }

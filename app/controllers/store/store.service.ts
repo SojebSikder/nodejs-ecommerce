@@ -101,11 +101,17 @@ export class StoreService {
     let message = "";
     let success = true;
 
-    if (checkStoreNameExist) {
+    if (!checkStoreNameExist) {
       statusCode = 400;
       message = "Store name already exist";
       success = false;
     } else {
+      const storeInfo = await prisma.store.findFirst({
+        where: {
+          id: user.userid,
+        },
+      });
+
       result = await prisma.store.update({
         where: {
           userId: user.userid,
@@ -113,12 +119,17 @@ export class StoreService {
         data: {
           userId: user.userid,
           StoreDetails: {
-            create: {
-              name: name,
-              displayName: displayName,
-              email: email,
-              description: description,
-              phone: phone,
+            update: {
+              where: {
+                id: storeInfo.id,
+              },
+              data: {
+                name: name,
+                displayName: displayName,
+                email: email,
+                description: description,
+                phone: phone,
+              },
             },
           },
         },
