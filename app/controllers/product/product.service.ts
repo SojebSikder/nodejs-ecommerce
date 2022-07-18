@@ -19,18 +19,29 @@ export class ProductService {
   /**
    * show all data
    */
-  public async index() {
+  public async index({ page = 1 }) {
+    const paginationResult = await prisma.product.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    let limit = 15;
+    let pagination = Math.ceil(paginationResult.length / limit);
+
     const result = await prisma.product.findMany({
       orderBy: [
         {
-          id: "desc",
+          createdAt: "desc",
         },
       ],
+      skip: limit * (page - 1),
+      take: limit,
       include: {
         ProductImage: true,
       },
     });
-    return result;
+    return { data: result, pagination: pagination };
   }
 
   /**

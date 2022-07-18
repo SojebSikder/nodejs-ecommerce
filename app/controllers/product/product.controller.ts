@@ -8,9 +8,13 @@ import { ProductService } from "./product.service";
 export class ProductController {
   @Get("", { middleware: [decorateHtmlResponse()] })
   async index(req: Request, res: Response) {
-    const result = await ProductService.getInstance().index();
+    //
+    const page = req.query.page == undefined ? 1 : req.query.page;
+    const result = await ProductService.getInstance().index({
+      page: Number(page),
+    });
 
-    res.render("index", { posts: result });
+    res.render("index", { posts: result, page: page });
   }
 
   @Post("product/add", { middleware: [decorateHtmlResponse()] })

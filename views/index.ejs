@@ -1,44 +1,72 @@
 <%- include('partials/header'); -%>
-  <%- include('partials/navbar'); -%>
+<%- include('partials/navbar'); -%>
 
-    <div class="container">
-      <h1>Buy here with joy</h1>
-      <div class="row justify-content-md-center">
-        <% for(var i=0; i < posts.length; i++) { %>
+<div class="container">
+  <h1>Buy here with joy</h1>
+
+  <div class="d-flex flex-row justify-content-center">
+    <form class="row g-3" action="/product/order" method="post">
 
 
-          <!-- product card start -->
-          <div class="card" style="width: 18rem; margin: 10px;">
+      <div class="col-auto">
+        <input type="search" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-lg btn-outline-primary mb-3">Search</button>
+      </div>
 
-            <a href="/product/<%= posts[i].id %>">
 
-              <!-- display images -->
-              <% for(let image in posts[i].ProductImage){ %>
-                <img class="card-img-top" src="/uploads/products/<%= posts[i].ProductImage[image].url %>"
-                  alt=" <%= posts[i].name %>" />
-                <% } %>
-            </a>
+    </form>
+  </div>
+  <div class="row justify-content-md-center">
+    <% for(let post of posts.data) { %>
 
-            <div class="card-body">
-              <h5 class="card-title"> <a href="/product/<%= posts[i].id %>">
-                  <%= posts[i].name %>
-                </a> </h5>
-              <p class="card-text">
-                <%= posts[i].description %>
-              </p>
 
-              <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart/add">
+    <!-- product card start -->
+    <div class="card" style="width: 18rem; margin: 10px;">
 
-                <input type="hidden" class="btn btn-primary" name="productId" value="<%= posts[i].id %> "></a>
-                <input type="submit" class="btn btn-primary" value="Add to cart"></a>
-                <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
-              </form>
-            </div>
-          </div>
-          <!-- product card end -->
-          <br />
-          <% } %>
+      <a href="/product/<%= post.id %>">
+
+        <!-- display images -->
+        <% for(let image in post.ProductImage){ %>
+        <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[image].url %>" alt=" <%= post.name %>" />
+        <% } %>
+      </a>
+
+      <div class="card-body">
+        <h5 class="card-title"> <a href="/product/<%= post.id %>">
+            <%= post.name %>
+          </a> </h5>
+        <p class="card-text">
+          <%= post.description %>
+        </p>
+
+        <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart/add">
+
+          <input type="hidden" class="btn btn-primary" name="productId" value="<%= post.id %> "></a>
+          <input type="submit" class="btn btn-primary" value="Add to cart"></a>
+          <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
+        </form>
       </div>
     </div>
+    <!-- product card end -->
+    <br />
+    <% } %>
 
-    <%- include('partials/footer'); -%>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < posts.pagination; i++) {%>
+        <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
+          <a class="page-link" href="/?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<%- include('partials/footer'); -%>
