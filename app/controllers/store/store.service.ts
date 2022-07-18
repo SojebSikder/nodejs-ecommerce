@@ -105,13 +105,13 @@ export class StoreService {
 
       const storeInfo = await prisma.store.findFirst({
         where: {
-          id: user.userid,
+          userId: user.userid,
         },
       });
 
-      result = await prisma.storeDetails.update({
+      result = await prisma.storeDetails.updateMany({
         where: {
-          id: storeInfo.id,
+          storeId: storeInfo.id,
         },
         data: data,
       });
@@ -126,6 +126,13 @@ export class StoreService {
         statusCode = 400;
         message = "Store name already exist";
         success = false;
+
+        return {
+          statusCode: statusCode,
+          success: success,
+          data: result,
+          message: message,
+        };
       }
       data = {
         name: name,
@@ -136,13 +143,13 @@ export class StoreService {
       };
       const storeInfo = await prisma.store.findFirst({
         where: {
-          id: user.userid,
+          userId: user.userid,
         },
       });
 
-      result = await prisma.storeDetails.update({
+      result = await prisma.storeDetails.updateMany({
         where: {
-          id: storeInfo.id,
+          storeId: storeInfo.id,
         },
         data: data,
       });

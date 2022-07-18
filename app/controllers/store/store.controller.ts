@@ -62,6 +62,7 @@ export class StoreController {
     const result = await StoreService.getInstance().index({
       signedCookies: req.signedCookies,
     });
+
     res.render("store/editStore", { store: result });
   }
 
@@ -88,7 +89,6 @@ export class StoreController {
     const updated = await StoreService.getInstance().index({
       signedCookies: req.signedCookies,
     });
-
     res.render("store/editStore", {
       message: result.message,
       store: updated,
