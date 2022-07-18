@@ -147,9 +147,6 @@ export class OrderService {
       },
     });
 
-    // store to orderProductItem to send to paypal
-    const items = [];
-
     for (const cart of carts) {
       // store to orderProductItem first
       await this.storeOrderProductItem({
@@ -160,35 +157,16 @@ export class OrderService {
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
       });
-
-      // remove product quantity from product
-      await prisma.product.update({
-        where: {
-          id: cart.productId,
-        },
-        data: {
-          stock: cart.product.stock - cart.quantity,
-        },
-      });
-
-      // push to items
-      items.push({
-        name: cart.product.name,
-        price: String(cart.product.price.toFixed(2)),
-        currency: "USD",
-        quantity: cart.quantity,
-      });
     }
 
     // make payment
-    await PaymentDetailsService.getInstance().store({
+    await this.pay({
       orderID: order_id,
-      items: items,
-      TotalPrice: String(totalPrice.toFixed(2)),
-      redirect_callback: async (value) => {
-        res.redirect(value);
-      },
+      signedCookies: req.signedCookies,
+      req,
+      res,
     });
+
 
     // send email to user
     // try {
@@ -242,6 +220,15 @@ export class OrderService {
     const items = [];
 
     for (const orderItem of order.OrderItem) {
+      // remove product quantity from product
+      await prisma.product.update({
+        where: {
+          id: orderItem.product.id,
+        },
+        data: {
+          stock: orderItem.product.stock - orderItem.quantity,
+        },
+      });
       // store to orderProductItem first
       items.push({
         name: orderItem.product.name,
@@ -250,8 +237,6 @@ export class OrderService {
         quantity: orderItem.quantity,
       });
     }
-
-    // todo: remove product quantity from product
 
     // make payment
     await PaymentDetailsService.getInstance().store({
