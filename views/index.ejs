@@ -21,7 +21,11 @@
       </div>
 
       <% if(search.q){ %>
+      <% if(search.count > 0) {%>
       <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results! in <strong><%= search.time %></strong></div>
+      <% }else{ %>
+      <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results!</div>
+      <% } %>
       <% } %>
 
     </form>
