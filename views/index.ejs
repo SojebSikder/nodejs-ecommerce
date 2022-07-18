@@ -5,16 +5,24 @@
   <h1>Buy here with joy</h1>
 
   <div class="d-flex flex-row justify-content-center">
-    <form class="row g-3" action="/product/order" method="post">
+    <form class="row g-3" action="/" method="get">
 
-
+      <% if(search.q){ %>
       <div class="col-auto">
-        <input type="search" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+        <input type="search" name="q" value="<%= search.q %> " class="form-control form-control-lg" id="" placeholder="Search what you want...">
       </div>
+      <% }else{%>
+      <div class="col-auto">
+        <input type="search" name="q" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+      </div>
+      <% } %>
       <div class="col-auto">
         <button type="submit" class="btn btn-lg btn-outline-primary mb-3">Search</button>
       </div>
 
+      <% if(search.q){ %>
+      <div>Search for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results! </div>
+      <% } %>
 
     </form>
   </div>
@@ -53,6 +61,31 @@
     <br />
     <% } %>
 
+    <% if(posts.count > posts.data.length){ %>
+    <div class="row justify-content-md-center">
+      <div class="col-auto">
+        <a href="/search?q=<%= search.q %>&page=<%= posts.page + 1 %>" class="btn btn-lg btn-outline-primary mb-3">Next</a>
+      </div>
+    </div>
+    <% } %>
+
+    <% if(search.q){ %>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < posts.pagination; i++) {%>
+        <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/?q=<%= search.q %>&page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
+          <a class="page-link" href="/?q=<%= search.q %>&page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+    <% } else{ %>
+
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <% for(let i=0; i < posts.pagination; i++) {%>
@@ -66,6 +99,8 @@
         <% } %>
       </ul>
     </nav>
+
+    <% } %>
   </div>
 </div>
 

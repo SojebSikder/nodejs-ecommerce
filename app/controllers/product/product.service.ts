@@ -19,7 +19,7 @@ export class ProductService {
   /**
    * show all data
    */
-  public async index({ page = 1 }) {
+  public async index({ page = 1, isSearch = false, searchText = "" }) {
     const paginationResult = await prisma.product.findMany({
       orderBy: {
         createdAt: "desc",
@@ -29,18 +29,42 @@ export class ProductService {
     let limit = 15;
     let pagination = Math.ceil(paginationResult.length / limit);
 
-    const result = await prisma.product.findMany({
-      orderBy: [
-        {
-          createdAt: "desc",
+    let result;
+    // main query
+    if (isSearch == true) {
+      result = await prisma.product.findMany({
+        where: {
+          OR: [
+            { name: { contains: searchText } },
+            { description: { contains: searchText } },
+          ],
         },
-      ],
-      skip: limit * (page - 1),
-      take: limit,
-      include: {
-        ProductImage: true,
-      },
-    });
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        skip: limit * (page - 1),
+        take: limit,
+        include: {
+          ProductImage: true,
+        },
+      });
+    } else {
+      result = await prisma.product.findMany({
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        skip: limit * (page - 1),
+        take: limit,
+        include: {
+          ProductImage: true,
+        },
+      });
+    }
+
     return { data: result, pagination: pagination };
   }
 

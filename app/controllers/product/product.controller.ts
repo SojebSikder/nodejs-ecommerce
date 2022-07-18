@@ -10,11 +10,25 @@ export class ProductController {
   async index(req: Request, res: Response) {
     //
     const page = req.query.page == undefined ? 1 : req.query.page;
-    const result = await ProductService.getInstance().index({
-      page: Number(page),
-    });
+    const q = req.query.q;
+    let result;
+    if (q != undefined) {
+      result = await ProductService.getInstance().index({
+        page: Number(page),
+        isSearch: true,
+        searchText: String(q),
+      });
+    } else {
+      result = await ProductService.getInstance().index({
+        page: Number(page),
+      });
+    }
 
-    res.render("index", { posts: result, page: page });
+    res.render("index", {
+      posts: result,
+      page: page,
+      search: { q: q, count: result.data.length },
+    });
   }
 
   @Post("product/add", { middleware: [decorateHtmlResponse()] })
