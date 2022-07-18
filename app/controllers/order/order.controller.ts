@@ -49,6 +49,7 @@ export class OrderController {
           Id: orderID,
           paid: "PAID",
           SignedCookies: req.signedCookies,
+          updateStock: true,
         });
         // render success page
         res.render("order/success");

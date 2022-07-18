@@ -298,6 +298,7 @@ export class OrderService {
     SignedCookies,
     status = "order_confirmed",
     paid = "NOT_PAID",
+    updateStock = false,
   }) {
     const id = Id;
     const user = Auth.userByCookie(SignedCookies);
@@ -333,16 +334,18 @@ export class OrderService {
         },
       });
       // update product stock
-      for (const orderItem of result.OrderItem) {
-        // update product quantity from product
-        await prisma.product.update({
-          where: {
-            id: orderItem.product.id,
-          },
-          data: {
-            stock: orderItem.product.stock - orderItem.quantity,
-          },
-        });
+      if (updateStock) {
+        for (const orderItem of result.OrderItem) {
+          // update product quantity from product
+          await prisma.product.update({
+            where: {
+              id: orderItem.product.id,
+            },
+            data: {
+              stock: orderItem.product.stock - orderItem.quantity,
+            },
+          });
+        }
       }
     }
     return result;
