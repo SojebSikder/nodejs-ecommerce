@@ -84,8 +84,10 @@ export class StoreController {
         status: storecommand,
         signedCookies: req.signedCookies,
       });
+
+      res.redirect("/store");
     } else {
-      result = await StoreService.getInstance().updateStore({
+      result = await StoreService.getInstance().updateStoreDetails({
         name,
         displayName,
         email,
@@ -93,14 +95,15 @@ export class StoreController {
         phone,
         signedCookies: req.signedCookies,
       });
-    }
 
-    const updated = await StoreService.getInstance().index({
-      signedCookies: req.signedCookies,
-    });
-    res.render("store/editStore", {
-      message: result.message,
-      store: updated,
-    });
+      const updated = await StoreService.getInstance().index({
+        signedCookies: req.signedCookies,
+      });
+
+      res.render("store/editStore", {
+        message: result.message,
+        store: updated,
+      });
+    }
   }
 }

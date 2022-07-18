@@ -80,7 +80,41 @@ export class StoreService {
       message: message,
     };
   }
-  async updateStore({
+  async updateStore({ status = null, signedCookies }) {
+    const user = Auth.userByCookie(signedCookies);
+    let result;
+    let data = {};
+    let statusCode = 200;
+    let message = "";
+    let success = true;
+
+    if (status == "delete") {
+      result = await prisma.store.delete({
+        where: {
+          userId: user.userid,
+        },
+      });
+      message = "Store deleted";
+    } else {
+      if (status) {
+        Object.assign(data, { status });
+      }
+
+      result = await prisma.store.updateMany({
+        where: {
+          userId: user.userid,
+        },
+        data: data,
+      });
+    }
+    return {
+      statusCode: statusCode,
+      success: success,
+      data: result,
+      message: message,
+    };
+  }
+  async updateStoreDetails({
     name = null,
     displayName = null,
     email = null,
