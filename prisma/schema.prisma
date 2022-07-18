@@ -33,10 +33,10 @@ model User {
   profile   Profile?
   role      String?    @default("user")
   orders    Order[]
-  Address   Address[]
   Product   Product[]
   ApiToken  ApiToken[]
   cart      cart[]
+  Store     Store[]
 }
 
 model ApiToken {
@@ -46,14 +46,45 @@ model ApiToken {
   userId Int    @unique
 }
 
+model City {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  Address Address[]
+}
+
+model State {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  Address Address[]
+}
+
+model Country {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  Address Address[]
+}
+
 model Address {
-  id      Int     @id @default(autoincrement())
-  street  String?
-  city    String?
-  country String?
-  user    User    @relation(fields: [userId], references: [id])
-  userId  Int     @unique
-  Order   Order[]
+  id           Int            @id @default(autoincrement())
+  street       String?
+  cityId       Int?
+  city         City?          @relation(fields: [cityId], references: [id])
+  stateId      Int?
+  state        State?         @relation(fields: [stateId], references: [id])
+  countryId    Int?
+  country      Country?       @relation(fields: [countryId], references: [id])
+  zip          String?
+  Order        Order[]
+  StoreDetails StoreDetails[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  name      String    @db.VarChar(255)
+  slug      String    @db.VarChar(255)
+  products  Product[]
 }
 
 model Product {
@@ -77,20 +108,49 @@ model Product {
   cart         cart[]
 }
 
-model Category {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  name      String    @db.VarChar(255)
-  slug      String    @db.VarChar(255)
-  products  Product[]
-}
-
 model ProductImage {
   id        Int     @id @default(autoincrement())
   url       String?
   product   Product @relation(fields: [productId], references: [id])
   productId Int
+}
+
+// User can create own store to selling products
+model Store {
+  id     Int     @id @default(autoincrement())
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+  Order  Order[]
+
+  // available value
+  // 1: pending
+  // 2: approved
+  // 3: banned
+  status       String?        @default("pending")
+  StoreDetails StoreDetails[]
+}
+
+// contains store details
+model StoreDetails {
+  id          Int       @id @default(autoincrement())
+  name        String?
+  phone       String?
+  email       String?
+  description String?
+  logo        String?
+  storeId     Int       @unique
+  Store       Store     @relation(fields: [storeId], references: [id])
+  storeUrlId  Int?
+  storeUrl    StoreUrl? @relation(fields: [storeUrlId], references: [id])
+  addressId   Int?
+  address     Address?  @relation(fields: [addressId], references: [id])
+}
+
+model StoreUrl {
+  id           Int            @id @default(autoincrement())
+  name         String?
+  url          String?
+  StoreDetails StoreDetails[]
 }
 
 // Order details
@@ -135,10 +195,14 @@ model Order {
   address   Address? @relation(fields: [addressId], references: [id])
 
   user             User?           @relation(fields: [userId], references: [id])
-  userId           Int
+  userId           Int?
   OrderItem        OrderItem[]
   PaymentDetails   PaymentDetails? @relation(fields: [paymentDetailsId], references: [id])
   paymentDetailsId Int?
+  // store
+  Store            Store?          @relation(fields: [storeId], references: [id])
+  storeId          Int?
+  storeDetailsId   Int?
 }
 
 // Order item
