@@ -49,7 +49,7 @@ export class StoreService {
 
     let result;
     let statusCode = 200;
-    let message = "store name have to be unique!";
+    let message = "";
     let success = true;
 
     if (checkStoreNameExist) {

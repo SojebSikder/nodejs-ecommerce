@@ -46,8 +46,6 @@ export class StoreController {
       signedCookies: req.signedCookies,
     });
 
-    console.log(result.message);
-
     res.render("store/createStore", {
       message: result.message,
     });
