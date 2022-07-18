@@ -20,11 +20,26 @@ export class ProductService {
    * show all data
    */
   public async index({ page = 1, isSearch = false, searchText = "" }) {
-    const paginationResult = await prisma.product.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    let paginationResult;
+    if (isSearch == true) {
+      paginationResult = await prisma.product.findMany({
+        where: {
+          OR: [
+            { name: { contains: searchText } },
+            { description: { contains: searchText } },
+          ],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      paginationResult = await prisma.product.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
 
     let limit = 15;
     let pagination = Math.ceil(paginationResult.length / limit);
