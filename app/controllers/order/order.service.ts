@@ -167,7 +167,6 @@ export class OrderService {
       res,
     });
 
-
     // send email to user
     // try {
     //   // send email to user
@@ -220,15 +219,6 @@ export class OrderService {
     const items = [];
 
     for (const orderItem of order.OrderItem) {
-      // remove product quantity from product
-      await prisma.product.update({
-        where: {
-          id: orderItem.product.id,
-        },
-        data: {
-          stock: orderItem.product.stock - orderItem.quantity,
-        },
-      });
       // store to orderProductItem first
       items.push({
         name: orderItem.product.name,
@@ -316,8 +306,23 @@ export class OrderService {
         orderId: String(id),
         userId: Number(user.userid),
       },
+      select: {
+        orderId: true,
+        createdAt: true,
+        total: true,
+        status: true,
+        price: true,
+        OrderItem: {
+          select: {
+            price: true,
+            quantity: true,
+            product: true,
+          },
+        },
+      },
     });
     if (result) {
+      // update payment status and order status
       await prisma.order.update({
         where: {
           orderId: String(id),
@@ -327,6 +332,18 @@ export class OrderService {
           status: status,
         },
       });
+      // update product stock
+      for (const orderItem of result.OrderItem) {
+        // update product quantity from product
+        await prisma.product.update({
+          where: {
+            id: orderItem.product.id,
+          },
+          data: {
+            stock: orderItem.product.stock - orderItem.quantity,
+          },
+        });
+      }
     }
     return result;
   }
