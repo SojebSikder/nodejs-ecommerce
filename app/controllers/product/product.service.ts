@@ -107,6 +107,10 @@ export class ProductService {
    * @param res
    */
   async store(req: Request, res: Response) {
+    const file =
+      req.files["image"][0].filename == null
+        ? ""
+        : req.files["image"][0].filename;
     const name = req.body.name;
     const description = req.body.description || "";
     const price = Number(req.body.price);
@@ -127,15 +131,33 @@ export class ProductService {
       });
     }
 
-    const result = await prisma.product.create({
-      data: {
-        authorId: user.userid,
-        name: name,
-        description: description,
-        price: price,
-        stock: stock,
-        published: publishedValue,
-      },
-    });
+    if (file) {
+      const result = await prisma.product.create({
+        data: {
+          authorId: user.userid,
+          name: name,
+          description: description,
+          price: price,
+          stock: stock,
+          published: publishedValue,
+          ProductImage: {
+            create: {
+              url: file,
+            },
+          },
+        },
+      });
+    } else {
+      const result = await prisma.product.create({
+        data: {
+          authorId: user.userid,
+          name: name,
+          description: description,
+          price: price,
+          stock: stock,
+          published: publishedValue,
+        },
+      });
+    }
   }
 }

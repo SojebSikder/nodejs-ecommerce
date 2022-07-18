@@ -46,9 +46,7 @@ export class ProductController {
   })
   async store(req: Request, res: Response) {
     //
-    console.log(req.files["image"][0].fieldname);
-    console.log(req.files["image"][0].filename);
-    // await ProductService.getInstance().store(req, res);
+    await ProductService.getInstance().store(req, res);
 
     res.render("post/addPost", {
       message: "Post has been added successfully",
