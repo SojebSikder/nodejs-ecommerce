@@ -126,6 +126,7 @@ model Store {
   // 1: pending
   // 2: approved
   // 3: banned
+  // 4: disabled
   status       String?        @default("pending")
   StoreDetails StoreDetails[]
 }

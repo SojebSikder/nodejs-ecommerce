@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post } from "../../../system/decorator";
+import { Controller, Get, Post, Put } from "../../../system/decorator";
 import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { StoreService } from "./store.service";
@@ -30,6 +30,38 @@ export class StoreController {
     middleware: [authorization(), decorateHtmlResponse("Create store")],
   })
   async createstore(req: Request, res: Response) {
+    //
+    const name = req.body.name;
+    const displayName = req.body.displayname;
+    const email = req.body.email;
+    const description = req.body.description;
+    const phone = req.body.phone;
+
+    const result = await StoreService.getInstance().createStore({
+      name,
+      displayName,
+      email,
+      description,
+      phone,
+      signedCookies: req.signedCookies,
+    });
+
+    res.render("store/createStore", {
+      message: result.message,
+    });
+  }
+
+  @Get("/edit", {
+    middleware: [authorization(), decorateHtmlResponse("Edit store")],
+  })
+  async updatestorePage(req: Request, res: Response) {
+    res.render("store/editStore");
+  }
+
+  @Put("/edit", {
+    middleware: [authorization(), decorateHtmlResponse("Create store")],
+  })
+  async updatestore(req: Request, res: Response) {
     //
     const name = req.body.name;
     const displayName = req.body.displayname;
