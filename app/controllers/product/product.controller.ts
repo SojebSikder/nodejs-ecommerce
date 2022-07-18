@@ -9,6 +9,7 @@ export class ProductController {
   @Get("", { middleware: [decorateHtmlResponse()] })
   async index(req: Request, res: Response) {
     //
+    const startTime = new Date().getTime();
     const page = req.query.page == undefined ? 1 : req.query.page;
     const q = req.query.q;
     let result;
@@ -24,10 +25,12 @@ export class ProductController {
       });
     }
 
+    const endTime = new Date().getTime();
+    const resultTime = endTime - startTime;
     res.render("index", {
       posts: result,
       page: page,
-      search: { q: q, count: result.data.length },
+      search: { q: q, count: result.data.length, time: resultTime + " ms" },
     });
   }
 

@@ -9,7 +9,7 @@
 
       <% if(search.q){ %>
       <div class="col-auto">
-        <input type="search" name="q" value="<%= search.q %> " class="form-control form-control-lg" id="" placeholder="Search what you want...">
+        <input type="search" name="q" value="<%= search.q %>" class="form-control form-control-lg" id="" placeholder="Search what you want...">
       </div>
       <% }else{%>
       <div class="col-auto">
@@ -21,7 +21,7 @@
       </div>
 
       <% if(search.q){ %>
-      <div>Search for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results! </div>
+      <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results! in <strong><%= search.time %></strong></div>
       <% } %>
 
     </form>
