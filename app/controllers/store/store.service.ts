@@ -89,24 +89,20 @@ export class StoreService {
     signedCookies,
   }) {
     const user = Auth.userByCookie(signedCookies);
-
-    const checkStoreNameExist = await prisma.storeDetails.findFirst({
-      where: {
-        name: name,
-      },
-    });
-
-
     let result;
+    let data;
     let statusCode = 200;
     let message = "";
     let success = true;
 
-    if (!checkStoreNameExist) {
-      statusCode = 400;
-      message = "Store name already exist";
-      success = false;
-    } else {
+    if (name == null) {
+      data = {
+        displayName: displayName,
+        email: email,
+        description: description,
+        phone: phone,
+      };
+
       const storeInfo = await prisma.store.findFirst({
         where: {
           id: user.userid,
@@ -117,13 +113,38 @@ export class StoreService {
         where: {
           id: storeInfo.id,
         },
-        data: {
+        data: data,
+      });
+    } else {
+      const checkStoreNameExist = await prisma.storeDetails.findFirst({
+        where: {
           name: name,
-          displayName: displayName,
-          email: email,
-          description: description,
-          phone: phone,
         },
+      });
+
+      if (!checkStoreNameExist) {
+        statusCode = 400;
+        message = "Store name already exist";
+        success = false;
+      }
+      data = {
+        name: name,
+        displayName: displayName,
+        email: email,
+        description: description,
+        phone: phone,
+      };
+      const storeInfo = await prisma.store.findFirst({
+        where: {
+          id: user.userid,
+        },
+      });
+
+      result = await prisma.storeDetails.update({
+        where: {
+          id: storeInfo.id,
+        },
+        data: data,
       });
     }
 

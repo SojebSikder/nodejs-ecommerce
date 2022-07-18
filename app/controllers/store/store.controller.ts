@@ -46,9 +46,13 @@ export class StoreController {
       signedCookies: req.signedCookies,
     });
 
-    res.render("store/createStore", {
-      message: result.message,
-    });
+    if (result.success == true) {
+      res.redirect("/store");
+    } else {
+      res.render("store/createStore", {
+        message: result.message,
+      });
+    }
   }
 
   @Get("/editstore", {
@@ -66,7 +70,7 @@ export class StoreController {
   })
   async updatestore(req: Request, res: Response) {
     //
-    const name = req.body.name;
+    const name = req.body.name || null;
     const displayName = req.body.displayname;
     const email = req.body.email;
     const description = req.body.description;
