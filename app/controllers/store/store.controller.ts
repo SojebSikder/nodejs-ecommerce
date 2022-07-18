@@ -55,7 +55,10 @@ export class StoreController {
     middleware: [authorization(), decorateHtmlResponse("Edit store")],
   })
   async updatestorePage(req: Request, res: Response) {
-    res.render("store/editStore");
+    const result = await StoreService.getInstance().index({
+      signedCookies: req.signedCookies,
+    });
+    res.render("store/editStore", { store: result });
   }
 
   @Put("/edit", {
@@ -69,7 +72,7 @@ export class StoreController {
     const description = req.body.description;
     const phone = req.body.phone;
 
-    const result = await StoreService.getInstance().createStore({
+    const result = await StoreService.getInstance().updateStore({
       name,
       displayName,
       email,
@@ -78,7 +81,7 @@ export class StoreController {
       signedCookies: req.signedCookies,
     });
 
-    res.render("store/createStore", {
+    res.render("store/editStore", {
       message: result.message,
     });
   }
