@@ -81,13 +81,8 @@ export class StoreController {
     let result;
     if (storecommand) {
       result = await StoreService.getInstance().updateStore({
-        name,
-        displayName,
-        email,
-        description,
-        phone,
+        status: storecommand,
         signedCookies: req.signedCookies,
-        
       });
     } else {
       result = await StoreService.getInstance().updateStore({
