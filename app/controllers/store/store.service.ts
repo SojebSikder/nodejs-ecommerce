@@ -18,16 +18,46 @@ export class StoreService {
   /**
    * show all data
    */
-  public async index() {}
+  public async index({ signedCookies }) {
+    const user = Auth.userByCookie(signedCookies).userid;
+    const result = await prisma.store.findFirst({
+      where: {
+        userId: user.userid,
+      },
+      include: {
+        StoreDetails: true,
+      },
+    });
+    return result;
+  }
 
-  async createStore({ name, email, description, phone, signedCookies }) {
+  async createStore({
+    name,
+    displayName,
+    email,
+    description,
+    phone,
+    signedCookies,
+  }) {
     const user = Auth.userByCookie(signedCookies);
+
+    const checkStoreNameExist = await prisma.storeDetails.findFirst({
+      where: {
+        name: name,
+      },
+    });
+    
+    if (checkStoreNameExist) {
+      throw new Error("Store name already exist");
+    }
+
     const result = await prisma.store.create({
       data: {
-        userId: user.userId,
+        userId: user.userid,
         StoreDetails: {
           create: {
             name: name,
+            displayName: displayName,
             email: email,
             description: description,
             phone: phone,
@@ -36,6 +66,6 @@ export class StoreService {
       },
     });
 
-    // return result;
+    return result;
   }
 }

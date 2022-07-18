@@ -9,7 +9,15 @@ export class StoreController {
   //
   @Get("", { middleware: [authorization(), decorateHtmlResponse("My Store")] })
   async index(req: Request, res: Response) {
-    res.render("store/myStore");
+    let isStore = false;
+    const result = await StoreService.getInstance().index({
+      signedCookies: req.signedCookies,
+    });
+    if (result) {
+      isStore = true;
+    }
+    console.log(result);
+    res.render("store/myStore", { store: result, isStore: isStore });
   }
 
   @Get("/createstore", {
@@ -25,12 +33,14 @@ export class StoreController {
   async createstore(req: Request, res: Response) {
     //
     const name = req.body.name;
+    const displayName = req.body.displayname;
     const email = req.body.email;
     const description = req.body.description;
     const phone = req.body.phone;
 
     await StoreService.getInstance().createStore({
       name,
+      displayName,
       email,
       description,
       phone,

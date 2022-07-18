@@ -10,7 +10,11 @@
     <div class="align-items-center">
       <form action="/store/createstore" method="post">
         <div class="form-group">
-          <label for="name">Store Name</label>
+          <label for="name">Store Display Name</label>
+          <input type="text" class="form-control" id="name" name="displayname" placeholder="Store Name">
+        </div>
+        <div class="form-group">
+          <label for="name">Store Name (unique)</label>
           <input type="text" class="form-control" id="name" name="name" placeholder="Store Name">
         </div>
         <!-- <div class="form-group">

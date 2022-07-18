@@ -133,6 +133,7 @@ model Store {
 // contains store details
 model StoreDetails {
   id          Int       @id @default(autoincrement())
+  displayName String?
   name        String?
   phone       String?
   email       String?
