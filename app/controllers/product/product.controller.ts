@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Controller, Get, Post } from "../../../system/decorator";
 import { env } from "../../../system/util";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
+import { attachmentUpload } from "../../middlewares/common/upload";
 import { ProductService } from "./product.service";
 
 @Controller("/")
@@ -34,9 +35,11 @@ export class ProductController {
     });
   }
 
-  @Post("product/add", { middleware: [decorateHtmlResponse()] })
+  @Post("product/add", { middleware: [decorateHtmlResponse(), attachmentUpload("products")] })
   async store(req: Request, res: Response) {
-    await ProductService.getInstance().store(req, res);
+    //
+    console.log(req.files[0])
+    // await ProductService.getInstance().store(req, res);
 
     res.render("post/addPost", {
       message: "Post has been added successfully",

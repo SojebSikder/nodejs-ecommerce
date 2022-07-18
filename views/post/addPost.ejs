@@ -1,40 +1,52 @@
 <%- include('../partials/header'); -%>
-  <%- include('../partials/navbar'); -%>
-    <div class="container">
-      <form action="/product/add" method="post">
-        <div class="d-flex p-2 d-flex justify-content-between">
-          <h1>Upload Product</h1>
+<%- include('../partials/navbar'); -%>
+<div class="container">
+  <form action="/product/add" enctype="multipart/form-data" method="post">
+    <div class="d-flex p-2 d-flex justify-content-between">
+      <h1>Upload Product</h1>
 
-          <!-- publish button -->
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="published" checked>
-            <label class="form-check-label" for="flexCheckDefault">
-              Publish
-            </label>
-          </div>
+      <!-- publish button -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="published" checked>
+        <label class="form-check-label" for="flexCheckDefault">
+          Publish
+        </label>
+      </div>
 
-        </div>
-
-        <h2>
-          <%= message %>
-        </h2>
-
-        <div class="mb-3">
-          <input class="form-control" placeholder="Enter name" type="text" name="name" />
-        </div>
-        <div class="mb-3">
-          <input class="form-control" placeholder="Enter price" type="number" name="price" />
-        </div>
-        <div class="mb-3">
-          <input class="form-control" placeholder="Enter stock" type="number" name="stock" />
-        </div>
-
-        <div class="mb-3">
-          <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30"
-            rows="10"></textarea>
-          <input class="btn btn-primary" type="submit" value="Submit" />
-        </div>
-      </form>
     </div>
 
-    <%- include('../partials/footer'); -%>
+    <h2>
+      <%= message %>
+    </h2>
+
+    <div class="mb-3">
+      <input class="form-control" placeholder="Enter name" type="text" name="name" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" placeholder="Enter price" type="number" name="price" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" placeholder="Enter stock" type="number" name="stock" />
+    </div>
+
+    <div class="mb-3">
+      <img id="img" src="" alt="" srcset="">
+      <label class="form-control" for="image">Upload Product Image</label>
+      <input class="form-control d-none" id="image" type="file" name="image" />
+    </div>
+
+    <div class="mb-3">
+      <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30" rows="10"></textarea>
+      <input class="btn btn-primary" type="submit" value="Submit" />
+    </div>
+  </form>
+</div>
+
+<script>
+  //show image from local image upload
+  j("#image").on("change", function() {
+    j("#image").imageSet(j("#img"));
+  });
+</script>
+
+<%- include('../partials/footer'); -%>
