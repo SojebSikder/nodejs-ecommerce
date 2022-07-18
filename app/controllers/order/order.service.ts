@@ -160,6 +160,18 @@ export class OrderService {
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
       });
+
+      // remove product quantity from product
+      await prisma.product.update({
+        where: {
+          id: cart.productId,
+        },
+        data: {
+          stock: cart.product.stock - cart.quantity,
+        },
+      });
+
+      // push to items
       items.push({
         name: cart.product.name,
         price: String(cart.product.price.toFixed(2)),
@@ -167,8 +179,6 @@ export class OrderService {
         quantity: cart.quantity,
       });
     }
-
-    // todo: remove product quantity from product
 
     // make payment
     await PaymentDetailsService.getInstance().store({
