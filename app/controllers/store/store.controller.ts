@@ -16,7 +16,6 @@ export class StoreController {
     if (result) {
       isStore = true;
     }
-    console.log(result);
     res.render("store/myStore", { store: result, isStore: isStore });
   }
 
@@ -28,7 +27,7 @@ export class StoreController {
   }
 
   @Post("/createstore", {
-    middleware: [authorization()],
+    middleware: [authorization(), decorateHtmlResponse("Create store")],
   })
   async createstore(req: Request, res: Response) {
     //
@@ -38,7 +37,7 @@ export class StoreController {
     const description = req.body.description;
     const phone = req.body.phone;
 
-    await StoreService.getInstance().createStore({
+    const result = await StoreService.getInstance().createStore({
       name,
       displayName,
       email,
@@ -46,6 +45,11 @@ export class StoreController {
       phone,
       signedCookies: req.signedCookies,
     });
-    res.redirect("/store");
+
+    console.log(result.message);
+
+    res.render("store/createStore", {
+      message: result.message,
+    });
   }
 }

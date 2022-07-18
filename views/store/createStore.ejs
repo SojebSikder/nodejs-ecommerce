@@ -5,6 +5,14 @@
   <div class="d-flex flex-column justify-content-center">
     <div>
       <h1>Create Store</h1>
+      <br>
+      <% if(message == "") {%>
+      <% }else { %>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% } %>
     </div>
 
     <div class="align-items-center">

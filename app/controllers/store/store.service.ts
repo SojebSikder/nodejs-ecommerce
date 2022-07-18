@@ -19,7 +19,7 @@ export class StoreService {
    * show all data
    */
   public async index({ signedCookies }) {
-    const user = Auth.userByCookie(signedCookies).userid;
+    const user = Auth.userByCookie(signedCookies);
     const result = await prisma.store.findFirst({
       where: {
         userId: user.userid,
@@ -46,26 +46,38 @@ export class StoreService {
         name: name,
       },
     });
-    
-    if (checkStoreNameExist) {
-      throw new Error("Store name already exist");
-    }
 
-    const result = await prisma.store.create({
-      data: {
-        userId: user.userid,
-        StoreDetails: {
-          create: {
-            name: name,
-            displayName: displayName,
-            email: email,
-            description: description,
-            phone: phone,
+    let result;
+    let statusCode = 200;
+    let message = "store name have to be unique!";
+    let success = true;
+
+    if (checkStoreNameExist) {
+      statusCode = 400;
+      message = "Store name already exist";
+      success = false;
+    } else {
+      result = await prisma.store.create({
+        data: {
+          userId: user.userid,
+          StoreDetails: {
+            create: {
+              name: name,
+              displayName: displayName,
+              email: email,
+              description: description,
+              phone: phone,
+            },
           },
         },
-      },
-    });
+      });
+    }
 
-    return result;
+    return {
+      statusCode: statusCode,
+      success: success,
+      data: result,
+      message: message,
+    };
   }
 }
