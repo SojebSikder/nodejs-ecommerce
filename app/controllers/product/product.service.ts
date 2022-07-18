@@ -108,9 +108,7 @@ export class ProductService {
    */
   async store(req: Request, res: Response) {
     const file =
-      req.files["image"][0].filename == null
-        ? ""
-        : req.files["image"][0].filename;
+      req.files["image"] == null ? "" : req.files["image"][0].filename;
     const name = req.body.name;
     const description = req.body.description || "";
     const price = Number(req.body.price);
