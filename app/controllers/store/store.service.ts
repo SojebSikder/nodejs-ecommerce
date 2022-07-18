@@ -89,6 +89,18 @@ export class StoreService {
     let success = true;
 
     if (status == "delete") {
+      const storeInfo = await prisma.store.findFirst({
+        where: {
+          userId: user.userid,
+        },
+      });
+
+      result = await prisma.storeDetails.deleteMany({
+        where: {
+          storeId: storeInfo.id,
+        },
+      });
+
       result = await prisma.store.delete({
         where: {
           userId: user.userid,
