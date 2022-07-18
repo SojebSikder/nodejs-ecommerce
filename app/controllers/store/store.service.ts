@@ -96,6 +96,7 @@ export class StoreService {
       },
     });
 
+
     let result;
     let statusCode = 200;
     let message = "";
@@ -112,26 +113,16 @@ export class StoreService {
         },
       });
 
-      result = await prisma.store.update({
+      result = await prisma.storeDetails.update({
         where: {
-          userId: user.userid,
+          id: storeInfo.id,
         },
         data: {
-          userId: user.userid,
-          StoreDetails: {
-            update: {
-              where: {
-                id: storeInfo.id,
-              },
-              data: {
-                name: name,
-                displayName: displayName,
-                email: email,
-                description: description,
-                phone: phone,
-              },
-            },
-          },
+          name: name,
+          displayName: displayName,
+          email: email,
+          description: description,
+          phone: phone,
         },
       });
     }
