@@ -1,9 +1,18 @@
 import { Uploader } from "../../../system/core/Disk";
 
-export function attachmentUpload(distination: string = "attachments") {
+type fields = {
+  name: string;
+  maxCount: number;
+};
+
+type attachmentOption = {
+  fieldname: fields[];
+  distination: string;
+};
+export function attachmentUpload(attachmentOption: attachmentOption) {
   return function (req, res, next) {
     const upload = Uploader.upload(
-      distination,
+      attachmentOption.distination,
       ["image/jpeg", "image/jpg", "image/png"],
       1000000,
       2,
@@ -11,7 +20,7 @@ export function attachmentUpload(distination: string = "attachments") {
     );
 
     // call the middleware function
-    upload.any()(req, res, (err) => {
+    upload.fields(attachmentOption.fieldname)(req, res, (err) => {
       if (err) {
         res.status(500).json({
           message: err.message,

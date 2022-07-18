@@ -35,10 +35,19 @@ export class ProductController {
     });
   }
 
-  @Post("product/add", { middleware: [decorateHtmlResponse(), attachmentUpload("products")] })
+  @Post("product/add", {
+    middleware: [
+      decorateHtmlResponse(),
+      attachmentUpload({
+        fieldname: [{ name: "image", maxCount: 1 }],
+        distination: "products",
+      }),
+    ],
+  })
   async store(req: Request, res: Response) {
     //
-    console.log(req.files[0])
+    console.log(req.files["image"][0].fieldname);
+    console.log(req.files["image"][0].filename);
     // await ProductService.getInstance().store(req, res);
 
     res.render("post/addPost", {
