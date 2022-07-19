@@ -279,11 +279,11 @@ export class ProductService {
     const file =
       req.files["image"] == null ? "" : req.files["image"][0].filename;
     const id = req.params.id;
-    const name = req.body.name;
-    const description = req.body.description || "";
-    const price = Number(req.body.price);
-    const stock = Number(req.body.stock);
-    const published = req.body.published;
+    const name = req.body.name || null;
+    const description = req.body.description || null;
+    const price = Number(req.body.price) || null;
+    const stock = Number(req.body.stock) || null;
+    const published = req.body.published || null;
     let publishedValue;
 
     // check published
@@ -342,5 +342,7 @@ export class ProductService {
       },
       data: data,
     });
+
+    return result;
   }
 }

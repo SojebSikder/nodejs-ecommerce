@@ -126,13 +126,15 @@ export class ProductController {
     ],
   })
   async update(req: Request, res: Response) {
+    // save product
+    await ProductService.getInstance().update(req, res);
+
     const id = req.params.id;
     const result = await ProductService.getInstance().edit({
       Id: id,
       signedCookies: req.signedCookies,
     });
-    // save product
-    await ProductService.getInstance().update(req, res);
+
     res.render("store/product/edit", { post: result });
   }
 }

@@ -31,39 +31,30 @@
     </form>
   </div>
   <div class="row justify-content-md-center">
-    <% for(let post of posts.data) { %>
 
-
-    <!-- product card start -->
-    <div class="card" style="width: 18rem; margin: 10px;">
-
-      <a href="/product/<%= post.id %>">
-
-        <!-- display images -->
-        <% for(let image in post.ProductImage){ %>
-        <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[image].url %>" alt=" <%= post.name %>" />
-        <% } %>
-      </a>
-
-      <div class="card-body">
-        <h5 class="card-title"> <a href="/product/<%= post.id %>">
-            <%= post.name %>
-          </a> </h5>
-        <a href="/product/edit/<%= post.id %>">Edit</a>
-        <p class="card-text">
-          <%= post.description %>
-        </p>
-        <p class="card-text">
-          Stock: <%= post.stock %>
-        </p>
-        <p class="card-text">
-          Price: <%= post.price %>
-        </p>
-      </div>
-    </div>
-    <!-- product card end -->
-    <br />
-    <% } %>
+    <table class="table table-striped table-hover">
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Action</th>
+      </tr>
+      <% for(let post of posts.data) { %>
+      <tr>
+        <td><%= post.name %></td>
+        <td><%= post.price %></td>
+        <td><%= post.stock %></td>
+        <td><%= post.description %></td>
+        <td><img src="/uploads/products/<%= post.ProductImage[0].url %>" alt="<%= post.name %>" width="100" height="100"></td>
+        <td>
+          <a href="/product/edit/<%= post.id %>">Edit</a>
+          <a href="/store/product/delete/<%= post.id %>">Delete</a>
+        </td>
+      </tr>
+      <% } %>
+    </table>
 
 
     <% if(search.q){ %>

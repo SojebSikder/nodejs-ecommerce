@@ -35,14 +35,14 @@
 
     <!-- <div class="mb-3">
 
-      <img id="img" class="card-img-top" src="/uploads/products/<%= post.ProductImage[0].url %>" alt=" <%= post.name %>" />
+      <img id="img" class="card-img-top" src="/uploads/products/" alt="<%= post.name %>" />
 
       <label class="form-control" for="image">Upload Product Image</label>
       <input class="form-control d-none" id="image" name="image" type="file" accept="image/*" />
     </div> -->
 
     <div class="mb-3">
-      <textarea class="form-control" placeholder="Enter description" value="<%= post.description %>" name="description" id="" cols="30" rows="10"></textarea>
+      <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30" rows="10"><%= post.description %></textarea>
       <input class="btn btn-primary" type="submit" value="Save" />
     </div>
   </form>
