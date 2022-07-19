@@ -270,6 +270,7 @@ export class ProductService {
       data: data,
     });
   }
+
   /**
    * update data
    * @param req
@@ -336,11 +337,47 @@ export class ProductService {
     // save data
     const result = await prisma.product.updateMany({
       where: {
-        id: Number(id),
-        authorId: user.userid,
-        storeId: store.id,
+        AND: [
+          {
+            id: Number(id),
+          },
+          { authorId: user.userid },
+          { storeId: store.id },
+        ],
       },
       data: data,
+    });
+
+    return result;
+  }
+
+  /**
+   * delete data
+   */
+  async delete({ Id, signedCookies }) {
+    const id = Id;
+
+    // check user
+    const user = Auth.userByCookie(signedCookies);
+
+    // get user store id
+    const store = await StoreService.getInstance().index({
+      signedCookies: signedCookies,
+    });
+
+    // delete data
+    const result = await prisma.product.deleteMany({
+      where: {
+        AND: [
+          {
+            id: Number(id),
+          },
+          { authorId: user.userid },
+          {
+            storeId: store.id,
+          },
+        ],
+      },
     });
 
     return result;

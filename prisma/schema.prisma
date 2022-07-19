@@ -113,7 +113,7 @@ model Product {
 model ProductImage {
   id        Int     @id @default(autoincrement())
   url       String?
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 }
 
@@ -218,7 +218,7 @@ model OrderItem {
   quantity    Int
   price       Int
   orderItemId String
-  product     Product? @relation(fields: [productId], references: [id])
+  product     Product? @relation(fields: [productId], references: [id], onDelete: NoAction)
   productId   Int
   order       Order?   @relation(fields: [orderId], references: [orderId])
   orderId     String
@@ -241,7 +241,7 @@ model cart {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   quantity  Int
-  product   Product? @relation(fields: [productId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int

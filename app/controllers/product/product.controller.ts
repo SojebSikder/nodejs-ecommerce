@@ -137,4 +137,18 @@ export class ProductController {
 
     res.render("store/product/edit", { post: result });
   }
+
+  @Get("product/delete/:id", {
+    middleware: [decorateHtmlResponse(), authorization()],
+  })
+  async delete(req: Request, res: Response) {
+    const id = req.params.id;
+    // delete product
+    await ProductService.getInstance().delete({
+      Id: id,
+      signedCookies: req.signedCookies,
+    });
+
+    res.redirect("/store/product");
+  }
 }
