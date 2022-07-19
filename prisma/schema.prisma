@@ -241,7 +241,7 @@ model cart {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   quantity  Int
-  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id])
   productId Int
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int
