@@ -101,4 +101,38 @@ export class ProductController {
     res.locals.title = `${result.name} - ${env("APP_NAME")}`;
     res.render("post/postSingle", { post: result });
   }
+
+  @Get("product/edit/:id", {
+    middleware: [decorateHtmlResponse(), authorization()],
+  })
+  async updatePage(req: Request, res: Response) {
+    const id = req.params.id;
+    const result = await ProductService.getInstance().edit({
+      Id: id,
+      signedCookies: req.signedCookies,
+    });
+
+    res.render("store/product/edit", { post: result });
+  }
+
+  @Post("product/edit/:id", {
+    middleware: [
+      decorateHtmlResponse(),
+      authorization(),
+      attachmentUpload({
+        distination: "products",
+        fieldname: [{ name: "image", maxCount: 1 }],
+      }),
+    ],
+  })
+  async update(req: Request, res: Response) {
+    const id = req.params.id;
+    const result = await ProductService.getInstance().edit({
+      Id: id,
+      signedCookies: req.signedCookies,
+    });
+    // save product
+    await ProductService.getInstance().update(req, res);
+    res.render("store/product/edit", { post: result });
+  }
 }

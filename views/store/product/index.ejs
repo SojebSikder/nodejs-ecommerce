@@ -5,7 +5,7 @@
   <h1>Your all products here</h1>
 
   <div class="d-flex flex-row justify-content-center">
-    <form class="row g-3" action="/" method="get">
+    <form class="row g-3" action="/store/product" method="get">
 
       <% if(search.q){ %>
       <div class="col-auto">
@@ -49,6 +49,7 @@
         <h5 class="card-title"> <a href="/product/<%= post.id %>">
             <%= post.name %>
           </a> </h5>
+        <a href="/product/edit/<%= post.id %>">Edit</a>
         <p class="card-text">
           <%= post.description %>
         </p>
@@ -64,13 +65,6 @@
     <br />
     <% } %>
 
-    <% if(posts.count > posts.data.length){ %>
-    <div class="row justify-content-md-center">
-      <div class="col-auto">
-        <a href="/search?q=<%= search.q %>&page=<%= posts.page + 1 %>" class="btn btn-lg btn-outline-primary mb-3">Next</a>
-      </div>
-    </div>
-    <% } %>
 
     <% if(search.q){ %>
 

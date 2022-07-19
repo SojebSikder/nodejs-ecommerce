@@ -1,0 +1,58 @@
+<%- include('../../partials/header'); -%>
+<%- include('../../partials/navbar'); -%>
+<div class="container">
+  <form action="/product/edit/<%= post.id %>" enctype="multipart/form-data" method="post">
+    <div class="d-flex p-2 d-flex justify-content-between">
+      <h1>Edit Product</h1>
+
+      <!-- publish button -->
+      <div class="form-check">
+        <% if(post.published == true){ %>
+        <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="published" checked>
+        <% } else { %>
+        <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="published">
+        <% } %>
+        <label class="form-check-label" for="flexCheckDefault">
+          Publish
+        </label>
+      </div>
+
+    </div>
+
+    <h2>
+      <%= message %>
+    </h2>
+
+    <div class="mb-3">
+      <input class="form-control" placeholder="Enter name" value="<%= post.name %>" type="text" name="name" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" placeholder="Enter price" value="<%= post.price %>" type="number" name="price" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" placeholder="Enter stock" value="<%= post.stock %>" type="number" name="stock" />
+    </div>
+
+    <!-- <div class="mb-3">
+
+      <img id="img" class="card-img-top" src="/uploads/products/<%= post.ProductImage[0].url %>" alt=" <%= post.name %>" />
+
+      <label class="form-control" for="image">Upload Product Image</label>
+      <input class="form-control d-none" id="image" name="image" type="file" accept="image/*" />
+    </div> -->
+
+    <div class="mb-3">
+      <textarea class="form-control" placeholder="Enter description" value="<%= post.description %>" name="description" id="" cols="30" rows="10"></textarea>
+      <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+  </form>
+</div>
+
+<script>
+  //show image from local image upload
+  j("#image").on("change", function() {
+    j("#image").imageSet(j("#img"));
+  });
+</script>
+
+<%- include('../../partials/footer'); -%>

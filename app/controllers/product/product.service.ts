@@ -193,6 +193,24 @@ export class ProductService {
   }
 
   /**
+   * show specific data for editing
+   */
+  async edit({ Id, signedCookies }) {
+    const id = Id;
+    const store = await StoreService.getInstance().index({ signedCookies });
+    const result = await prisma.product.findFirst({
+      where: {
+        id: Number(id),
+        storeId: store.id,
+      },
+      include: {
+        ProductImage: true,
+      },
+    });
+    return result;
+  }
+
+  /**
    * store data
    * @param req
    * @param res
@@ -223,7 +241,9 @@ export class ProductService {
     }
 
     // get user store id
-    const store = await StoreService.getInstance().index(user.userid);
+    const store = await StoreService.getInstance().index({
+      signedCookies: req.signedCookies,
+    });
 
     //
     let data = {
@@ -247,6 +267,79 @@ export class ProductService {
     }
     // save data
     const result = await prisma.product.create({
+      data: data,
+    });
+  }
+  /**
+   * update data
+   * @param req
+   * @param res
+   */
+  async update(req: Request, res: Response) {
+    const file =
+      req.files["image"] == null ? "" : req.files["image"][0].filename;
+    const id = req.params.id;
+    const name = req.body.name;
+    const description = req.body.description || "";
+    const price = Number(req.body.price);
+    const stock = Number(req.body.stock);
+    const published = req.body.published;
+    let publishedValue;
+
+    // check published
+    if (published) {
+      publishedValue = true;
+    } else {
+      publishedValue = false;
+    }
+
+    // check user
+    const user = Auth.userByCookie(req.signedCookies);
+    if (!user) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    // get user store id
+    const store = await StoreService.getInstance().index({
+      signedCookies: req.signedCookies,
+    });
+
+    //
+    let data = {};
+    if (name) {
+      Object.assign(data, { name });
+    }
+    if (description) {
+      Object.assign(data, { description });
+    }
+    if (price) {
+      Object.assign(data, { price });
+    }
+    if (stock) {
+      Object.assign(data, { stock });
+    }
+    if (publishedValue) {
+      Object.assign(data, { published: publishedValue });
+    }
+    // check if file is empty or not
+    if (file) {
+      Object.assign(data, {
+        ProductImage: {
+          create: {
+            url: file,
+          },
+        },
+      });
+    }
+    // save data
+    const result = await prisma.product.updateMany({
+      where: {
+        id: Number(id),
+        authorId: user.userid,
+        storeId: store.id,
+      },
       data: data,
     });
   }
