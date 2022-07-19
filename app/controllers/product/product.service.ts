@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { Product } from "../../models/Product";
 import { Auth } from "../../../system/core";
+import { StoreService } from "../store/store.service";
 
 const prisma = new PrismaClient();
 
@@ -84,6 +85,96 @@ export class ProductService {
   }
 
   /**
+   * show all data for store owner
+   */
+  public async showProductForStore({
+    page = 1,
+    isSearch = false,
+    searchText = "",
+    signedCookies,
+  }) {
+    let paginationResult;
+    // get store id
+    const store = await StoreService.getInstance().index({ signedCookies });
+    if (isSearch == true) {
+      paginationResult = await prisma.product.findMany({
+        where: {
+          AND: [
+            { storeId: store.id },
+            {
+              OR: [
+                { name: { contains: searchText } },
+                { description: { contains: searchText } },
+              ],
+            },
+          ],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      paginationResult = await prisma.product.findMany({
+        where: {
+          storeId: store.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
+
+    let limit = 15;
+    let pagination = Math.ceil(paginationResult.length / limit);
+
+    let result;
+    // main query
+    if (isSearch == true) {
+      result = await prisma.product.findMany({
+        where: {
+          AND: [
+            { storeId: store.id },
+            {
+              OR: [
+                { name: { contains: searchText } },
+                { description: { contains: searchText } },
+              ],
+            },
+          ],
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        skip: limit * (page - 1),
+        take: limit,
+        include: {
+          ProductImage: true,
+        },
+      });
+    } else {
+      result = await prisma.product.findMany({
+        where: {
+          storeId: store.id,
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        skip: limit * (page - 1),
+        take: limit,
+        include: {
+          ProductImage: true,
+        },
+      });
+    }
+
+    return { data: result, pagination: pagination };
+  }
+
+  /**
    * show specific data
    * @param req
    * @param res
@@ -116,12 +207,14 @@ export class ProductService {
     const published = req.body.published;
     let publishedValue;
 
+    // check published
     if (published) {
       publishedValue = true;
     } else {
       publishedValue = false;
     }
 
+    // check user
     const user = Auth.userByCookie(req.signedCookies);
     if (!user) {
       return res.status(401).json({
@@ -129,33 +222,32 @@ export class ProductService {
       });
     }
 
+    // get user store id
+    const store = await StoreService.getInstance().index(user.userid);
+
+    //
+    let data = {
+      authorId: user.userid,
+      storeId: store.id,
+      name: name,
+      description: description,
+      price: price,
+      stock: stock,
+      published: publishedValue,
+    };
+    // check if file is empty or not
     if (file) {
-      const result = await prisma.product.create({
-        data: {
-          authorId: user.userid,
-          name: name,
-          description: description,
-          price: price,
-          stock: stock,
-          published: publishedValue,
-          ProductImage: {
-            create: {
-              url: file,
-            },
+      Object.assign(data, {
+        ProductImage: {
+          create: {
+            url: file,
           },
         },
       });
-    } else {
-      const result = await prisma.product.create({
-        data: {
-          authorId: user.userid,
-          name: name,
-          description: description,
-          price: price,
-          stock: stock,
-          published: publishedValue,
-        },
-      });
     }
+    // save data
+    const result = await prisma.product.create({
+      data: data,
+    });
   }
 }

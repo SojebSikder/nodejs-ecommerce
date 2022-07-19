@@ -22,7 +22,7 @@ export class StoreController {
   @Get("/createstore", {
     middleware: [authorization(), decorateHtmlResponse("Create store")],
   })
-  async createstorePage(req: Request, res: Response) {
+  createstorePage(req: Request, res: Response) {
     res.render("store/createStore");
   }
 

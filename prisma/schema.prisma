@@ -99,6 +99,8 @@ model Product {
   published   Boolean  @default(false)
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
+  storeId     Int?
+  store       Store?   @relation(fields: [storeId], references: [id])
 
   category     Category?      @relation(fields: [categoryId], references: [id])
   categoryId   Int?
@@ -129,6 +131,7 @@ model Store {
   // 4: disabled
   status       String?        @default("pending")
   StoreDetails StoreDetails[]
+  Product      Product[]
 }
 
 // contains store details

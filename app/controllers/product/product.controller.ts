@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
+import { Auth } from "../../../system";
 import { Controller, Get, Post } from "../../../system/decorator";
 import { env } from "../../../system/util";
+import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { attachmentUpload } from "../../middlewares/common/upload";
 import { ProductService } from "./product.service";
@@ -29,6 +31,38 @@ export class ProductController {
     const endTime = new Date().getTime();
     const resultTime = endTime - startTime;
     res.render("index", {
+      posts: result,
+      page: page,
+      search: { q: q, count: result.data.length, time: resultTime + " ms" },
+    });
+  }
+
+  @Get("store/product", {
+    middleware: [decorateHtmlResponse(), authorization()],
+  })
+  async storeProductPage(req: Request, res: Response) {
+    // show product for store owner
+    const startTime = new Date().getTime();
+    const page = req.query.page == undefined ? 1 : req.query.page;
+    const q = req.query.q;
+    let result;
+    if (q != undefined) {
+      result = await ProductService.getInstance().showProductForStore({
+        page: Number(page),
+        isSearch: true,
+        searchText: String(q),
+        signedCookies: req.signedCookies,
+      });
+    } else {
+      result = await ProductService.getInstance().showProductForStore({
+        page: Number(page),
+        signedCookies: req.signedCookies,
+      });
+    }
+
+    const endTime = new Date().getTime();
+    const resultTime = endTime - startTime;
+    res.render("store/product/index", {
       posts: result,
       page: page,
       search: { q: q, count: result.data.length, time: resultTime + " ms" },

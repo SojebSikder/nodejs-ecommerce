@@ -1,0 +1,110 @@
+<%- include('../../partials/header'); -%>
+<%- include('../../partials/navbar'); -%>
+
+<div class="container">
+  <h1>Your all products here</h1>
+
+  <div class="d-flex flex-row justify-content-center">
+    <form class="row g-3" action="/" method="get">
+
+      <% if(search.q){ %>
+      <div class="col-auto">
+        <input type="search" name="q" value="<%= search.q %>" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+      </div>
+      <% }else{%>
+      <div class="col-auto">
+        <input type="search" name="q" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+      </div>
+      <% } %>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-lg btn-outline-primary mb-3">Search</button>
+      </div>
+
+      <% if(search.q){ %>
+      <% if(search.count > 0) {%>
+      <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results! in <strong><%= search.time %></strong></div>
+      <% }else{ %>
+      <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results!</div>
+      <% } %>
+      <% } %>
+
+    </form>
+  </div>
+  <div class="row justify-content-md-center">
+    <% for(let post of posts.data) { %>
+
+
+    <!-- product card start -->
+    <div class="card" style="width: 18rem; margin: 10px;">
+
+      <a href="/product/<%= post.id %>">
+
+        <!-- display images -->
+        <% for(let image in post.ProductImage){ %>
+        <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[image].url %>" alt=" <%= post.name %>" />
+        <% } %>
+      </a>
+
+      <div class="card-body">
+        <h5 class="card-title"> <a href="/product/<%= post.id %>">
+            <%= post.name %>
+          </a> </h5>
+        <p class="card-text">
+          <%= post.description %>
+        </p>
+        <p class="card-text">
+          Stock: <%= post.stock %>
+        </p>
+        <p class="card-text">
+          Price: <%= post.price %>
+        </p>
+      </div>
+    </div>
+    <!-- product card end -->
+    <br />
+    <% } %>
+
+    <% if(posts.count > posts.data.length){ %>
+    <div class="row justify-content-md-center">
+      <div class="col-auto">
+        <a href="/search?q=<%= search.q %>&page=<%= posts.page + 1 %>" class="btn btn-lg btn-outline-primary mb-3">Next</a>
+      </div>
+    </div>
+    <% } %>
+
+    <% if(search.q){ %>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < posts.pagination; i++) {%>
+        <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/?q=<%= search.q %>&page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
+          <a class="page-link" href="/?q=<%= search.q %>&page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+    <% } else{ %>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < posts.pagination; i++) {%>
+        <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/store/product?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
+          <a class="page-link" href="/store/product?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <% } %>
+  </div>
+</div>
+
+<%- include('../../partials/footer'); -%>
