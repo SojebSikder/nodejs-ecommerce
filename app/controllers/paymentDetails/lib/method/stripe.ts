@@ -34,29 +34,14 @@ export class StripeMethod implements IMethod {
       cancel_url: `${env("APP_URL")}/order/cancel?orderID=${this.orderId}`,
     };
 
-    // line_items: [{
-    //   price_data: {
-    //     // The currency parameter determines which
-    //     // payment methods are used in the Checkout Session.
-    //     currency: 'eur',
-    //     product_data: {
-    //       name: 'T-shirt',
-    //     },
-    //     unit_amount: 2000,
-    //   },
-    //   quantity: 1,
-    // }],
+    const session = await this.stripe.checkout.sessions.create({
+      line_items: items,
+      mode: "payment",
+      success_url: this.redirect_urls.return_url,
+      cancel_url: this.redirect_urls.cancel_url,
+    });
 
-    return await this.stripe.checkout.sessions
-      .create({
-        line_items: items,
-        mode: "payment",
-        success_url: this.redirect_urls.return_url,
-        cancel_url: this.redirect_urls.cancel_url,
-      })
-      .then((paymentIntent) => {
-        redirect_callback(this.redirect_urls.return_url);
-      });
+    redirect_callback(session.url);
 
     // return await this.stripe.paymentIntents
     //   .create({

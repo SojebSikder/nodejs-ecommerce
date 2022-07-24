@@ -42,11 +42,9 @@
 
   <div style="background: rebeccapurple;" class="shadow p-3 mb-5 rounded p-4 h-100 d-flex align-items-center justify-content-center">
 
-
-    <form id="order_form" action="/order?pm=stripe" method="POST">
-      <script crossorigin="anonymous" src="//checkout.stripe.com/v2/checkout.js" class="stripe-button" data-key="pk_test_51J9nhdJ1sD6uaGBLUNBpch2OTELL6Bqj4vqKzb1maXjZnVeFq7EVTKVNdEqgHBrVD00nxjaXcYsNNJ3KWiiGJmNJ00yEhxQ9j2" data-amount="200" data-currency="usd" data-name="Sojeb Sikder" data-description="Buy Products" data-locale="auto">
-      </script>
+    <form style="display: inline;" id="order_form" action="/order?pm=stripe" method="POST">
       <input type="hidden" name="orderItemId" value="<%= uuid %> "></a>
+      <button class="btn btn-primary" type="submit">Pay</button>
     </form>
 
     <form id="order_form" action="/order?pm=paypal" method="POST">
