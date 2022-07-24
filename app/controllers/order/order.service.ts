@@ -220,13 +220,28 @@ export class OrderService {
 
     // store to orderProductItem to send to paypal
     const items = [];
+    const itemsForStripe = [];
 
     for (const orderItem of order.OrderItem) {
       // store to orderProductItem first
+
+      // for paypal
       items.push({
         name: orderItem.product.name,
         price: String(orderItem.product.price.toFixed(2)),
         currency: "USD",
+        quantity: orderItem.quantity,
+      });
+
+      // for stripe
+      itemsForStripe.push({
+        price_data: {
+          currency: "USD",
+          product_data: {
+            name: orderItem.product.name,
+          },
+          unit_amount: String(orderItem.product.price * 100),
+        },
         quantity: orderItem.quantity,
       });
     }
@@ -240,7 +255,7 @@ export class OrderService {
 
         paymentService.store({
           orderID: orderId,
-          items: items,
+          items: itemsForStripe,
           TotalPrice: String(totalPrice.toFixed(2) * 100), // making it in cents
           redirect_callback: async (value) => {
             res.redirect(value);
