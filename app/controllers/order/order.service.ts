@@ -1,7 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { Auth, Mail } from "../../../system/core";
-import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
+import { PaypalMethod } from "../paymentDetails/lib/method/paypal";
+import { StripeMethod } from "../paymentDetails/lib/method/stripe";
+import { PaymentService } from "../paymentDetails/lib/payment.service";
+// import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
 const prisma = new PrismaClient();
 
@@ -187,7 +190,7 @@ export class OrderService {
    */
   async pay({ orderID, signedCookies, req, res }) {
     let orderId = orderID;
-    const orderItemId = req.body.orderItemId;
+    const paymentMethod = req.query.pm; // stripe, paypal
     let totalPrice;
 
     const user = Auth.userByCookie(signedCookies);
@@ -227,17 +230,39 @@ export class OrderService {
         quantity: orderItem.quantity,
       });
     }
-
     // make payment
-    await PaymentDetailsService.getInstance().store({
-      orderID: orderId,
-      items: items,
-      TotalPrice: String(totalPrice.toFixed(2)),
-      redirect_callback: async (value) => {
-        res.redirect(value);
-      },
-    });
+    try {
+      let paymentMethods;
+      if (paymentMethod == "stripe") {
+        paymentMethods = new StripeMethod();
+        const paymentService = new PaymentService(paymentMethods);
+        paymentService.init();
 
+        paymentService.store({
+          orderID: orderId,
+          items: items,
+          TotalPrice: String(totalPrice.toFixed(2) * 100), // making it in cents
+          redirect_callback: async (value) => {
+            res.redirect(value);
+          },
+        });
+      } else {
+        paymentMethods = new PaypalMethod();
+        const paymentService = new PaymentService(paymentMethods);
+        paymentService.init();
+
+        paymentService.store({
+          orderID: orderId,
+          items: items,
+          TotalPrice: String(totalPrice.toFixed(2)),
+          redirect_callback: async (value) => {
+            res.redirect(value);
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
     // send email to user
     // try {
     //   // send email to user

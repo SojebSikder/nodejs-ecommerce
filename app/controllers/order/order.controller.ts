@@ -5,7 +5,10 @@ import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlRespo
 import { CartService } from "../cart/cart.service";
 import { OrderService } from "./order.service";
 import { v4 as uuidv4 } from "uuid";
-import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
+// import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
+import { PaymentService } from "../paymentDetails/lib/payment.service";
+import { PaypalMethod } from "../paymentDetails/lib/method/paypal";
+import { StripeMethod } from "../paymentDetails/lib/method/stripe";
 
 let fullUrl;
 @Controller("/order")
@@ -39,7 +42,17 @@ export class OrderController {
   async successPage(req: Request, res: Response) {
     //
     const orderID = req.query.orderID;
-    await PaymentDetailsService.getInstance().success({
+    const paymentMethod = req.query.pm;
+
+    let paymentMethods;
+    if (paymentMethod == "stripe") {
+      paymentMethods = new StripeMethod();
+    } else {
+      paymentMethods = new PaypalMethod();
+    }
+    const paymentService = new PaymentService(paymentMethods);
+    paymentService.init();
+    await paymentService.success({
       price: req.query.amount,
       PayerID: req.query.PayerID,
       PaymentID: req.query.paymentId,
@@ -66,6 +79,7 @@ export class OrderController {
     middleware: [decorateHtmlResponse("My Order"), authorization()],
   })
   async store(req: Request, res: Response) {
+    // const paymentMethod = req.body.payment_method; // STRIPE, PAYPAL
     // store order
     const data = await OrderService.getInstance().store(req, res);
     // res.render("order/success");

@@ -21,7 +21,7 @@ export const appConfig = {
      * Helmet helps you secure your Express apps by setting various HTTP headers.
      */
     helmet: {
-      enable: true,
+      enable: false,
       options: {
         contentSecurityPolicy:
           process.env.NODE_ENV === "production" ? undefined : false,

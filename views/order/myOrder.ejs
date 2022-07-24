@@ -26,8 +26,12 @@
             (order.status != "order_placed")) {%>
 
           <% }else{ %>
-          <form style="display: inline;" action="/order/pay/<%= order.orderId %> " method="post">
-            <button class="btn btn-success" type="submit">Pay</button>
+          <form style="display: inline;" id="order_form" action="/order/pay/<%= order.orderId %>?pm=stripe" method="POST">
+            <script crossorigin="anonymous" src="//checkout.stripe.com/v2/checkout.js" class="stripe-button" data-key="pk_test_51J9nhdJ1sD6uaGBLUNBpch2OTELL6Bqj4vqKzb1maXjZnVeFq7EVTKVNdEqgHBrVD00nxjaXcYsNNJ3KWiiGJmNJ00yEhxQ9j2" data-amount="<%= Number(order.total) * 100 %>" data-currency="usd" data-name="Sojeb Sikder" data-description="Buy Products" data-locale="auto">
+            </script>
+          </form>
+          <form style="display: inline;" id="order_form" action="/order/pay/<%= order.orderId %>?pm=paypal" method="POST">
+            <button class="btn btn-primary" type="submit">Pay With Paypal</button>
           </form>
 
           <form style="display: inline;" action="/order/cancel/<%= order.orderId %> " method="post">
