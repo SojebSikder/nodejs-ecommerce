@@ -22,9 +22,13 @@
         (order.status != "order_placed")) {%>
 
       <% }else{ %>
-      <form style="display: inline;" action="/order/pay/<%= order.orderId %> " method="post">
-        <button class="btn btn-success" type="submit">Pay</button>
+      <form style="display: inline;" id="order_form" action="/order/pay/<%= order.orderId %>?pm=stripe" method="POST">
+        <button class="btn btn-primary" type="submit">Pay</button>
       </form>
+      <form style="display: inline;" id="order_form" action="/order/pay/<%= order.orderId %>?pm=paypal" method="POST">
+        <button class="btn btn-primary" type="submit">Pay With Paypal</button>
+      </form>
+
 
       <form style="display: inline;" action="/order/cancel/<%= order.orderId %> " method="post">
         <button class="btn btn-danger" type="submit">Cancel</button>

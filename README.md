@@ -4,7 +4,6 @@ nodejs ecommerce application
 
 ## Features:
 
-- Multivendor Ecommerce
 - Paypal, stripe payment gateway integration
 - Order receipt pdf generation
 - And much more.
