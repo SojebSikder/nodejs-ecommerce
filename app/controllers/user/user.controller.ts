@@ -23,24 +23,30 @@ export class UserController {
 
     const result = await UserService.getInstance().login(email, password);
 
-    if (result.statusCode === 200) {
-      // after sucessfull login set cookie and localstorage
-      res.cookie(env("COOKIE_NAME"), result.token, {
-        maxAge: env("JWT_EXPIRY"),
-        httpOnly: true,
-        signed: true,
-      });
+    try {
+      if (result.statusCode === 200) {
+        // after sucessfull login set cookie and localstorage
+        res.cookie(env("COOKIE_NAME"), result.token, {
+          maxAge: env("JWT_EXPIRY"),
+          httpOnly: true,
+          signed: true,
+        });
 
-      // set logged in user local identifier
-      res.locals.loggedInUser = result.data;
-      res.redirect("/");
-    } else if (result.statusCode === 401) {
+        // set logged in user local identifier
+        res.locals.loggedInUser = result.data;
+        res.redirect("/");
+      } else if (result.statusCode === 401) {
+        res.render("auth/login", {
+          message: result.message,
+        });
+      } else if (result.statusCode === 500) {
+        res.render("auth/login", {
+          message: result.message,
+        });
+      }
+    } catch (error) {
       res.render("auth/login", {
-        message: result.message,
-      });
-    } else if (result.statusCode === 500) {
-      res.render("auth/login", {
-        message: result.message,
+        message: "Something went wrong",
       });
     }
   }
@@ -57,22 +63,26 @@ export class UserController {
     try {
       const name = req.body.name;
       const email = req.body.email;
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const password = req.body.password;
 
-      const result = await prisma.user.create({
-        data: {
-          username: name,
-          email: email,
-          password: hashedPassword,
-        },
+      const result = await UserService.getInstance().register({
+        nameField: name,
+        emailField: email,
+        passwordField: password,
       });
 
-      res.render("auth/login", {
-        message: "Account created successfully. Please login.",
-      });
+      if (result.statusCode === 200) {
+        res.render("auth/login", {
+          message: result.message,
+        });
+      } else {
+        res.render("auth/register", {
+          message: result.message,
+        });
+      }
     } catch (error) {
       res.render("auth/register", {
-        message: error,
+        message: "Something went wrong",
       });
     }
   }

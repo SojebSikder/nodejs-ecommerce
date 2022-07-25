@@ -17,8 +17,6 @@ export class UserService {
   }
   /**
    * Process login
-   * @param req
-   * @param res
    */
   async login(emailField, passwordField) {
     try {
@@ -74,14 +72,36 @@ export class UserService {
 
   /**
    * Process register
-   * @param req
-   * @param res
    */
-  register = async (nameField, emailField, passwordField) => {
+  async register({ nameField, emailField, passwordField }) {
     try {
       const name = nameField;
       const email = emailField;
       const hashedPassword = await bcrypt.hash(passwordField, 10);
+
+      const userEmailExist = await prisma.user.findFirst({
+        where: {
+          email: String(email),
+        },
+      });
+
+      const userNameExist = await prisma.user.findFirst({
+        where: {
+          username: String(name),
+        },
+      });
+      if (userEmailExist) {
+        return {
+          statusCode: 401,
+          message: "Email already exist",
+        };
+      }
+      if (userNameExist) {
+        return {
+          statusCode: 401,
+          message: "Username already exist",
+        };
+      }
 
       const user = {
         name: name,
@@ -103,5 +123,5 @@ export class UserService {
         message: error,
       };
     }
-  };
+  }
 }

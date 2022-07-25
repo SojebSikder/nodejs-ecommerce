@@ -201,7 +201,6 @@ CREATE TABLE `StoreOrder` (
     `storeDetailsId` INTEGER NULL,
     `userOrderId` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `StoreOrder_orderId_key`(`orderId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

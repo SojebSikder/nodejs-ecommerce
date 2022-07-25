@@ -222,7 +222,7 @@ model VendorOrder {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  orderId      String  @unique
+  orderId      String
   orderItemId  String
   price        Int
   delivery_fee String?

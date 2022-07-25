@@ -199,22 +199,46 @@ export class OrderService {
 
       // store to vendor order
       // TODO: change orderId
-      const vendorOrder = await prisma.vendorOrder.create({
-        data: {
-          userOrderId: `${order_id}`,
-          userId: Number(user.userid),
-          orderId: `${order_id}`,
-          storeId: cart.product.storeId,
-          orderItemId: `${orderItemId}`,
-          price: price,
-          discount: `${discount}`,
-          delivery_fee: `${delivery_fee}`,
-          total: `${totalPrice}`,
-          paymentStatus: "NOT_PAID",
-          paymentMode: "COD",
-          status: "order_placed",
+      // check vendor order exist
+      // if exist then update qnty just
+      const vendorExists = await prisma.vendorOrder.findFirst({
+        where: {
+          AND: [
+            {
+              storeId: cart.product.storeId,
+            },
+            {
+              userId: user.userid,
+            },
+            {
+              orderItemId: `${orderItemId}`,
+            },
+            {
+              orderId: `${order_id}`,
+            },
+          ],
         },
       });
+
+      if (vendorExists) {
+      } else {
+        const vendorOrder = await prisma.vendorOrder.create({
+          data: {
+            userOrderId: `${order_id}`,
+            userId: Number(user.userid),
+            orderId: `${order_id}`,
+            storeId: cart.product.storeId,
+            orderItemId: `${orderItemId}`,
+            price: price,
+            discount: `${discount}`,
+            delivery_fee: `${delivery_fee}`,
+            total: `${totalPrice}`,
+            paymentStatus: "NOT_PAID",
+            paymentMode: "COD",
+            status: "order_placed",
+          },
+        });
+      }
     }
 
     // make payment
