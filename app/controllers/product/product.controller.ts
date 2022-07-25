@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Auth } from "../../../system";
 import { Controller, Get, Post } from "../../../system/decorator";
 import { env } from "../../../system/util";
 import { authorization } from "../../middlewares/authorization";

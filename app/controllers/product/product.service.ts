@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { Product } from "../../models/Product";
 import { Auth } from "../../../system/core";
 import { StoreService } from "../store/store.service";
 
@@ -62,8 +61,18 @@ export class ProductService {
         ],
         skip: limit * (page - 1),
         take: limit,
-        include: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          price: true,
+          stock: true,
           ProductImage: true,
+          store: {
+            include: {
+              StoreDetails: true,
+            },
+          },
         },
       });
     } else {
@@ -75,8 +84,22 @@ export class ProductService {
         ],
         skip: limit * (page - 1),
         take: limit,
-        include: {
+        // include: {
+        //   ProductImage: true,
+        //   store: true,
+        // },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          price: true,
+          stock: true,
           ProductImage: true,
+          store: {
+            include: {
+              StoreDetails: true,
+            },
+          },
         },
       });
     }
@@ -185,8 +208,18 @@ export class ProductService {
       where: {
         id: Number(id),
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        stock: true,
         ProductImage: true,
+        store: {
+          include: {
+            StoreDetails: true,
+          },
+        },
       },
     });
     return result;
