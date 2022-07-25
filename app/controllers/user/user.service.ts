@@ -110,14 +110,12 @@ export class UserService {
         };
       }
 
-      const user = {
-        name: name,
-        email: email,
-        password: hashedPassword,
-      };
-
       const result = await prisma.user.create({
-        data: user,
+        data: {
+          username: name,
+          email: email,
+          password: hashedPassword,
+        },
       });
 
       return {
