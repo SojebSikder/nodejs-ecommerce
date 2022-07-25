@@ -3,32 +3,20 @@
   <h1>Login here</h1>
 
   <% if(message){ %>
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <%= message %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <% } %>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <%= message %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% } %>
 
   <form action="/login" method="post">
     <div class="mb-3">
-      <label for="email" class="form-label">Email address</label>
-      <input
-        id="email"
-        type="text"
-        class="form-control"
-        name="email"
-        placeholder="name@example.com"
-      />
+      <label for="email" class="form-label">Username or email</label>
+      <input id="email" type="text" class="form-control" name="email" placeholder="name@example.com" />
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input
-        id="password"
-        type="password"
-        class="form-control"
-        name="password"
-        placeholder="********"
-      />
+      <input id="password" type="password" class="form-control" name="password" placeholder="********" />
     </div>
     <div class="mb-3">
       <input type="submit" value="Login" class="btn btn-primary" name="submit" />

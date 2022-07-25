@@ -25,7 +25,14 @@ export class UserService {
 
       const user = await prisma.user.findFirst({
         where: {
-          email: String(email),
+          OR: [
+            {
+              email: String(email),
+            },
+            {
+              username: String(email),
+            },
+          ],
         },
       });
 
@@ -59,7 +66,7 @@ export class UserService {
       } else {
         return {
           statusCode: 401,
-          message: "Email not found",
+          message: "User not found",
         };
       }
     } catch (error) {
