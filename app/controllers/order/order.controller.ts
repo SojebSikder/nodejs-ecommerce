@@ -154,6 +154,6 @@ export class OrderController {
       Id: id,
       SignedCookies: req.signedCookies,
     });
-    res.render("order/myOrderDetails", { order: data });
+    res.render("store/order/orderDetails", { order: data });
   }
 }
