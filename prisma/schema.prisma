@@ -25,18 +25,19 @@ model Profile {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  username  String?
-  full_name String?
-  password  String     @db.VarChar(255)
-  profile   Profile?
-  role      String?    @default("user")
-  orders    Order[]
-  Product   Product[]
-  ApiToken  ApiToken[]
-  cart      cart[]
-  Store     Store[]
+  id         Int           @id @default(autoincrement())
+  email      String        @unique
+  username   String?
+  full_name  String?
+  password   String        @db.VarChar(255)
+  profile    Profile?
+  role       String?       @default("user")
+  orders     Order[]
+  Product    Product[]
+  ApiToken   ApiToken[]
+  cart       cart[]
+  Store      Store[]
+  StoreOrder VendorOrder[]
 }
 
 model ApiToken {
@@ -76,6 +77,7 @@ model Address {
   zip          String?
   Order        Order[]
   StoreDetails StoreDetails[]
+  StoreOrder   VendorOrder[]
 }
 
 model Category {
@@ -132,6 +134,7 @@ model Store {
   status       String?        @default("pending")
   StoreDetails StoreDetails[]
   Product      Product[]
+  StoreOrder   VendorOrder[]
 }
 
 // contains store details
@@ -158,7 +161,7 @@ model StoreUrl {
   StoreDetails StoreDetails[]
 }
 
-// Order details
+// user order details
 model Order {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -208,32 +211,95 @@ model Order {
   Store            Store?          @relation(fields: [storeId], references: [id])
   storeId          Int?
   storeDetailsId   Int?
+  //
+
+  StoreOrder VendorOrder[]
+}
+
+// vendor Order details
+model VendorOrder {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  orderId      String  @unique
+  orderItemId  String
+  price        Int
+  delivery_fee String?
+  discount     String?
+  total        String
+
+  // /**
+  // * available value:
+  // * COD, ONLINE_PAYMENT
+  // */
+  paymentMode   String
+  // /**
+  // * available value:
+  // * NOT_PAID, PAID
+  // */
+  paymentStatus String
+
+  // /**
+  // * available value:
+  // *
+  // * 'order_placed',
+  // * 'order_confirmed',
+  // * 'order_picked',
+  // * 'order_on_way',
+  // * 'order_delivered',
+  // * 'order_returned',
+  // * 'order_cancelled',
+  // * 'order_paused'
+  // */
+  status    String?
+  comment   String?
+  addressId Int?
+  address   Address? @relation(fields: [addressId], references: [id])
+
+  user             User?           @relation(fields: [userId], references: [id])
+  userId           Int?
+  OrderItem        OrderItem[]
+  PaymentDetails   PaymentDetails? @relation(fields: [paymentDetailsId], references: [id])
+  paymentDetailsId Int?
+  // store
+  Store            Store?          @relation(fields: [storeId], references: [id])
+  storeId          Int?
+  storeDetailsId   Int?
+  //
+  userOrder        Order?          @relation(fields: [userOrderId], references: [orderId])
+  userOrderId      String
+
+  @@map("StoreOrder")
 }
 
 // Order item
 model OrderItem {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  quantity    Int
-  price       Int
-  orderItemId String
-  product     Product? @relation(fields: [productId], references: [id], onDelete: NoAction)
-  productId   Int
-  order       Order?   @relation(fields: [orderId], references: [orderId])
-  orderId     String
+  id           Int          @id @default(autoincrement())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+  quantity     Int
+  price        Int
+  orderItemId  String
+  product      Product?     @relation(fields: [productId], references: [id], onDelete: NoAction)
+  productId    Int
+  order        Order?       @relation(fields: [orderId], references: [orderId])
+  orderId      String
+  StoreOrder   VendorOrder? @relation(fields: [storeOrderId], references: [id])
+  storeOrderId Int?
 }
 
 // payment details attach with order details
 model PaymentDetails {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  orderId   Int
-  amount    Int
-  provider  String?
-  status    String?
-  Order     Order[]
+  id         Int           @id @default(autoincrement())
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @default(now())
+  orderId    Int
+  amount     Int
+  provider   String?
+  status     String?
+  Order      Order[]
+  StoreOrder VendorOrder[]
 }
 
 model cart {

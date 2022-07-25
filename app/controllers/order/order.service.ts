@@ -4,6 +4,7 @@ import { Auth, Mail } from "../../../system/core";
 import { PaypalMethod } from "../paymentDetails/lib/method/paypal";
 import { StripeMethod } from "../paymentDetails/lib/method/stripe";
 import { PaymentService } from "../paymentDetails/lib/payment.service";
+import { StoreService } from "../store/store.service";
 // import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
 const prisma = new PrismaClient();
@@ -42,6 +43,40 @@ export class OrderService {
     const result = await prisma.order.findMany({
       where: {
         id: user.userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: limit * (page - 1),
+      take: limit,
+    });
+    return { data: result, pagination: pagination };
+  }
+
+  /**
+   * show all data
+   * @returns
+   */
+  public async storeOrderFindAll({ page = 1, signedCookies }) {
+    const user = Auth.userByCookie(signedCookies);
+
+    const store = await StoreService.getInstance().index({ signedCookies });
+
+    const paginationResult = await prisma.vendorOrder.findMany({
+      where: {
+        storeId: store.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    let limit = 15;
+    let pagination = Math.ceil(paginationResult.length / limit);
+
+    const result = await prisma.vendorOrder.findMany({
+      where: {
+        storeId: store.id,
       },
       orderBy: {
         createdAt: "desc",
@@ -150,6 +185,7 @@ export class OrderService {
       },
     });
 
+    // store to order item
     for (const cart of carts) {
       // store to orderProductItem first
       await this.storeOrderProductItem({
@@ -159,6 +195,25 @@ export class OrderService {
         OrderId: String(order_id),
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
+      });
+
+      // store to vendor order
+      // TODO: change orderId
+      const vendorOrder = await prisma.vendorOrder.create({
+        data: {
+          userOrderId: `${order_id}`,
+          userId: Number(user.userid),
+          orderId: `${order_id}`,
+          storeId: cart.product.storeId,
+          orderItemId: `${orderItemId}`,
+          price: price,
+          discount: `${discount}`,
+          delivery_fee: `${delivery_fee}`,
+          total: `${totalPrice}`,
+          paymentStatus: "NOT_PAID",
+          paymentMode: "COD",
+          status: "order_placed",
+        },
       });
     }
 

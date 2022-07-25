@@ -28,6 +28,22 @@ export class OrderController {
     res.render("order/myOrder", { orders: data, page: page });
   }
 
+  @Get("/store", {
+    middleware: [decorateHtmlResponse("My Order"), authorization()],
+  })
+  async storeOrderPage(req: Request, res: Response) {
+    // store order
+    const page = req.query.page == undefined ? 1 : req.query.page;
+    const data = await OrderService.getInstance().storeOrderFindAll({
+      page: Number(page),
+      signedCookies: req.signedCookies,
+    });
+    // set urls for refer
+    fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
+    //
+    res.render("store/order/index", { orders: data, page: page });
+  }
+
   @Get("/checkout", {
     middleware: [decorateHtmlResponse("Checkout"), authorization()],
   })
