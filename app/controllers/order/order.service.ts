@@ -124,6 +124,45 @@ export class OrderService {
   }
 
   /**
+   * show specific data for vendor order
+   */
+  async showVendor({ Id, SignedCookies }) {
+    const id = Id;
+    const user = Auth.userByCookie(SignedCookies);
+    const store = await StoreService.getInstance().index({
+      signedCookies: SignedCookies,
+    });
+    const result = await prisma.vendorOrder.findFirst({
+      where: {
+        storeId: store.id,
+      },
+      select: {
+        orderId: true,
+        createdAt: true,
+        status: true,
+        price: true,
+        paymentStatus: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        OrderItem: {
+          select: {
+            quantity: true,
+            price: true,
+            product: true,
+          },
+        },
+      },
+    });
+    console.log(result);
+    return result;
+  }
+
+  /**
    * store data
    */
   async store(req: Request, res: Response) {
@@ -188,14 +227,14 @@ export class OrderService {
     // store to order item
     for (const cart of carts) {
       // store to orderProductItem first
-      await this.storeOrderProductItem({
-        Price: cart.product.price,
-        ProductId: cart.productId,
-        Quantity: cart.quantity,
-        OrderId: String(order_id),
-        OrderItemId: orderItemId,
-        signedCookies: req.signedCookies,
-      });
+      // await this.storeOrderProductItem({
+      //   Price: cart.product.price,
+      //   ProductId: cart.productId,
+      //   Quantity: cart.quantity,
+      //   OrderId: String(order_id),
+      //   OrderItemId: orderItemId,
+      //   signedCookies: req.signedCookies,
+      // });
 
       // store to vendor order
       // TODO: change orderId
@@ -222,6 +261,15 @@ export class OrderService {
 
       if (vendorExists) {
       } else {
+        await this.storeOrderProductItem({
+          Price: cart.product.price,
+          ProductId: cart.productId,
+          Quantity: cart.quantity,
+          OrderId: String(order_id),
+          OrderItemId: orderItemId,
+          signedCookies: req.signedCookies,
+        });
+
         const vendorOrder = await prisma.vendorOrder.create({
           data: {
             userOrderId: `${order_id}`,

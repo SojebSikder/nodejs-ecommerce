@@ -222,7 +222,7 @@ model VendorOrder {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  orderId      String
+  orderId      String @unique
   orderItemId  String
   price        Int
   delivery_fee String?
@@ -269,8 +269,6 @@ model VendorOrder {
   //
   userOrder        Order?          @relation(fields: [userOrderId], references: [orderId])
   userOrderId      String
-
-  @@map("StoreOrder")
 }
 
 // Order item

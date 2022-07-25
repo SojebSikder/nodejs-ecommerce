@@ -143,4 +143,17 @@ export class OrderController {
     });
     res.render("order/myOrderDetails", { order: data });
   }
+
+  @Get("/store/:id", {
+    middleware: [decorateHtmlResponse("Store Order"), authorization()],
+  })
+  async showVendorOrder(req: Request, res: Response) {
+    //
+    let id = req.params.id;
+    const data = await OrderService.getInstance().showVendor({
+      Id: id,
+      SignedCookies: req.signedCookies,
+    });
+    res.render("order/myOrderDetails", { order: data });
+  }
 }
