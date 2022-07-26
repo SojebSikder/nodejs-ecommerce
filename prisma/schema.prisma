@@ -25,19 +25,19 @@ model Profile {
 }
 
 model User {
-  id         Int           @id @default(autoincrement())
-  email      String        @unique
-  username   String?
-  full_name  String?
-  password   String        @db.VarChar(255)
-  profile    Profile?
-  role       String?       @default("user")
-  orders     Order[]
-  Product    Product[]
-  ApiToken   ApiToken[]
-  cart       cart[]
-  Store      Store[]
-  StoreOrder VendorOrder[]
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  username  String?
+  full_name String?
+  password  String     @db.VarChar(255)
+  profile   Profile?
+  role      String?    @default("user")
+  orders    Order[]
+  Product   Product[]
+  ApiToken  ApiToken[]
+  cart      cart[]
+  Shop      Shop[]
+  SubOrder  SubOrder[]
 }
 
 model ApiToken {
@@ -66,18 +66,17 @@ model Country {
 }
 
 model Address {
-  id           Int            @id @default(autoincrement())
-  street       String?
-  cityId       Int?
-  city         City?          @relation(fields: [cityId], references: [id])
-  stateId      Int?
-  state        State?         @relation(fields: [stateId], references: [id])
-  countryId    Int?
-  country      Country?       @relation(fields: [countryId], references: [id])
-  zip          String?
-  Order        Order[]
-  StoreDetails StoreDetails[]
-  StoreOrder   VendorOrder[]
+  id          Int           @id @default(autoincrement())
+  street      String?
+  cityId      Int?
+  city        City?         @relation(fields: [cityId], references: [id])
+  stateId     Int?
+  state       State?        @relation(fields: [stateId], references: [id])
+  countryId   Int?
+  country     Country?      @relation(fields: [countryId], references: [id])
+  zip         String?
+  Order       Order[]
+  ShopDetails ShopDetails[]
 }
 
 model Category {
@@ -101,8 +100,8 @@ model Product {
   published   Boolean  @default(false)
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
-  storeId     Int?
-  store       Store?   @relation(fields: [storeId], references: [id])
+  shopId      Int?
+  shop        Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
 
   category     Category?      @relation(fields: [categoryId], references: [id])
   categoryId   Int?
@@ -110,6 +109,7 @@ model Product {
   OrderItem    OrderItem[]
   ProductImage ProductImage[]
   cart         cart[]
+  SubOrderItem SubOrderItem[]
 }
 
 model ProductImage {
@@ -119,46 +119,44 @@ model ProductImage {
   productId Int
 }
 
-// User can create own store to selling products
-model Store {
-  id     Int     @id @default(autoincrement())
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-  Order  Order[]
+// User can create own shop to selling products
+model Shop {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
 
   // available value
   // 1: pending
   // 2: approved
   // 3: banned
   // 4: disabled
-  status       String?        @default("pending")
-  StoreDetails StoreDetails[]
-  Product      Product[]
-  StoreOrder   VendorOrder[]
+  status      String?       @default("pending")
+  ShopDetails ShopDetails[]
+  Product     Product[]
 }
 
-// contains store details
-model StoreDetails {
-  id          Int       @id @default(autoincrement())
+// contains shop details
+model ShopDetails {
+  id          Int      @id @default(autoincrement())
   displayName String?
   name        String?
   phone       String?
   email       String?
   description String?
   logo        String?
-  storeId     Int?
-  Store       Store?    @relation(fields: [storeId], references: [id])
-  storeUrlId  Int?
-  storeUrl    StoreUrl? @relation(fields: [storeUrlId], references: [id])
+  shopId      Int?
+  Shop        Shop?    @relation(fields: [shopId], references: [id])
+  shopUrlId   Int?
+  shopUrl     ShopUrl? @relation(fields: [shopUrlId], references: [id])
   addressId   Int?
-  address     Address?  @relation(fields: [addressId], references: [id])
+  address     Address? @relation(fields: [addressId], references: [id])
 }
 
-model StoreUrl {
-  id           Int            @id @default(autoincrement())
-  name         String?
-  url          String?
-  StoreDetails StoreDetails[]
+model ShopUrl {
+  id          Int           @id @default(autoincrement())
+  name        String?
+  url         String?
+  ShopDetails ShopDetails[]
 }
 
 // user order details
@@ -207,97 +205,61 @@ model Order {
   OrderItem        OrderItem[]
   PaymentDetails   PaymentDetails? @relation(fields: [paymentDetailsId], references: [id])
   paymentDetailsId Int?
-  // store
-  Store            Store?          @relation(fields: [storeId], references: [id])
-  storeId          Int?
-  storeDetailsId   Int?
-  //
-
-  StoreOrder VendorOrder[]
-}
-
-// vendor Order details
-model VendorOrder {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  orderId      String
-  orderItemId  String
-  price        Int
-  delivery_fee String?
-  discount     String?
-  total        String
-
-  // /**
-  // * available value:
-  // * COD, ONLINE_PAYMENT
-  // */
-  paymentMode   String
-  // /**
-  // * available value:
-  // * NOT_PAID, PAID
-  // */
-  paymentStatus String
-
-  // /**
-  // * available value:
-  // *
-  // * 'order_placed',
-  // * 'order_confirmed',
-  // * 'order_picked',
-  // * 'order_on_way',
-  // * 'order_delivered',
-  // * 'order_returned',
-  // * 'order_cancelled',
-  // * 'order_paused'
-  // */
-  status    String?
-  comment   String?
-  addressId Int?
-  address   Address? @relation(fields: [addressId], references: [id])
-
-  user             User?           @relation(fields: [userId], references: [id])
-  userId           Int?
-  OrderItem        OrderItem[]
-  PaymentDetails   PaymentDetails? @relation(fields: [paymentDetailsId], references: [id])
-  paymentDetailsId Int?
-  // store
-  Store            Store?          @relation(fields: [storeId], references: [id])
-  storeId          Int?
-  storeDetailsId   Int?
-  //
-  userOrder        Order?          @relation(fields: [userOrderId], references: [orderId])
-  userOrderId      String
+  SubOrder         SubOrder[]
 }
 
 // Order item
 model OrderItem {
-  id           Int          @id @default(autoincrement())
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
-  quantity     Int
-  price        Int
-  orderItemId  String
-  product      Product?     @relation(fields: [productId], references: [id], onDelete: NoAction)
-  productId    Int
-  order        Order?       @relation(fields: [orderId], references: [orderId])
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  quantity    Int
+  price       Int
+  orderItemId String
+  product     Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   Int
+  order       Order?   @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  orderId     String
+  shopOrderId Int?
+}
+
+// this sub order table for seller order
+model SubOrder {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  order        Order?         @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   orderId      String
-  StoreOrder   VendorOrder? @relation(fields: [storeOrderId], references: [id])
-  storeOrderId Int?
+  seller       User?          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  sellerId     Int
+  status       String?
+  total        String?
+  SubOrderItem SubOrderItem[]
+}
+
+// suborder item for seller order
+model SubOrderItem {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  quantity   Int
+  price      Int
+  subOrderId Int?
+  subOrder   SubOrder? @relation(fields: [subOrderId], references: [id], onDelete: Cascade)
+  product    Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
 }
 
 // payment details attach with order details
 model PaymentDetails {
-  id         Int           @id @default(autoincrement())
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @default(now())
-  orderId    Int
-  amount     Int
-  provider   String?
-  status     String?
-  Order      Order[]
-  StoreOrder VendorOrder[]
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  orderId   Int
+  amount    Int
+  provider  String?
+  status    String?
+  Order     Order[]
 }
 
 model cart {
