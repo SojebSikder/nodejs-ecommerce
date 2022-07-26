@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { Auth, Mail } from "../../../system/core";
+import { Auth, Mail } from "../../../system/src/core";
 import { PaypalMethod } from "../paymentDetails/lib/method/paypal";
 import { StripeMethod } from "../paymentDetails/lib/method/stripe";
 import { PaymentService } from "../paymentDetails/lib/payment.service";

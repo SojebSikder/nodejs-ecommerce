@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { Product } from "../../../models/Product";
-import { Auth } from "../../../../system/core";
+import { Auth } from "../../../../system/src/core";
 
 const prisma = new PrismaClient();
 

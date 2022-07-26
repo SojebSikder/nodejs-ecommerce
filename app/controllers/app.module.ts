@@ -1,4 +1,4 @@
-import { Module } from "../../system/decorator";
+import { Module } from "../../system/src/core/decorator";
 import { AdminProductController } from "./admin/adminProduct/product.controller";
 import { IndexController } from "./admin/index/index.controller";
 import { CartController } from "./cart/cart.controller";

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post } from "../../../../system/decorator";
-import { env } from "../../../../system/util";
+import { Controller, Get, Post } from "../../../../system/src/core/decorator";
+import { env } from "../../../../system/src/util";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
 import { IndexService } from "./index.service";
 

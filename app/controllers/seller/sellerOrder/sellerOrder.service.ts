@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import { Auth } from "../../../../system/src";
 
 const prisma = new PrismaClient();
 
-export class OrderService {
-  private static _instance: OrderService;
+export class SellerOrderService {
+  private static _instance: SellerOrderService;
 
   /**
    * Create instance
@@ -19,7 +20,13 @@ export class OrderService {
     return 'This action adds a new user';
   }
 
-  findAll() {
+  async findAll() {
+    const user = Auth.userByCookie("");
+    const result = await prisma.subOrder.findMany({
+      where:{
+        sellerId: 1
+      }
+    });
     return 'This action returns all user';
   }
 

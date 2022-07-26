@@ -1,6 +1,6 @@
 import { IMethod } from "./IMethod";
 import Stripe from "stripe";
-import { env } from "../../../../../system";
+import { env } from "../../../../../system/src/util";
 
 export class StripeMethod implements IMethod {
   //

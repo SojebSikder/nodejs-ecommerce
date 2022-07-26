@@ -1,4 +1,4 @@
-import { env } from "../system/util";
+import { env } from "../system/src/util";
 import dotenv from "dotenv"
 dotenv.config();
 

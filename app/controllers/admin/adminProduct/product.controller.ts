@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post } from "../../../../system/decorator";
-import { env } from "../../../../system/util";
+import { env } from "../../../../system/src/util";
+import { Controller, Get, Post } from "../../../../system/src/core/decorator";
+
 import { authorization } from "../../../middlewares/authorization";
 import { requireRole } from "../../../middlewares/common/checkLogin";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
@@ -8,12 +9,9 @@ import { ProductService } from "./product.service";
 
 @Controller("/admin/product/")
 export class AdminProductController {
+  //
   @Get("", {
-    middleware: [
-      decorateHtmlResponse(),
-      authorization(),
-      requireRole("admin"),
-    ],
+    middleware: [decorateHtmlResponse(), authorization(), requireRole("admin")],
   })
   async index(req: Request, res: Response) {
     const result = await ProductService.getInstance().index();

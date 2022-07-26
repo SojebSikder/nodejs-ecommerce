@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Auth } from "../../../system";
-import { env } from "../../../system/util";
+import { Auth } from "../../../system/src/core/Auth";
+import { env } from "../../../system/src/util";
 
 /**
  * Middleware for decorating HTML response.

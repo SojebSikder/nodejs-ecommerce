@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Controller, Get } from "../../../system/decorator";
+import { Controller, Get } from "../../../system/src/core/decorator";
 import { InvoiceService } from "./invoice.service";
 
 @Controller("/invoice/")

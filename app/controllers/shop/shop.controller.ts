@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post, Put } from "../../../system/decorator";
+import { Controller, Get, Post, Put } from "../../../system/src/core/decorator";
 import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { ShopService } from "./shop.service";

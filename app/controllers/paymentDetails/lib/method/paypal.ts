@@ -1,5 +1,5 @@
 import paypal from "paypal-rest-sdk";
-import { env } from "../../../../../system";
+import { env } from "../../../../../system/src/util";
 import { IMethod } from "./IMethod";
 
 export class PaypalMethod implements IMethod {

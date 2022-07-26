@@ -1,13 +1,9 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
-import { env } from "../../../system/util";
+import { env } from "../../../system/src/util";
 import { UserService } from "./user.service";
-import { Controller, Get, Post } from "../../../system/decorator";
+import { Controller, Get, Post } from "../../../system/src/core/decorator";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { authorization } from "../../middlewares/authorization";
-
-const prisma = new PrismaClient();
 
 @Controller("/")
 export class UserController {

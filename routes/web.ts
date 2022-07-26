@@ -2,7 +2,7 @@
 import { Express, Request, Response } from "express";
 // internal imports
 // middleware
-import { RouterResolver } from "../system/core/Router";
+import { RouterResolver } from "../system/src/core/Router";
 import { AppModule } from "../app/controllers/app.module";
 
 /**

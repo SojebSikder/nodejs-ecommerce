@@ -1,4 +1,4 @@
-import { Uploader } from "../../../system/core/Disk";
+import { Uploader } from "../../../system/src/core/Disk";
 
 type fields = {
   name: string;

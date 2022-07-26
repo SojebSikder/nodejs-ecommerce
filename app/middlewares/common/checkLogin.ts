@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import createError from "http-errors";
-import { env } from "../../../system/util";
+import { env } from "../../../system/src/util";
 
 // auth guard to protect routes that need authentication
 export const checkLogin = (req, res, next) => {
