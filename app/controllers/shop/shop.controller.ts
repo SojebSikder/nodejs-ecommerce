@@ -9,27 +9,32 @@ export class ShopController {
   //
   @Get("", { middleware: [authorization(), decorateHtmlResponse("My Store")] })
   async index(req: Request, res: Response) {
+    res.send("all shop here");
+  }
+
+  @Get("/createshop", {
+    middleware: [authorization(), decorateHtmlResponse("Create shop")],
+  })
+  async createshopPage(req: Request, res: Response) {
     let isShop = false;
     const result = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
     if (result) {
       isShop = true;
+      res.render("shop/create-shop", {
+        message: result.status,
+        isShop: isShop,
+      });
+    } else {
+      res.render("shop/create-shop", { message: "", isShop: isShop });
     }
-    res.render("store/myStore", { store: result, isStore: isShop });
   }
 
-  @Get("/createstore", {
-    middleware: [authorization(), decorateHtmlResponse("Create store")],
+  @Post("/createshop", {
+    middleware: [authorization(), decorateHtmlResponse("Create shop")],
   })
-  createstorePage(req: Request, res: Response) {
-    res.render("store/createStore");
-  }
-
-  @Post("/createstore", {
-    middleware: [authorization(), decorateHtmlResponse("Create store")],
-  })
-  async createstore(req: Request, res: Response) {
+  async createshop(req: Request, res: Response) {
     //
     const name = req.body.name;
     const displayName = req.body.displayname;
@@ -47,36 +52,36 @@ export class ShopController {
     });
 
     if (result.success == true) {
-      res.redirect("/store");
+      res.redirect("/shop/createshop");
     } else {
-      res.render("store/createStore", {
+      res.render("shop/create-shop", {
         message: result.message,
       });
     }
   }
 
-  @Get("/editstore", {
-    middleware: [authorization(), decorateHtmlResponse("Edit store")],
+  @Get("/editshop", {
+    middleware: [authorization(), decorateHtmlResponse("Edit shop")],
   })
-  async updatestorePage(req: Request, res: Response) {
+  async updateshopPage(req: Request, res: Response) {
     const result = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
 
-    res.render("store/editStore", { store: result });
+    res.render("shop/editShop", { shop: result });
   }
 
-  @Post("/editstore", {
-    middleware: [authorization(), decorateHtmlResponse("Create store")],
+  @Post("/editshop", {
+    middleware: [authorization(), decorateHtmlResponse("Create shop")],
   })
-  async updatestore(req: Request, res: Response) {
+  async updateshop(req: Request, res: Response) {
     //
     const name = req.body.name || null;
     const displayName = req.body.displayname;
     const email = req.body.email;
     const description = req.body.description;
     const phone = req.body.phone;
-    const shopcommand = req.body.storecommand || null;
+    const shopcommand = req.body.shopcommand || null;
 
     let result;
     if (shopcommand) {
@@ -85,7 +90,7 @@ export class ShopController {
         signedCookies: req.signedCookies,
       });
 
-      res.redirect("/store");
+      res.redirect("/shop");
     } else {
       result = await ShopService.getInstance().updateShopDetails({
         name,
@@ -100,7 +105,7 @@ export class ShopController {
         signedCookies: req.signedCookies,
       });
 
-      res.render("store/editStore", {
+      res.render("shop/editStore", {
         message: result.message,
         store: updated,
       });

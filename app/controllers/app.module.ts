@@ -5,6 +5,9 @@ import { CartController } from "./cart/cart.controller";
 import { InvoiceController } from "./invoice/invoice.controller";
 import { OrderController } from "./order/order.controller";
 import { ProductController } from "./product/product.controller";
+import { SellerDashboardController } from "./seller/sellerDashboard/sellerDashboard.controller";
+import { SellerOrderController } from "./seller/sellerOrder/sellerOrder.controller";
+import { SellerProductController } from "./seller/sellerProduct/sellerProduct.controller";
 import { ShopController } from "./shop/shop.controller";
 import { UserController } from "./user/user.controller";
 
@@ -17,7 +20,14 @@ import { UserController } from "./user/user.controller";
     IndexController,
     InvoiceController,
     ShopController,
-    AdminProductController, // Admin/index.controller.ts
+    // seller
+    SellerDashboardController,
+    SellerProductController,
+    SellerOrderController,
+    // end seller imports
+    // admin
+    AdminProductController,
+    // end admin imports
   ],
 })
 export class AppModule {}

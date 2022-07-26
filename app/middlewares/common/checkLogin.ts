@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import createError from "http-errors";
 import { env } from "../../../system/src/util";
+import { ShopService } from "../../controllers/shop/shop.service";
 
 // auth guard to protect routes that need authentication
 export const checkLogin = (req, res, next) => {
@@ -54,6 +55,26 @@ export const redirectLoggedIn = function (req, res, next) {
 export function requireRole(role) {
   return function (req, res, next) {
     if (req.user.role && role.includes(req.user.role)) {
+      next();
+    } else {
+      if (res.locals.html) {
+        next(createError(401, "You are not authorized to access this page!"));
+      } else {
+        res.status(401).json({
+          message: "You are not authorized!",
+        });
+      }
+    }
+  };
+}
+
+// guard to protect routes that those have shop.
+export function isSeller() {
+  return async function (req, res, next) {
+    const shop = await ShopService.getInstance().index({
+      signedCookies: req.signedCookies,
+    });
+    if (shop && shop.ShopDetails.length > 0) {
       next();
     } else {
       if (res.locals.html) {

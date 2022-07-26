@@ -16,30 +16,28 @@ export class SellerOrderService {
     return this._instance;
   }
 
-  create(data: any){
-    return 'This action adds a new user';
-  }
-
-  async findAll() {
-    const user = Auth.userByCookie("");
+  async findAll({ signedCookies }) {
+    //
+    const user = Auth.userByCookie(signedCookies);
     const result = await prisma.subOrder.findMany({
-      where:{
-        sellerId: 1
-      }
+      where: {
+        sellerId: user.userid,
+      },
     });
-    return 'This action returns all user';
+    return result;
   }
 
-  findOne(id: string) {
-    return 'This action returns a {id} user';
+  async findOne(id: string) {
+    //
+    const items = await prisma.subOrder.findMany({
+      include: {
+        SubOrderItem: true,
+      },
+    });
+    return items;
   }
 
-  update(id: string, data: any) {
-    return 'This action updates a {id} user';
-  }
-
-  remove(id: string) {
-    return 'This action removes a {id} user';
+  markDelivered(id: string) {
+    return "This action mark delivery a {id} user";
   }
 }
- 

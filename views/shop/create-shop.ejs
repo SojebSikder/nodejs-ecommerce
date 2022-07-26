@@ -1,0 +1,72 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<div class="container">
+  <div class="d-flex flex-column justify-content-center">
+    <div>
+      <h1>Create Shop</h1>
+    </div>
+
+    <% if(isShop){ %>
+    <div class="alert alert-primary" role="alert">
+      You already submitted. And shop status is: <strong><%= message %></strong>
+    </div>
+    <% }else{ %>
+
+    <div class="align-items-center">
+      <form action="/shop/createshop" method="post">
+        <div class="form-group">
+          <label for="name">Shop Display Name</label>
+          <input type="text" class="form-control" id="name" name="displayname" placeholder="Shop Name">
+        </div>
+        <div class="form-group">
+          <label for="name">Shop Name (unique)</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Shop Name">
+        </div>
+        <!-- <div class="form-group">
+          <label for="address">Shop Address</label>
+          <input type="text" class="form-control" id="address" name="address" placeholder="Shop Address">
+        </div>
+        <div class="form-group">
+          <label for="city">Shop City</label>
+          <input type="text" class="form-control" id="city" name="city" placeholder="Shop City">
+        </div>
+        <div class="form-group">
+          <label for="state">Shop State</label>
+          <input type="text" class="form-control" id="state" name="state" placeholder="Shop State">
+        </div>
+        <div class="form-group">
+          <label for="zip">Shop Zip</label>
+          <input type="text" class="form-control" id="zip" name="zip" placeholder="Shop Zip">
+        </div>
+        <div class="form-group">
+          <label for="phone">Shop Phone</label>
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="Shop Phone">
+        </div> -->
+        <div class="form-group">
+          <label for="email">Shop Email</label>
+          <input type="text" class="form-control" id="email" name="email" placeholder="Shop Email">
+        </div>
+        <div class="form-group">
+          <label for="description">Shop Description</label>
+          <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Shop</button>
+
+      </form>
+    </div>
+    <% } %>
+
+  </div>
+
+</div>
+
+<script>
+  //show image from local image upload
+  j("#image").on("change", function() {
+    j("#image").imageSet(j("#img"));
+    j('#img').css('width', '500px');
+    j('#img').css('height', '500px');
+  });
+</script>
+
+<%- include('../partials/footer'); -%>
