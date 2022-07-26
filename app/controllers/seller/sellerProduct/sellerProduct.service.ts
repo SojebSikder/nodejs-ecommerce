@@ -175,6 +175,30 @@ export class SellerProductService {
     return "This action returns a {id} user";
   }
 
+  /**
+   * show specific data for editing
+   */
+  async edit({ Id, signedCookies }) {
+    const id = Id;
+    const store = await ShopService.getInstance().index({ signedCookies });
+    const result = await prisma.product.findFirst({
+      where: {
+        AND: [
+          {
+            id: Number(id),
+          },
+          {
+            shopId: store.id,
+          },
+        ],
+      },
+      include: {
+        ProductImage: true,
+      },
+    });
+    return result;
+  }
+
   async update(
     Id,
     {
@@ -258,30 +282,6 @@ export class SellerProductService {
       data: data,
     });
 
-    return result;
-  }
-
-  /**
-   * show specific data for editing
-   */
-  async edit({ Id, signedCookies }) {
-    const id = Id;
-    const store = await ShopService.getInstance().index({ signedCookies });
-    const result = await prisma.product.findFirst({
-      where: {
-        AND: [
-          {
-            id: Number(id),
-          },
-          {
-            shopId: store.id,
-          },
-        ],
-      },
-      include: {
-        ProductImage: true,
-      },
-    });
     return result;
   }
 

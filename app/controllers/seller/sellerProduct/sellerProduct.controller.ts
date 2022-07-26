@@ -7,6 +7,7 @@ import {
   Put,
 } from "../../../../system/src/core/decorator";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
+import { attachmentUpload } from "../../../middlewares/common/upload";
 import { SellerProductService } from "./sellerProduct.service";
 
 @Controller("/seller/product/")
@@ -49,7 +50,15 @@ export class SellerProductController {
     res.render("seller/product/add");
   }
 
-  @Post()
+  @Post("", {
+    middleware: [
+      decorateHtmlResponse(),
+      attachmentUpload({
+        fieldname: [{ name: "image", maxCount: 1 }],
+        distination: "products",
+      }),
+    ],
+  })
   async create(req: Request, res: Response) {
     const file =
       req.files["image"] == null ? "" : req.files["image"][0].filename;
@@ -68,7 +77,9 @@ export class SellerProductController {
       image: file,
       signedCookies: req.signedCookies,
     });
-    res.render("seller/product/add");
+    res.render("seller/product/add", {
+      message: "Post has been added successfully",
+    });
   }
 
   @Get(":id")
@@ -76,7 +87,28 @@ export class SellerProductController {
     res.send(await SellerProductService.getInstance().findOne(req.params.id));
   }
 
-  @Put(":id")
+  @Get("edit/:id", {
+    middleware: [decorateHtmlResponse()],
+  })
+  async edit(req: Request, res: Response) {
+    const id = req.params.id;
+    const result = await SellerProductService.getInstance().edit({
+      Id: id,
+      signedCookies: req.signedCookies,
+    });
+
+    res.render("seller/product/edit", { post: result });
+  }
+
+  @Post("edit/:id", {
+    middleware: [
+      decorateHtmlResponse(),
+      attachmentUpload({
+        distination: "products",
+        fieldname: [{ name: "image", maxCount: 1 }],
+      }),
+    ],
+  })
   async update(req: Request, res: Response) {
     const id = req.params.id;
     const file =
@@ -100,13 +132,12 @@ export class SellerProductController {
     );
   }
 
-  @Delete(":id")
+  @Delete("delete/:id")
   async remove(req: Request, res: Response) {
     const id = req.params.id;
-    res.send(
-      await SellerProductService.getInstance().remove(id, {
-        signedCookies: req.signedCookies,
-      })
-    );
+    await SellerProductService.getInstance().remove(id, {
+      signedCookies: req.signedCookies,
+    });
+    res.redirect("/seller/product");
   }
 }

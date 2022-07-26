@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post } from "../../../system/src/core/decorator";
+import { Controller, Get } from "../../../system/src/core/decorator";
 import { env } from "../../../system/src/util";
-import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
-import { attachmentUpload } from "../../middlewares/common/upload";
 import { ProductService } from "./product.service";
 
 @Controller("/")
@@ -36,86 +34,11 @@ export class ProductController {
     });
   }
 
-  @Post("product/add", {
-    middleware: [
-      decorateHtmlResponse(),
-      attachmentUpload({
-        fieldname: [{ name: "image", maxCount: 1 }],
-        distination: "products",
-      }),
-    ],
-  })
-  async store(req: Request, res: Response) {
-    //
-    await ProductService.getInstance().store(req, res);
-
-    res.render("post/addPost", {
-      message: "Post has been added successfully",
-    });
-  }
-
-  @Get("product/add", { middleware: [decorateHtmlResponse()] })
-  showAddPostPage(req: Request, res: Response) {
-    res.render("post/addPost", {
-      message: "",
-    });
-  }
-
   @Get("product/:id", { middleware: [decorateHtmlResponse()] })
   async show(req: Request, res: Response) {
     const id = req.params.id;
     const result = await ProductService.getInstance().show(id);
     res.locals.title = `${result.name} - ${env("APP_NAME")}`;
     res.render("post/postSingle", { post: result });
-  }
-
-  @Get("product/edit/:id", {
-    middleware: [decorateHtmlResponse(), authorization()],
-  })
-  async updatePage(req: Request, res: Response) {
-    const id = req.params.id;
-    const result = await ProductService.getInstance().edit({
-      Id: id,
-      signedCookies: req.signedCookies,
-    });
-
-    res.render("store/product/edit", { post: result });
-  }
-
-  @Post("product/edit/:id", {
-    middleware: [
-      decorateHtmlResponse(),
-      authorization(),
-      attachmentUpload({
-        distination: "products",
-        fieldname: [{ name: "image", maxCount: 1 }],
-      }),
-    ],
-  })
-  async update(req: Request, res: Response) {
-    // save product
-    await ProductService.getInstance().update(req, res);
-
-    const id = req.params.id;
-    const result = await ProductService.getInstance().edit({
-      Id: id,
-      signedCookies: req.signedCookies,
-    });
-
-    res.render("store/product/edit", { post: result });
-  }
-
-  @Get("product/delete/:id", {
-    middleware: [decorateHtmlResponse(), authorization()],
-  })
-  async delete(req: Request, res: Response) {
-    const id = req.params.id;
-    // delete product
-    await ProductService.getInstance().delete({
-      Id: id,
-      signedCookies: req.signedCookies,
-    });
-
-    res.redirect("/store/product");
   }
 }
