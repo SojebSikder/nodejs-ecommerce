@@ -28,22 +28,6 @@ export class OrderController {
     res.render("order/myOrder", { orders: data, page: page });
   }
 
-  @Get("/store", {
-    middleware: [decorateHtmlResponse("My Order"), authorization()],
-  })
-  async storeOrderPage(req: Request, res: Response) {
-    // store order
-    const page = req.query.page == undefined ? 1 : req.query.page;
-    const data = await OrderService.getInstance().storeOrderFindAll({
-      page: Number(page),
-      signedCookies: req.signedCookies,
-    });
-    // set urls for refer
-    fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
-    //
-    res.render("store/order/index", { orders: data, page: page });
-  }
-
   @Get("/checkout", {
     middleware: [decorateHtmlResponse("Checkout"), authorization()],
   })
@@ -142,18 +126,5 @@ export class OrderController {
       SignedCookies: req.signedCookies,
     });
     res.render("order/myOrderDetails", { order: data });
-  }
-
-  @Get("/store/:id", {
-    middleware: [decorateHtmlResponse("Store Order"), authorization()],
-  })
-  async showVendorOrder(req: Request, res: Response) {
-    //
-    let id = req.params.id;
-    const data = await OrderService.getInstance().showVendor({
-      Id: id,
-      SignedCookies: req.signedCookies,
-    });
-    res.render("store/order/orderDetails", { order: data });
   }
 }

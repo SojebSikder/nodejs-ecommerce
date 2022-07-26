@@ -1,11 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
 import { Auth } from "../../../system/core";
 
 const prisma = new PrismaClient();
 
-export class StoreService {
-  private static _instance: StoreService;
+export class ShopService {
+  private static _instance: ShopService;
   /**
    * Create instance
    */
@@ -20,18 +19,18 @@ export class StoreService {
    */
   public async index({ signedCookies }) {
     const user = Auth.userByCookie(signedCookies);
-    const result = await prisma.store.findFirst({
+    const result = await prisma.shop.findFirst({
       where: {
         userId: user.userid,
       },
       include: {
-        StoreDetails: true,
+        ShopDetails: true,
       },
     });
     return result;
   }
 
-  async createStore({
+  async createShop({
     name,
     displayName,
     email,
@@ -41,7 +40,7 @@ export class StoreService {
   }) {
     const user = Auth.userByCookie(signedCookies);
 
-    const checkStoreNameExist = await prisma.storeDetails.findFirst({
+    const checkShopNameExist = await prisma.shopDetails.findFirst({
       where: {
         name: name,
       },
@@ -52,15 +51,15 @@ export class StoreService {
     let message = "";
     let success = true;
 
-    if (checkStoreNameExist) {
+    if (checkShopNameExist) {
       statusCode = 400;
-      message = "Store name already exist";
+      message = "Shop name already exist";
       success = false;
     } else {
-      result = await prisma.store.create({
+      result = await prisma.shop.create({
         data: {
           userId: user.userid,
-          StoreDetails: {
+          ShopDetails: {
             create: {
               name: name,
               displayName: displayName,
@@ -80,7 +79,7 @@ export class StoreService {
       message: message,
     };
   }
-  async updateStore({ status = null, signedCookies }) {
+  async updateShop({ status = null, signedCookies }) {
     const user = Auth.userByCookie(signedCookies);
     let result;
     let data = {};
@@ -89,30 +88,30 @@ export class StoreService {
     let success = true;
 
     if (status == "delete") {
-      const storeInfo = await prisma.store.findFirst({
+      const ShopInfo = await prisma.shop.findFirst({
         where: {
           userId: user.userid,
         },
       });
 
-      result = await prisma.storeDetails.deleteMany({
+      result = await prisma.shopDetails.deleteMany({
         where: {
-          storeId: storeInfo.id,
+          shopId: ShopInfo.id,
         },
       });
 
-      result = await prisma.store.delete({
+      result = await prisma.shop.delete({
         where: {
           userId: user.userid,
         },
       });
-      message = "Store deleted";
+      message = "Shop deleted";
     } else {
       if (status) {
         Object.assign(data, { status });
       }
 
-      result = await prisma.store.updateMany({
+      result = await prisma.shop.updateMany({
         where: {
           userId: user.userid,
         },
@@ -126,7 +125,7 @@ export class StoreService {
       message: message,
     };
   }
-  async updateStoreDetails({
+  async updateShopDetails({
     name = null,
     displayName = null,
     email = null,
@@ -142,7 +141,7 @@ export class StoreService {
     let message = "";
     let success = true;
 
-    const storeInfo = await prisma.store.findFirst({
+    const ShopInfo = await prisma.shop.findFirst({
       where: {
         userId: user.userid,
       },
@@ -166,15 +165,15 @@ export class StoreService {
 
     if (name) {
       Object.assign(data, { name });
-      const checkStoreNameExist = await prisma.storeDetails.findFirst({
+      const checkShopNameExist = await prisma.shopDetails.findFirst({
         where: {
           name: name,
         },
       });
 
-      if (checkStoreNameExist) {
+      if (checkShopNameExist) {
         statusCode = 400;
-        message = "Store name already exist";
+        message = "Shop name already exist";
         success = false;
 
         return {
@@ -186,9 +185,9 @@ export class StoreService {
       }
     }
 
-    result = await prisma.storeDetails.updateMany({
+    result = await prisma.shopDetails.updateMany({
       where: {
-        storeId: storeInfo.id,
+        shopId: ShopInfo.id,
       },
       data: data,
     });

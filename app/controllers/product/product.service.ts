@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { Auth } from "../../../system/core";
-import { StoreService } from "../store/store.service";
+import { ShopService } from "../shop/shop.service";
 
 const prisma = new PrismaClient();
 
@@ -68,9 +68,9 @@ export class ProductService {
           price: true,
           stock: true,
           ProductImage: true,
-          store: {
+          shop: {
             include: {
-              StoreDetails: true,
+              ShopDetails: true,
             },
           },
         },
@@ -84,10 +84,6 @@ export class ProductService {
         ],
         skip: limit * (page - 1),
         take: limit,
-        // include: {
-        //   ProductImage: true,
-        //   store: true,
-        // },
         select: {
           id: true,
           name: true,
@@ -95,9 +91,9 @@ export class ProductService {
           price: true,
           stock: true,
           ProductImage: true,
-          store: {
+          shop: {
             include: {
-              StoreDetails: true,
+              ShopDetails: true,
             },
           },
         },
@@ -118,12 +114,12 @@ export class ProductService {
   }) {
     let paginationResult;
     // get store id
-    const store = await StoreService.getInstance().index({ signedCookies });
+    const shop = await ShopService.getInstance().index({ signedCookies });
     if (isSearch == true) {
       paginationResult = await prisma.product.findMany({
         where: {
           AND: [
-            { storeId: store.id },
+            { shopId: shop.id },
             {
               OR: [
                 { name: { contains: searchText } },
@@ -139,7 +135,7 @@ export class ProductService {
     } else {
       paginationResult = await prisma.product.findMany({
         where: {
-          storeId: store.id,
+          shopId: shop.id,
         },
         orderBy: {
           createdAt: "desc",
@@ -156,7 +152,7 @@ export class ProductService {
       result = await prisma.product.findMany({
         where: {
           AND: [
-            { storeId: store.id },
+            { shopId: shop.id },
             {
               OR: [
                 { name: { contains: searchText } },
@@ -179,7 +175,7 @@ export class ProductService {
     } else {
       result = await prisma.product.findMany({
         where: {
-          storeId: store.id,
+          shopId: shop.id,
         },
         orderBy: [
           {
@@ -215,9 +211,9 @@ export class ProductService {
         price: true,
         stock: true,
         ProductImage: true,
-        store: {
+        shop: {
           include: {
-            StoreDetails: true,
+            ShopDetails: true,
           },
         },
       },
@@ -230,11 +226,17 @@ export class ProductService {
    */
   async edit({ Id, signedCookies }) {
     const id = Id;
-    const store = await StoreService.getInstance().index({ signedCookies });
+    const store = await ShopService.getInstance().index({ signedCookies });
     const result = await prisma.product.findFirst({
       where: {
-        id: Number(id),
-        storeId: store.id,
+        AND: [
+          {
+            id: Number(id),
+          },
+          {
+            shopId: store.id,
+          },
+        ],
       },
       include: {
         ProductImage: true,
@@ -274,7 +276,7 @@ export class ProductService {
     }
 
     // get user store id
-    const store = await StoreService.getInstance().index({
+    const store = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
 
@@ -336,7 +338,7 @@ export class ProductService {
     }
 
     // get user store id
-    const store = await StoreService.getInstance().index({
+    const shop = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
 
@@ -375,7 +377,7 @@ export class ProductService {
             id: Number(id),
           },
           { authorId: user.userid },
-          { storeId: store.id },
+          { shopId: shop.id },
         ],
       },
       data: data,
@@ -394,7 +396,7 @@ export class ProductService {
     const user = Auth.userByCookie(signedCookies);
 
     // get user store id
-    const store = await StoreService.getInstance().index({
+    const shop = await ShopService.getInstance().index({
       signedCookies: signedCookies,
     });
 
@@ -407,7 +409,7 @@ export class ProductService {
           },
           { authorId: user.userid },
           {
-            storeId: store.id,
+            shopId: shop.id,
           },
         ],
       },

@@ -4,7 +4,6 @@ import { Auth, Mail } from "../../../system/core";
 import { PaypalMethod } from "../paymentDetails/lib/method/paypal";
 import { StripeMethod } from "../paymentDetails/lib/method/stripe";
 import { PaymentService } from "../paymentDetails/lib/payment.service";
-import { StoreService } from "../store/store.service";
 // import { PaymentDetailsService } from "../paymentDetails/paymentDetails.service";
 
 const prisma = new PrismaClient();
@@ -54,40 +53,6 @@ export class OrderService {
   }
 
   /**
-   * show all data
-   * @returns
-   */
-  public async storeOrderFindAll({ page = 1, signedCookies }) {
-    const user = Auth.userByCookie(signedCookies);
-
-    const store = await StoreService.getInstance().index({ signedCookies });
-
-    const paginationResult = await prisma.vendorOrder.findMany({
-      where: {
-        storeId: store.id,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    let limit = 15;
-    let pagination = Math.ceil(paginationResult.length / limit);
-
-    const result = await prisma.vendorOrder.findMany({
-      where: {
-        storeId: store.id,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      skip: limit * (page - 1),
-      take: limit,
-    });
-    return { data: result, pagination: pagination };
-  }
-
-  /**
    * show specific data
    */
   async show({ Id, SignedCookies }) {
@@ -97,44 +62,6 @@ export class OrderService {
       where: {
         orderId: String(id),
         userId: Number(user.userid),
-      },
-      select: {
-        orderId: true,
-        createdAt: true,
-        status: true,
-        price: true,
-        paymentStatus: true,
-        user: {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-          },
-        },
-        OrderItem: {
-          select: {
-            quantity: true,
-            price: true,
-            product: true,
-          },
-        },
-      },
-    });
-    return result;
-  }
-
-  /**
-   * show specific data for vendor order
-   */
-  async showVendor({ Id, SignedCookies }) {
-    const id = Id;
-    const user = Auth.userByCookie(SignedCookies);
-    const store = await StoreService.getInstance().index({
-      signedCookies: SignedCookies,
-    });
-    const result = await prisma.vendorOrder.findFirst({
-      where: {
-        storeId: store.id,
       },
       select: {
         orderId: true,
@@ -226,66 +153,14 @@ export class OrderService {
     // store to order item
     for (const cart of carts) {
       // store to orderProductItem first
-      // await this.storeOrderProductItem({
-      //   Price: cart.product.price,
-      //   ProductId: cart.productId,
-      //   Quantity: cart.quantity,
-      //   OrderId: String(order_id),
-      //   OrderItemId: orderItemId,
-      //   signedCookies: req.signedCookies,
-      // });
-
-      // store to vendor order
-      // TODO: change orderId
-      // check vendor order exist
-      // if exist then update qnty just
-      const vendorExists = await prisma.vendorOrder.findFirst({
-        where: {
-          AND: [
-            {
-              storeId: cart.product.storeId,
-            },
-            {
-              userId: user.userid,
-            },
-            {
-              orderItemId: `${orderItemId}`,
-            },
-            {
-              orderId: `${order_id}`,
-            },
-          ],
-        },
+      await this.storeOrderProductItem({
+        Price: cart.product.price,
+        ProductId: cart.productId,
+        Quantity: cart.quantity,
+        OrderId: String(order_id),
+        OrderItemId: orderItemId,
+        signedCookies: req.signedCookies,
       });
-
-      if (vendorExists) {
-      } else {
-        await this.storeOrderProductItem({
-          Price: cart.product.price,
-          ProductId: cart.productId,
-          Quantity: cart.quantity,
-          OrderId: String(order_id),
-          OrderItemId: orderItemId,
-          signedCookies: req.signedCookies,
-        });
-
-        const vendorOrder = await prisma.vendorOrder.create({
-          data: {
-            userOrderId: `${order_id}`,
-            userId: Number(user.userid),
-            orderId: `${order_id}`,
-            storeId: cart.product.storeId,
-            orderItemId: `${orderItemId}`,
-            price: price,
-            discount: `${discount}`,
-            delivery_fee: `${delivery_fee}`,
-            total: `${totalPrice}`,
-            paymentStatus: "NOT_PAID",
-            paymentMode: "COD",
-            status: "order_placed",
-          },
-        });
-      }
     }
 
     // make payment

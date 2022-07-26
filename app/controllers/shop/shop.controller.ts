@@ -2,21 +2,21 @@ import { Request, Response } from "express";
 import { Controller, Get, Post, Put } from "../../../system/decorator";
 import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
-import { StoreService } from "./store.service";
+import { ShopService } from "./shop.service";
 
-@Controller("/store")
-export class StoreController {
+@Controller("/shop")
+export class ShopController {
   //
   @Get("", { middleware: [authorization(), decorateHtmlResponse("My Store")] })
   async index(req: Request, res: Response) {
-    let isStore = false;
-    const result = await StoreService.getInstance().index({
+    let isShop = false;
+    const result = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
     if (result) {
-      isStore = true;
+      isShop = true;
     }
-    res.render("store/myStore", { store: result, isStore: isStore });
+    res.render("store/myStore", { store: result, isStore: isShop });
   }
 
   @Get("/createstore", {
@@ -37,7 +37,7 @@ export class StoreController {
     const description = req.body.description;
     const phone = req.body.phone;
 
-    const result = await StoreService.getInstance().createStore({
+    const result = await ShopService.getInstance().createShop({
       name,
       displayName,
       email,
@@ -59,7 +59,7 @@ export class StoreController {
     middleware: [authorization(), decorateHtmlResponse("Edit store")],
   })
   async updatestorePage(req: Request, res: Response) {
-    const result = await StoreService.getInstance().index({
+    const result = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
 
@@ -76,18 +76,18 @@ export class StoreController {
     const email = req.body.email;
     const description = req.body.description;
     const phone = req.body.phone;
-    const storecommand = req.body.storecommand || null;
+    const shopcommand = req.body.storecommand || null;
 
     let result;
-    if (storecommand) {
-      result = await StoreService.getInstance().updateStore({
-        status: storecommand,
+    if (shopcommand) {
+      result = await ShopService.getInstance().updateShop({
+        status: shopcommand,
         signedCookies: req.signedCookies,
       });
 
       res.redirect("/store");
     } else {
-      result = await StoreService.getInstance().updateStoreDetails({
+      result = await ShopService.getInstance().updateShopDetails({
         name,
         displayName,
         email,
@@ -96,7 +96,7 @@ export class StoreController {
         signedCookies: req.signedCookies,
       });
 
-      const updated = await StoreService.getInstance().index({
+      const updated = await ShopService.getInstance().index({
         signedCookies: req.signedCookies,
       });
 
