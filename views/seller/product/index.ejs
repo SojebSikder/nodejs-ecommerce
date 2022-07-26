@@ -1,0 +1,34 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<%- include('../partials/sidebar'); -%>
+
+<!-- Main section -->
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        View Products
+      </div>
+    </div>
+    <div class="row">
+
+    </div>
+
+
+
+  </div>
+  </div>
+</main>
+<!-- End Main section -->
+
+
+<script>
+  //show image from local image upload
+  j("#image").on("change", function() {
+    j("#image").imageSet(j("#img"));
+    j('#img').css('width', '500px');
+    j('#img').css('height', '500px');
+  });
+</script>
+
+<%- include('../partials/footer'); -%>

@@ -1,13 +1,7 @@
 import { Request, Response } from "express";
-import {
-  Controller,
-  Delete,
-  Get,
-  Patch,
-  Post,
-} from "../../../../system/src/core/decorator";
+import { Controller, Get } from "../../../../system/src/core/decorator";
 import { authorization } from "../../../middlewares/authorization";
-import { isSeller, requireRole } from "../../../middlewares/common/checkLogin";
+import { isSeller } from "../../../middlewares/common/checkLogin";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
 import { SellerDashboardService } from "./sellerDashboard.service";
 

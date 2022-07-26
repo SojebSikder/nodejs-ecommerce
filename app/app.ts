@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 // middleware imports
 import { appConfig } from "../config/app";
 import { setUser } from "./middlewares/authorization";
+import { getShopDetails } from "./middlewares/common/decorateHtmlResponse";
 
 /**
  * Use any middleware here
@@ -16,4 +17,5 @@ export function boot(app: Express) {
   app.use(cookieParser(appConfig.cookieSecret));
   // custom middleware here
   app.use(setUser());
+  app.use("/seller", getShopDetails());
 }

@@ -12,6 +12,11 @@ import { SellerProductService } from "./sellerProduct.service";
 @Controller("/seller/product/")
 export class SellerProductController {
   //
+  @Get("", { middleware: [decorateHtmlResponse()] })
+  viewProductPage(req: Request, res: Response) {
+    res.render("seller/product/index");
+  }
+
   @Get("add", { middleware: [decorateHtmlResponse()] })
   addProductPage(req: Request, res: Response) {
     res.render("seller/product/add");
