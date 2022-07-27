@@ -27,15 +27,24 @@ export class SellerOrderService {
     return result;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, { signedCookies }) {
     //
+    const user = Auth.userByCookie(signedCookies);
     const items = await prisma.subOrder.findFirst({
       where: {
-        orderId: id,
+        AND: [
+          {
+            orderId: id,
+          },
+          {
+            sellerId: user.userid,
+          },
+        ],
       },
       select: {
         SubOrderItem: {
           select: {
+            subOrderId: true,
             quantity: true,
             price: true,
             product: true,

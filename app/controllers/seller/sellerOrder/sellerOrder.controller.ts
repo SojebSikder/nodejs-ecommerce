@@ -17,7 +17,10 @@ export class SellerOrderController {
   @Get(":id", { middleware: [decorateHtmlResponse("My Order")] })
   async findOne(req: Request, res: Response) {
     const result = await SellerOrderService.getInstance().findOne(
-      req.params.id
+      req.params.id,
+      {
+        signedCookies: req.signedCookies,
+      }
     );
     res.render("seller/order/show", { orders: result });
   }
