@@ -58,7 +58,6 @@ export class SellerOrderService {
         },
       },
     });
-    console.log(items)
     return items;
   }
 
