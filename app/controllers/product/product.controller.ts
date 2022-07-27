@@ -6,6 +6,7 @@ import { ProductService } from "./product.service";
 
 @Controller("/")
 export class ProductController {
+  //
   @Get("", { middleware: [decorateHtmlResponse()] })
   async index(req: Request, res: Response) {
     //

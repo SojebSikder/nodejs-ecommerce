@@ -140,15 +140,15 @@ export class SellerProductService {
       };
     }
 
-    // get user store id
-    const store = await ShopService.getInstance().index({
+    // get user shop id
+    const shop = await ShopService.getInstance().index({
       signedCookies: signedCookies,
     });
 
     //
     let data = {
       authorId: user.userid,
-      storeId: store.id,
+      shopId: shop.id,
       name: name,
       description: description,
       price: price,

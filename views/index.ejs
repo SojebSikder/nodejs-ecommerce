@@ -49,9 +49,11 @@
         <h5 class="card-title"> <a href="/product/<%= post.id %>">
             <%= post.name %>
           </a> </h5>
+        <% if(post.store > 0) {%>
         <p class="card-text">
           <%= post.store.StoreDetails[0].displayName %>
         </p>
+        <% } %>
         <p class="card-text">
           <%= post.description %>
         </p>

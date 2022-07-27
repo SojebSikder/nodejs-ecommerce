@@ -1,11 +1,5 @@
 import { Request, Response } from "express";
-import {
-  Controller,
-  Delete,
-  Get,
-  Post,
-  Put,
-} from "../../../../system/src/core/decorator";
+import { Controller, Get, Post } from "../../../../system/src/core/decorator";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
 import { attachmentUpload } from "../../../middlewares/common/upload";
 import { SellerProductService } from "./sellerProduct.service";
@@ -119,20 +113,20 @@ export class SellerProductController {
     const stock = Number(req.body.stock);
     const published = req.body.published;
 
-    res.send(
-      await SellerProductService.getInstance().update(id, {
-        productName: name,
-        productDescription: description,
-        Price: price,
-        Stock: stock,
-        Published: published,
-        image: file,
-        signedCookies: req.signedCookies,
-      })
-    );
+    await SellerProductService.getInstance().update(id, {
+      productName: name,
+      productDescription: description,
+      Price: price,
+      Stock: stock,
+      Published: published,
+      image: file,
+      signedCookies: req.signedCookies,
+    });
+
+    res.redirect(`/seller/product/edit/${id}`);
   }
 
-  @Delete("delete/:id")
+  @Get("delete/:id")
   async remove(req: Request, res: Response) {
     const id = req.params.id;
     await SellerProductService.getInstance().remove(id, {
