@@ -129,16 +129,20 @@ export const orderpdf = ({
                    </td>
                 </tr>
                 <tr class="heading">
-                   <td>Bought items:</td>
+                   <td>Bought items</td>
+                   <td>Shop name</td>
                    <td>Price</td>
                    <td>Quantity</td>
+                   <td>Status</td>
                 </tr>
                 ${items.map((item) => {
                   return `
                     <tr class="item">
                        <td>${item.product.name}</td>
+                       <td>${item.product.shop.ShopDetails[0].displayName}</td>
                        <td>${item.price}</td>
                        <td>${item.quantity}</td>
+                       <td></td>
                     </tr>
                   `;
                 })}
