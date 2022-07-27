@@ -1,0 +1,49 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<%- include('../partials/sidebar'); -%>
+
+<!-- Main section -->
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        View Products
+      </div>
+    </div>
+    <div class="row">
+      <div class="row justify-content-md-center">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>
+              Product Name
+            </th>
+            <th>
+              Price
+            </th>
+            <th>Quantity</th>
+          </tr>
+          <% for(let order of orders.SubOrderItem) { %>
+
+          <tr>
+            <td>
+              <%= order.product.name %>
+            </td>
+            <td>
+              <%= order.price %>
+            </td>
+            <td>
+              <%= order.quantity %>
+            </td>
+          </tr>
+          <% } %>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+</main>
+<!-- End Main section -->
+
+<%- include('../partials/footer'); -%>

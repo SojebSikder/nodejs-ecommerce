@@ -149,15 +149,6 @@ export class OrderService {
       },
     });
 
-    // insert to suborders
-    const suborders = await prisma.subOrder.create({
-      data: {
-        orderId: `${order_id}`,
-        sellerId: user.userid,
-        total: `${totalPrice}`,
-      },
-    });
-
     // store to order item
     for (const cart of carts) {
       // store to orderProductItem first
@@ -168,6 +159,15 @@ export class OrderService {
         OrderId: String(order_id),
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
+      });
+
+      // insert to suborders
+      const suborders = await prisma.subOrder.create({
+        data: {
+          orderId: `${order_id}`,
+          sellerId: cart.product.authorId,
+          total: `${totalPrice}`,
+        },
       });
 
       // insert to suborder items

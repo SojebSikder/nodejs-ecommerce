@@ -29,9 +29,18 @@ export class SellerOrderService {
 
   async findOne(id: string) {
     //
-    const items = await prisma.subOrder.findMany({
-      include: {
-        SubOrderItem: true,
+    const items = await prisma.subOrder.findFirst({
+      where: {
+        orderId: id,
+      },
+      select: {
+        SubOrderItem: {
+          select: {
+            quantity: true,
+            price: true,
+            product: true,
+          },
+        },
       },
     });
     return items;

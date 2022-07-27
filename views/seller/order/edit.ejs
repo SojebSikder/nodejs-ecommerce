@@ -1,0 +1,81 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<%- include('../partials/sidebar'); -%>
+
+<!-- Main section -->
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        Edit Product
+      </div>
+    </div>
+    <div class="row">
+      <form action="/seller/product/edit/<%= post.id %> " enctype="multipart/form-data" method="post">
+        <div class="d-flex justify-content-center">
+          <div>
+            <div class="d-flex p-2 justify-content-between">
+              <!-- publish button -->
+              <div class="form-check">
+                <% if(post.published) {%>
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="published" checked>
+                <% } else { %>
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="published">
+                <% } %>
+                <label class="form-check-label" for="flexCheckDefault">
+                  Publish
+                </label>
+              </div>
+            </div>
+
+            <% if(message){ %>
+            <div class="alert alert-primary" role="alert">
+              <%= message %>
+            </div>
+            <% } %>
+
+            <div class="mb-3">
+              <input class="form-control" value="<%= post.name %>" placeholder="Enter name" type="text" name="name" />
+            </div>
+            <div class="mb-3">
+              <input class="form-control" value="<%= post.price %>" placeholder="Enter price" type="number" name="price" />
+            </div>
+            <div class="mb-3">
+              <input class="form-control" value="<%= post.stock %>" placeholder="Enter stock" type="number" name="stock" />
+            </div>
+
+            <div class="mb-3">
+              <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30" rows="10"><%= post.name %></textarea>
+              <input class="btn btn-primary" type="submit" value="Submit" />
+            </div>
+
+          </div>
+
+          <!-- <div>
+            <div class="mb-3">
+              <img id="img" src="" alt="" srcset="">
+              <label class="form-control" for="image">Upload Product Image</label>
+              <input class="form-control d-none" id="image" name="image" type="file" accept="image/*" />
+            </div>
+          </div> -->
+      </form>
+    </div>
+
+
+
+  </div>
+  </div>
+</main>
+<!-- End Main section -->
+
+
+<script>
+  //show image from local image upload
+  j("#image").on("change", function() {
+    j("#image").imageSet(j("#img"));
+    j('#img').css('width', '500px');
+    j('#img').css('height', '500px');
+  });
+</script>
+
+<%- include('../partials/footer'); -%>
