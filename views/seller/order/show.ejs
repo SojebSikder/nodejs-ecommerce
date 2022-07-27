@@ -7,13 +7,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12 fw-bold fs-3">
-        View Order
+        Order Details
       </div>
       <div class="col-md-12 fw-bold fs-3">
         <a class="btn btn-outline-primary" href="/seller/order">View all Order</a>
 
         <form style="display: inline;" action="/seller/order/mark/<%= orders.orderId %>" method="post">
-          <select class="form-control" name="status" id="status">
+          <select class="" name="status" id="status">
             <option value="order_placed">order_placed</option>
             <option value="order_confirmed">order_confirmed</option>
             <option value="order_picked">order_picked</option>
