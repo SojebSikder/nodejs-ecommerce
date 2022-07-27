@@ -1,9 +1,10 @@
 # node-ecommerce
 
-nodejs ecommerce application
+NodeJS multivendor ecommerce application
 
 ## Features:
 
+- Written in Typescript
 - Multivendor support
 - Paypal, stripe payment gateway integration
 - Order receipt pdf generation
@@ -12,8 +13,6 @@ nodejs ecommerce application
 ## Configure
 
 - Set up database credentials in env file
-- run this command for database migration:
-  `npx prisma db push`
 - Migrate database using this command:
   `npx prisma migrate dev`
 
@@ -23,7 +22,7 @@ nodejs ecommerce application
 yarn install
 ```
 
-# Production
+## Production
 
 ### Build
 
