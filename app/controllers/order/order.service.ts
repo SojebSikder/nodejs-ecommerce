@@ -68,6 +68,7 @@ export class OrderService {
         status: true,
         price: true,
         paymentStatus: true,
+        SubOrder: true,
         user: {
           select: {
             id: true,
@@ -79,11 +80,23 @@ export class OrderService {
           select: {
             quantity: true,
             price: true,
-            product: true,
+            product: {
+              select: {
+                shop: {
+                  select: {
+                    ShopDetails: true,
+                  },
+                },
+                id: true,
+                name: true,
+                price: true,
+              },
+            },
           },
         },
       },
     });
+    console.log(result)
     return result;
   }
 

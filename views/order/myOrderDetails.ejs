@@ -55,15 +55,22 @@
     <table class="table table-striped table-hover">
       <tr>
         <th>Product Name</th>
+        <th>Shop Name</th>
         <th>Quantity</th>
         <th>Price</th>
+        <th>Status</th>
       </tr>
       <% for(let orderItem of order.OrderItem){ %>
+
+
       <tr>
         <td> <a href="/product/<%= orderItem.product.id %> "><%= orderItem.product.name %></a></td>
+        <td><%= orderItem.product.shop.ShopDetails[0].displayName %></td>
         <td><%= orderItem.quantity %></td>
         <td><%= orderItem.price %></td>
+        <td></td>
       </tr>
+
       <% } %>
     </table>
   </div>
