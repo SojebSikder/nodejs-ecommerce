@@ -9,6 +9,10 @@
       <div class="col-md-12 fw-bold fs-3">
         Add Product
       </div>
+      <div class="col-md-12 fw-bold fs-3">
+        <a class="btn btn-outline-primary" href="/seller/product">View all Product</a>
+      </div>
+
     </div>
     <div class="row">
       <form action="/seller/product" enctype="multipart/form-data" method="post">
@@ -24,9 +28,11 @@
               </div>
             </div>
 
-            <h2>
+            <% if(message){ %>
+            <div class="alert alert-primary" role="alert">
               <%= message %>
-            </h2>
+            </div>
+            <% } %>
 
             <div class="mb-3">
               <input class="form-control" placeholder="Enter name" type="text" name="name" />
