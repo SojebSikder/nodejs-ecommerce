@@ -11,6 +11,27 @@
       </div>
       <div class="col-md-12 fw-bold fs-3">
         <a class="btn btn-outline-primary" href="/seller/order">View all Order</a>
+
+        <form style="display: inline;" action="/seller/order/mark/<%= orders.orderId %>" method="post">
+          <select class="form-control" name="status">
+            <option value="order_placed">order_placed</option>
+            <option value="order_confirmed">order_confirmed</option>
+            <option value="order_picked">order_picked</option>
+            <option value="order_on_way">order_on_way</option>
+            <option value="order_delivered">order_delivered</option>
+            <option value="order_returned">order_returned</option>
+            <option value="order_cancelled">order_cancelled</option>
+            <option value="order_paused">order_paused</option>
+          </select>
+          <button class="btn btn-outline-primary" type="submit">Mark Order</button>
+        </form>
+
+      </div>
+      <div class="col-md-12 fw-bold fs-3">
+
+
+
+
       </div>
     </div>
     <div class="row">

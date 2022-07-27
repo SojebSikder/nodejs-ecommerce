@@ -45,6 +45,8 @@ export class SellerOrderService {
         ],
       },
       select: {
+        id: true,
+        orderId: true,
         SubOrderItem: {
           select: {
             subOrderId: true,
@@ -58,7 +60,25 @@ export class SellerOrderService {
     return items;
   }
 
-  markDelivered(id: string) {
-    return "This action mark delivery a {id} user";
+  async markOrder(id: string, { status, signedCookies }) {
+    //
+    const user = Auth.userByCookie(signedCookies);
+    const result = await prisma.subOrder.updateMany({
+      where: {
+        AND: [
+          {
+            orderId: id,
+          },
+          {
+            sellerId: user.userid,
+          },
+        ],
+      },
+      data: {
+        status: status,
+      },
+    });
+
+    return result;
   }
 }
