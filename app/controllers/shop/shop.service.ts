@@ -17,11 +17,17 @@ export class ShopService {
   /**
    * show all data
    */
-  public async index({ signedCookies }) {
+  public async index({ signedCookies, status = null }) {
     const user = Auth.userByCookie(signedCookies);
+
     const result = await prisma.shop.findFirst({
       where: {
-        userId: user.userid,
+        AND: [
+          {
+            userId: user.userid,
+          },
+          status != null ? { status: status } : {},
+        ],
       },
       include: {
         ShopDetails: true,

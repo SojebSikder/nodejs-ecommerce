@@ -73,6 +73,7 @@ export function isSeller() {
   return async function (req, res, next) {
     const shop = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
+      status: "approved",
     });
     if (shop && shop.ShopDetails.length > 0) {
       next();
