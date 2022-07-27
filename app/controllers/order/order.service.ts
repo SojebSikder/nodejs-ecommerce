@@ -22,7 +22,6 @@ export class OrderService {
 
   /**
    * show all data
-   * @returns
    */
   public async index({ page = 1, signedCookies }) {
     const user = Auth.userByCookie(signedCookies);
@@ -150,6 +149,15 @@ export class OrderService {
       },
     });
 
+    // insert to suborders
+    const suborders = await prisma.subOrder.create({
+      data: {
+        orderId: `${order_id}`,
+        sellerId: user.userid,
+        total: `${totalPrice}`,
+      },
+    });
+
     // store to order item
     for (const cart of carts) {
       // store to orderProductItem first
@@ -160,6 +168,16 @@ export class OrderService {
         OrderId: String(order_id),
         OrderItemId: orderItemId,
         signedCookies: req.signedCookies,
+      });
+
+      // insert to suborder items
+      const subordersItem = await prisma.subOrderItem.create({
+        data: {
+          subOrderId: suborders.id,
+          productId: cart.productId,
+          quantity: cart.quantity,
+          price: cart.product.price,
+        },
       });
     }
 
@@ -296,9 +314,6 @@ export class OrderService {
 
   /**
    * store order product item
-   * @param req
-   * @param res
-   * @returns
    */
   async storeOrderProductItem({
     ProductId,
