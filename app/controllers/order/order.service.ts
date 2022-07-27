@@ -96,7 +96,6 @@ export class OrderService {
         },
       },
     });
-    console.log(result)
     return result;
   }
 

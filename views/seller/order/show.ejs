@@ -13,7 +13,7 @@
         <a class="btn btn-outline-primary" href="/seller/order">View all Order</a>
 
         <form style="display: inline;" action="/seller/order/mark/<%= orders.orderId %>" method="post">
-          <select class="form-control" name="status">
+          <select class="form-control" name="status" id="status">
             <option value="order_placed">order_placed</option>
             <option value="order_confirmed">order_confirmed</option>
             <option value="order_picked">order_picked</option>
@@ -25,6 +25,20 @@
           </select>
           <button class="btn btn-outline-primary" type="submit">Mark Order</button>
         </form>
+
+        <script>
+          // script for select dropdown menu from database selected value
+          var statusValue = "<%= orders.status %>";
+          var statusEl = document.getElementById("status");
+          for (const key in statusEl.options) {
+            if (Object.hasOwnProperty.call(statusEl.options, key)) {
+              const element = statusEl.options[key];
+              if (statusValue == element.value) {
+                element.selected = true;
+              }
+            }
+          }
+        </script>
 
       </div>
       <div class="col-md-12 fw-bold fs-3">

@@ -47,6 +47,7 @@ export class SellerOrderService {
       select: {
         id: true,
         orderId: true,
+        status: true,
         SubOrderItem: {
           select: {
             subOrderId: true,
@@ -57,6 +58,7 @@ export class SellerOrderService {
         },
       },
     });
+    console.log(items)
     return items;
   }
 
