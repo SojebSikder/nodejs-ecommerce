@@ -4,6 +4,7 @@ nodejs ecommerce application
 
 ## Features:
 
+- Multivendor support
 - Paypal, stripe payment gateway integration
 - Order receipt pdf generation
 - And much more.
@@ -24,13 +25,13 @@ yarn install
 
 # Production
 
-## Build
+### Build
 
 ```
 yarn build
 ```
 
-## Running
+### Running
 
 ```
 yarn start:prod

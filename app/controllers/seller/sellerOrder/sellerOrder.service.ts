@@ -23,6 +23,9 @@ export class SellerOrderService {
       where: {
         sellerId: user.userid,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return result;
   }

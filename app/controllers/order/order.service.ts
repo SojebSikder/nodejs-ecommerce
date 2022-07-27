@@ -162,11 +162,12 @@ export class OrderService {
       });
 
       // insert to suborders
+      let subprice = cart.product.price * cart.quantity;
       const suborders = await prisma.subOrder.create({
         data: {
           orderId: `${order_id}`,
           sellerId: cart.product.authorId,
-          total: `${totalPrice}`,
+          total: `${subprice}`,
         },
       });
 
