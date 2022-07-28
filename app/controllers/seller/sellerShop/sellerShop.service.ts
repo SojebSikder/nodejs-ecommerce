@@ -1,10 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { Auth } from "../../../system/src/core";
+import { Auth } from "../../../../system/src";
 
 const prisma = new PrismaClient();
 
-export class ShopService {
-  private static _instance: ShopService;
+export class SellerShopService {
+  private static _instance: SellerShopService;
+
   /**
    * Create instance
    */
@@ -14,9 +15,7 @@ export class ShopService {
     }
     return this._instance;
   }
-  /**
-   * show all data
-   */
+
   public async index({ signedCookies, status = null }) {
     const user = Auth.userByCookie(signedCookies);
 
@@ -34,56 +33,6 @@ export class ShopService {
       },
     });
     return result;
-  }
-
-  async createShop({
-    name,
-    displayName,
-    email,
-    description,
-    phone,
-    signedCookies,
-  }) {
-    const user = Auth.userByCookie(signedCookies);
-
-    const checkShopNameExist = await prisma.shopDetails.findFirst({
-      where: {
-        name: name,
-      },
-    });
-
-    let result;
-    let statusCode = 200;
-    let message = "";
-    let success = true;
-
-    if (checkShopNameExist) {
-      statusCode = 400;
-      message = "Shop name already exist";
-      success = false;
-    } else {
-      result = await prisma.shop.create({
-        data: {
-          userId: user.userid,
-          ShopDetails: {
-            create: {
-              name: name,
-              displayName: displayName,
-              email: email,
-              description: description,
-              phone: phone,
-            },
-          },
-        },
-      });
-    }
-
-    return {
-      statusCode: statusCode,
-      success: success,
-      data: result,
-      message: message,
-    };
   }
 
   async updateShop({ status = null, signedCookies }) {
@@ -150,11 +99,7 @@ export class ShopService {
     let message = "";
     let success = true;
 
-    const ShopInfo = await prisma.shop.findFirst({
-      where: {
-        userId: user.userid,
-      },
-    });
+    const ShopInfo = await this.index({ signedCookies: signedCookies });
 
     if (displayName) {
       Object.assign(data, { displayName });

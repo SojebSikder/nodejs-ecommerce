@@ -1,0 +1,55 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<%- include('../partials/sidebar'); -%>
+
+<!-- Main section -->
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        My Shop
+      </div>
+    </div>
+    <div class="row">
+      <div class="row justify-content-md-center">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>
+              Shop Name
+            </th>
+            <th>
+              Status
+            </th>
+            <th>Description</th>
+            <th>
+              Action
+            </th>
+          </tr>
+
+          <tr>
+            <td>
+              <%= shop.ShopDetails[0].displayName %>
+            </td>
+            <td>
+              <%= shop.status %>
+            </td>
+            <td>
+              <%= shop.ShopDetails[0].description %>
+            </td>
+            <td>
+              <a href="/shop/<%= shop.ShopDetails[0].name %>" class="btn btn-outline-primary">View</a>
+              <a href="/seller/shop/edit/" class="btn btn-outline-primary">Edit</a>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+</main>
+<!-- End Main section -->
+
+<%- include('../partials/footer'); -%>

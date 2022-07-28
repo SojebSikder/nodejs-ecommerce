@@ -8,6 +8,7 @@ import { ProductController } from "./product/product.controller";
 import { SellerDashboardController } from "./seller/sellerDashboard/sellerDashboard.controller";
 import { SellerOrderController } from "./seller/sellerOrder/sellerOrder.controller";
 import { SellerProductController } from "./seller/sellerProduct/sellerProduct.controller";
+import { SellerShopController } from "./seller/sellerShop/sellerShop.controller";
 import { ShopController } from "./shop/shop.controller";
 import { UserController } from "./user/user.controller";
 
@@ -24,6 +25,7 @@ import { UserController } from "./user/user.controller";
     SellerDashboardController,
     SellerProductController,
     SellerOrderController,
+    SellerShopController,
     // end seller imports
     // admin
     AdminProductController,
