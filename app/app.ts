@@ -18,5 +18,5 @@ export function boot(app: Express) {
   app.use(cookieParser(appConfig.cookieSecret));
   // custom middleware here
   app.use(setUser());
-  app.use("/seller", getShopDetails(), isSeller(), authorization());
+  app.use("/seller", authorization(), isSeller(), getShopDetails());
 }
