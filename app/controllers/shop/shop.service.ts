@@ -66,9 +66,12 @@ export class ShopService {
                 },
               },
             },
-            status != null ? { status: status } : {},
-            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+            // status != null ? { status: status } : {},
+            // sellerStatus != null ? { sellerStatus: sellerStatus } : {},
           ],
+
+          status: status,
+          sellerStatus: sellerStatus,
         },
         orderBy: {
           createdAt: "desc",
@@ -105,9 +108,12 @@ export class ShopService {
                 },
               },
             },
-            status != null ? { status: status } : {},
-            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+            // status != null ? { status: status } : {},
+            // sellerStatus != null ? { sellerStatus: sellerStatus } : {},
           ],
+
+          status: status,
+          sellerStatus: sellerStatus,
         },
         orderBy: [
           {
@@ -122,6 +128,10 @@ export class ShopService {
       });
     } else {
       result = await prisma.shop.findMany({
+        where: {
+          status: status,
+          sellerStatus: sellerStatus,
+        },
         orderBy: [
           {
             createdAt: "desc",
@@ -134,18 +144,6 @@ export class ShopService {
         },
       });
     }
-
-    // const result = await prisma.shop.findMany({
-    //   where: {
-    //     AND: [
-    //       status != null ? { status: status } : {},
-    //       sellerStatus != null ? { sellerStatus: sellerStatus } : {},
-    //     ],
-    //   },
-    //   include: {
-    //     ShopDetails: true,
-    //   },
-    // });
     return { data: result, pagination: pagination };
   }
 

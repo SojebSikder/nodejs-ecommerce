@@ -81,7 +81,7 @@ export class ShopController {
     const resultTime = endTime - startTime;
 
     result = await ShopService.getInstance().findAll({});
-    console.log(result);
+    console.log(result.data);
     res.render("shop/index", {
       shops: result,
       page: page,
