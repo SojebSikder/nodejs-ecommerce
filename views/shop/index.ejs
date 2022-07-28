@@ -1,8 +1,8 @@
-<%- include('partials/header'); -%>
-<%- include('partials/navbar'); -%>
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
 
 <div class="container">
-  <h1>Buy here with joy</h1>
+  <h1>Find attractive shop</h1>
 
   <div class="d-flex flex-row justify-content-center">
     <form class="row g-3" action="/" method="get">
@@ -51,7 +51,7 @@
           </a> </h5>
         <% if(post.shop) {%>
         <p class="card-text">
-         <a href="/shop/<%= post.shop.ShopDetails[0].name %>"><%= post.shop.ShopDetails[0].displayName %></a>
+          <a href="/shop/<%= post.shop.ShopDetails[0].name %>"><%= post.shop.ShopDetails[0].displayName %></a>
         </p>
         <% } %>
         <p class="card-text">
@@ -119,4 +119,4 @@
   </div>
 </div>
 
-<%- include('partials/footer'); -%>
+<%- include('../partials/footer'); -%>

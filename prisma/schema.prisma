@@ -26,6 +26,9 @@ model Profile {
 
 model User {
   id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
   email     String   @unique
   username  String?
   full_name String?
@@ -126,9 +129,11 @@ model ProductImage {
 
 // User can create own shop to selling products
 model Shop {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
 
   // available value:
   // 1: pending
@@ -146,7 +151,10 @@ model Shop {
 
 // contains shop details
 model ShopDetails {
-  id          Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
   displayName String?
   name        String?
   phone       String?
@@ -162,7 +170,10 @@ model ShopDetails {
 }
 
 model ShopUrl {
-  id          Int           @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
   name        String?
   url         String?
   ShopDetails ShopDetails[]

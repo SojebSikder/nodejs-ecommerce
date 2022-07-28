@@ -1,18 +1,14 @@
 import { Request, Response } from "express";
+import { env } from "../../../system/src";
 import { Controller, Get, Post, Put } from "../../../system/src/core/decorator";
 import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { ShopService } from "./shop.service";
 
-@Controller("/shop")
+@Controller("/shop/")
 export class ShopController {
   //
-  @Get("", { middleware: [authorization(), decorateHtmlResponse("My Store")] })
-  async index(req: Request, res: Response) {
-    res.send("all shop here");
-  }
-
-  @Get("/createshop", {
+  @Get("createshop", {
     middleware: [authorization(), decorateHtmlResponse("Create shop")],
   })
   async createshopPage(req: Request, res: Response) {
@@ -31,7 +27,7 @@ export class ShopController {
     }
   }
 
-  @Post("/createshop", {
+  @Post("createshop", {
     middleware: [authorization(), decorateHtmlResponse("Create shop")],
   })
   async createshop(req: Request, res: Response) {
@@ -58,5 +54,52 @@ export class ShopController {
         message: result.message,
       });
     }
+  }
+
+  @Get("", {
+    middleware: [decorateHtmlResponse("Shop")],
+  })
+  async findAll(req: Request, res: Response) {
+    //
+    const startTime = new Date().getTime();
+    const page = req.query.page == undefined ? 1 : req.query.page;
+    const q = req.query.q;
+    let result;
+    if (q != undefined) {
+      result = await ShopService.getInstance().findAll({
+        page: Number(page),
+        isSearch: true,
+        searchText: String(q),
+      });
+    } else {
+      result = await ShopService.getInstance().findAll({
+        page: Number(page),
+      });
+    }
+
+    const endTime = new Date().getTime();
+    const resultTime = endTime - startTime;
+
+    result = await ShopService.getInstance().findAll({});
+    console.log(result);
+    res.render("shop/index", {
+      shops: result,
+      page: page,
+      search: { q: q, count: result.data.length, time: resultTime + " ms" },
+    });
+  }
+
+  @Get(":name", {
+    middleware: [decorateHtmlResponse("Shop")],
+  })
+  async shop(req: Request, res: Response) {
+    //
+    const name = req.params.name;
+    res.locals.title = `${name} - ${env("APP_NAME")}`;
+    const result = await ShopService.getInstance().findOne({
+      name: name,
+      signedCookies: req.signedCookies,
+    });
+    res.render("shop/showOne", { shop: result });
   }
 }

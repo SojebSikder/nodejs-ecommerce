@@ -14,6 +14,7 @@ export class ShopService {
     }
     return this._instance;
   }
+
   /**
    * show all data
    */
@@ -27,6 +28,150 @@ export class ShopService {
             userId: user.userid,
           },
           status != null ? { status: status } : {},
+        ],
+      },
+      include: {
+        ShopDetails: true,
+      },
+    });
+    return result;
+  }
+
+  /**
+   * show all data
+   */
+  public async findAll({
+    page = 1,
+    isSearch = false,
+    searchText = "",
+    status = "approved",
+    sellerStatus = "active",
+  }) {
+    let paginationResult;
+    if (isSearch == true) {
+      paginationResult = await prisma.shop.findMany({
+        where: {
+          OR: [
+            {
+              ShopDetails: {
+                every: {
+                  name: { contains: searchText },
+                },
+              },
+            },
+            {
+              ShopDetails: {
+                every: {
+                  description: { contains: searchText },
+                },
+              },
+            },
+            status != null ? { status: status } : {},
+            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+          ],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      paginationResult = await prisma.shop.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
+
+    let limit = 15;
+    let pagination = Math.ceil(paginationResult.length / limit);
+
+    let result;
+    // main query
+    if (isSearch == true) {
+      result = await prisma.shop.findMany({
+        where: {
+          OR: [
+            {
+              ShopDetails: {
+                every: {
+                  name: { contains: searchText },
+                },
+              },
+            },
+            {
+              ShopDetails: {
+                every: {
+                  description: { contains: searchText },
+                },
+              },
+            },
+            status != null ? { status: status } : {},
+            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+          ],
+        },
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        skip: limit * (page - 1),
+        take: limit,
+        include: {
+          ShopDetails: true,
+        },
+      });
+    } else {
+      result = await prisma.shop.findMany({
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
+        skip: limit * (page - 1),
+        take: limit,
+        include: {
+          ShopDetails: true,
+        },
+      });
+    }
+
+    // const result = await prisma.shop.findMany({
+    //   where: {
+    //     AND: [
+    //       status != null ? { status: status } : {},
+    //       sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+    //     ],
+    //   },
+    //   include: {
+    //     ShopDetails: true,
+    //   },
+    // });
+    return { data: result, pagination: pagination };
+  }
+
+  /**
+   * show one data
+   */
+  public async findOne({
+    name,
+    signedCookies,
+    status = "approved",
+    sellerStatus = "active",
+  }) {
+    const user = Auth.userByCookie(signedCookies);
+
+    const result = await prisma.shop.findFirst({
+      where: {
+        AND: [
+          {
+            ShopDetails: {
+              every: {
+                name: name,
+              },
+            },
+          },
+          status != null ? { status: status } : {},
+          sellerStatus != null ? { sellerStatus: sellerStatus } : {},
         ],
       },
       include: {
