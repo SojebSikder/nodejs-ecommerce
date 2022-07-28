@@ -12,7 +12,6 @@ export class SellerShopController {
     const result = await SellerShopService.getInstance().index({
       signedCookies: req.signedCookies,
     });
-    console.log(result);
     res.render("seller/shop/index", { shop: result });
   }
 
@@ -34,6 +33,7 @@ export class SellerShopController {
     //
     const name = req.body.name || null;
     const displayName = req.body.displayname;
+    const sellerStatus = req.body.sellerStatus == "on" ? "active" : "deactive";
     const email = req.body.email;
     const description = req.body.description;
     const phone = req.body.phone;
@@ -51,6 +51,7 @@ export class SellerShopController {
       result = await SellerShopService.getInstance().updateShopDetails({
         name,
         displayName,
+        sellerStatus,
         email,
         description,
         phone,
@@ -65,7 +66,7 @@ export class SellerShopController {
       //   message: result.message,
       //   shop: updated,
       // });
-      res.redirect("/seller/shop/edit")
+      res.redirect("/seller/shop/edit");
     }
   }
 }

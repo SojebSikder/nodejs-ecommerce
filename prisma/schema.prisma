@@ -25,24 +25,24 @@ model Profile {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
   username  String?
   full_name String?
-  password  String     @db.VarChar(255)
+  password  String   @db.VarChar(255)
   profile   Profile?
-  
+
   // available value:
   // user
   // seller
   // admin
-  role      String?    @default("user")
-  orders    Order[]
-  Product   Product[]
-  ApiToken  ApiToken[]
-  cart      cart[]
-  Shop      Shop[]
-  SubOrder  SubOrder[]
+  role     String?    @default("user")
+  orders   Order[]
+  Product  Product[]
+  ApiToken ApiToken[]
+  cart     cart[]
+  Shop     Shop[]
+  SubOrder SubOrder[]
 }
 
 model ApiToken {
@@ -130,14 +130,18 @@ model Shop {
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
-  // available value
+  // available value:
   // 1: pending
   // 2: approved
   // 3: banned
   // 4: disabled
-  status      String?       @default("pending")
-  ShopDetails ShopDetails[]
-  Product     Product[]
+  status       String?       @default("pending")
+  // available value:
+  // 1: active
+  // 2: deactive
+  sellerStatus String?       @default("active")
+  ShopDetails  ShopDetails[]
+  Product      Product[]
 }
 
 // contains shop details

@@ -86,6 +86,7 @@ export class SellerShopService {
   async updateShopDetails({
     name = null,
     displayName = null,
+    sellerStatus = null,
     email = null,
     description = null,
     phone = null,
@@ -103,6 +104,16 @@ export class SellerShopService {
 
     if (displayName) {
       Object.assign(data, { displayName });
+    }
+    if (sellerStatus) {
+      result = await prisma.shop.updateMany({
+        where: {
+          userId: user.userid,
+        },
+        data: {
+          sellerStatus: sellerStatus,
+        },
+      });
     }
     if (email) {
       Object.assign(data, { email });
