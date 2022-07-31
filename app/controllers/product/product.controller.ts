@@ -4,10 +4,10 @@ import { env } from "../../../system/src/util";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { ProductService } from "./product.service";
 
-@Controller("/")
+@Controller("/", { middleware: [decorateHtmlResponse()] })
 export class ProductController {
   //
-  @Get("", { middleware: [decorateHtmlResponse()] })
+  @Get()
   async index(req: Request, res: Response) {
     //
     const startTime = new Date().getTime();
@@ -35,7 +35,7 @@ export class ProductController {
     });
   }
 
-  @Get("product/:id", { middleware: [decorateHtmlResponse()] })
+  @Get("product/:id")
   async show(req: Request, res: Response) {
     const id = req.params.id;
     const result = await ProductService.getInstance().show(id);

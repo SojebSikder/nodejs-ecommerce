@@ -2,7 +2,7 @@ import { RouterStorage } from "../Router";
 
 type RouteOption = {
   /**
-   * use middleware
+   * define middlewares
    */
   middleware?: any[];
 };
@@ -11,7 +11,10 @@ type RouteOption = {
  * Controller decorator.
  * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
-export function Controller(baseRoute: string = "/", options?): Function {
+export function Controller(
+  baseRoute: string = "/",
+  options?: RouteOption
+): Function {
   return function (object: Function) {
     RouterStorage.controllers.push({
       type: "default",

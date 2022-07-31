@@ -4,16 +4,17 @@ import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
 import { CartService } from "./cart.service";
 
-@Controller("/cart/")
+@Controller("/cart/", { middleware: [authorization()] })
 export class CartController {
-  @Get("", { middleware: [decorateHtmlResponse("Cart"), authorization()] })
+
+  @Get("", { middleware: [decorateHtmlResponse("Cart")] })
   async index(req: Request, res: Response) {
     const result = await CartService.getInstance().index(req.signedCookies);
     res.render("cart/index", { carts: result });
   }
 
   @Post("add", {
-    middleware: [decorateHtmlResponse(), authorization()],
+    middleware: [decorateHtmlResponse()],
   })
   async store(req: Request, res: Response) {
     const productId = req.body.productId;
@@ -29,7 +30,7 @@ export class CartController {
     res.redirect(backURL);
   }
 
-  @Post(":id/delete", { middleware: [decorateHtmlResponse(), authorization()] })
+  @Post(":id/delete", { middleware: [decorateHtmlResponse()] })
   async delete(req: Request, res: Response) {
     const id = req.params.id;
     const result = await CartService.getInstance().delete(id);
@@ -39,6 +40,7 @@ export class CartController {
       res.send("Something went wrong :(");
     }
   }
+
   @Get(":id", { middleware: [decorateHtmlResponse()] })
   async show(req: Request, res: Response) {
     res.send("Hello world");

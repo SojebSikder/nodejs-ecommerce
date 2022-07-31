@@ -5,11 +5,6 @@ import helmet from "helmet";
 import { Server } from "socket.io";
 import cors from "cors";
 // internal imports
-// import { appConfig } from "../../config/app";
-// import { routes } from "../../routes/web";
-// import { boot } from "../../app/app";
-// import { staticConfig } from "../../config/static";
-
 import { appConfig } from "../Config";
 import { routes } from "../Config";
 import { boot } from "../Config";

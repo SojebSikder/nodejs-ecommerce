@@ -1,6 +1,18 @@
 import nodemailer from "nodemailer";
-// import { mailConfig } from "../../../config/mail";
+// import { mailConfig } from "../../../../config/mail";
 import { mailConfig } from "../../Config";
+
+// mail attachment option
+type attachmentOption = {
+  /**
+   * field name
+   */
+  filename: string;
+  /**
+   * max upload file number
+   */
+  path: string;
+};
 
 /**
  * Mail abstraction top of nodemailer. Using Mail class Send email
@@ -12,13 +24,11 @@ import { mailConfig } from "../../Config";
  *  .body("My body")
  *  .send();
  */
-
 export class Mail {
   private static host = mailConfig.mailers.smtp.host;
   private static port = mailConfig.mailers.smtp.port;
   private static user = mailConfig.mailers.smtp.username;
   private static pass = mailConfig.mailers.smtp.password;
-
 
   // mail options
   private static from = mailConfig.from.address;
@@ -28,6 +38,9 @@ export class Mail {
   private static subjectText = "";
   // body
   private static bodyText = "";
+  // attachment
+  private static _attachment;
+  private static _isAttachment = false;
 
   /**
    * Mail recepient
@@ -37,6 +50,7 @@ export class Mail {
     this.recepient = recepient;
     return this;
   }
+
   /**
    * mail subject
    * @param subjectText
@@ -45,6 +59,7 @@ export class Mail {
     this.subjectText = subjectText;
     return this;
   }
+
   /**
    * mail body
    * @param bodyText
@@ -53,6 +68,7 @@ export class Mail {
     this.bodyText = bodyText;
     return this;
   }
+
   /**
    * set credentials for sending email
    */
@@ -61,25 +77,21 @@ export class Mail {
     this.pass = password;
     return this;
   }
+
+  /**
+   * send attachment with mail
+   */
+  public static attachment(attachments: attachmentOption[]) {
+    this._isAttachment = true;
+    this._attachment = attachments;
+    return this;
+  }
+
   /**
    * send mail
    */
   public static send(html = false) {
     try {
-      // let transporter = nodemailer.createTransport({
-      //   // host: "smtp.gmail.com",
-      //   host: this.host,
-      //   port: 465,
-      //   secure: true,
-      //   auth: {
-      //     type: "OAuth2",
-      //     user: this.user,
-      //     accessToken: this.accessToken,
-      //     refreshToken: this.refreshToken,
-      //     clientId: this.clientId,
-      //     clientSecret: this.clientSecret,
-      //   },
-      // });
       let transporter = nodemailer.createTransport({
         // host: "smtp.gmail.com",
         host: this.host,
@@ -109,6 +121,14 @@ export class Mail {
         };
       }
 
+      // if attachment is set
+      if (this._isAttachment) {
+        Object.assign(mailOptions, {
+          attachments: this._attachment,
+        });
+      }
+
+      // send mail with defined transport object
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error);

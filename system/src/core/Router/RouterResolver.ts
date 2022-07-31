@@ -22,26 +22,26 @@ export class RouterResolver {
         if (controllerValue.target == methodValue.target) {
           const controllerObject = new controllerValue.target();
 
-          // if controller has not route specified
-          if (!controllerValue.route) {
-            // if method has middleware
-            if (methodValue.options != null) {
-              const { middleware } = methodValue.options;
-              router[methodValue.type](
-                `${methodValue.route}`,
-                middleware,
-                controllerObject[methodValue.method]
-              );
-            } else {
-              router[methodValue.type](
-                `${methodValue.route}`,
-                controllerObject[methodValue.method]
-              );
+          // if method has middleware
+          if (methodValue.options != null) {
+            let { middleware } = methodValue.options;
+            // if controller has middleware
+            if (controllerValue.options != null) {
+              const cmid = controllerValue.options.middleware;
+              middleware = middleware.concat(cmid);
             }
+            router[methodValue.type](
+              `${controllerValue.route}${methodValue.route}`,
+              middleware,
+              controllerObject[methodValue.method]
+            );
           } else {
-            // if method has middleware
-            if (methodValue.options != null) {
-              const { middleware } = methodValue.options;
+            // if controller has middleware
+            if (controllerValue.options != null) {
+              let middleware;
+              const cmid = controllerValue.options.middleware;
+              middleware = cmid;
+
               router[methodValue.type](
                 `${controllerValue.route}${methodValue.route}`,
                 middleware,
@@ -55,18 +55,6 @@ export class RouterResolver {
             }
           }
 
-          // if controller has middleware
-          // if (controllerValue.options != null) {
-          //   const { middleware } = controllerValue.options || {};
-          //   app.use(middleware, router);
-          // }
-          // // if method has middleware
-          // if (methodValue.options != null) {
-          //   const { middleware } = methodValue.options || {};
-          //   app.use(middleware, router);
-          // } else {
-          //   app.use(router);
-          // }
           app.use(router);
         }
       }
