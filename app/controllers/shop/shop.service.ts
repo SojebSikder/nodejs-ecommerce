@@ -38,6 +38,30 @@ export class ShopService {
   }
 
   /**
+   * show shop by name
+   */
+  public async findByName({ name, status = null }) {
+    const result = await prisma.shop.findFirst({
+      where: {
+        AND: [
+          {
+            ShopDetails: {
+              every: {
+                name: name,
+              },
+            },
+          },
+          status != null ? { status: status } : {},
+        ],
+      },
+      include: {
+        ShopDetails: true,
+      },
+    });
+    return result;
+  }
+
+  /**
    * show all data
    */
   public async findAll({
@@ -155,28 +179,147 @@ export class ShopService {
     signedCookies,
     status = "approved",
     sellerStatus = "active",
+    // for pagination
+    page = 1,
+    isSearch = false,
+    searchText = "",
   }) {
-    const user = Auth.userByCookie(signedCookies);
+    // pagination limit
+    const shopInfo = await ShopService.getInstance().findByName({
+      name: name,
+    });
 
-    const result = await prisma.shop.findFirst({
-      where: {
-        AND: [
-          {
-            ShopDetails: {
-              every: {
-                name: name,
+    // pagination
+    let paginationResult;
+    let limit = 15;
+    if (isSearch == true) {
+      paginationResult = await prisma.shop.findFirst({
+        where: {
+          AND: [
+            {
+              ShopDetails: {
+                every: {
+                  name: name,
+                },
               },
             },
+            status != null ? { status: status } : {},
+            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+          ],
+        },
+        include: {
+          ShopDetails: true,
+          Product: {
+            where: {
+              OR: [
+                { name: { contains: searchText } },
+                { description: { contains: searchText } },
+              ],
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
           },
-          status != null ? { status: status } : {},
-          sellerStatus != null ? { sellerStatus: sellerStatus } : {},
-        ],
-      },
-      include: {
-        ShopDetails: true,
-      },
-    });
-    return result;
+        },
+      });
+    } else {
+      paginationResult = await prisma.shop.findFirst({
+        where: {
+          AND: [
+            {
+              ShopDetails: {
+                every: {
+                  name: name,
+                },
+              },
+            },
+            status != null ? { status: status } : {},
+            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+          ],
+        },
+        include: {
+          ShopDetails: true,
+          Product: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+        },
+      });
+    }
+
+    if (paginationResult.Product.length > 0) {
+      paginationResult = paginationResult.Product;
+    } else {
+      paginationResult = [];
+    }
+
+    let pagination = Math.ceil(paginationResult.length / limit);
+    // end pagination
+
+    // main query
+    let result;
+    if (isSearch == true) {
+      result = await prisma.shop.findFirst({
+        where: {
+          AND: [
+            {
+              ShopDetails: {
+                every: {
+                  name: name,
+                },
+              },
+            },
+            status != null ? { status: status } : {},
+            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+          ],
+        },
+        include: {
+          ShopDetails: true,
+          Product: {
+            where: {
+              OR: [
+                { name: { contains: searchText } },
+                { description: { contains: searchText } },
+              ],
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            skip: limit * (page - 1),
+            take: limit,
+          },
+        },
+      });
+    } else {
+      result = await prisma.shop.findFirst({
+        where: {
+          AND: [
+            {
+              ShopDetails: {
+                every: {
+                  name: name,
+                },
+              },
+            },
+            status != null ? { status: status } : {},
+            sellerStatus != null ? { sellerStatus: sellerStatus } : {},
+          ],
+        },
+        include: {
+          ShopDetails: true,
+          Product: {
+            orderBy: {
+              createdAt: "desc",
+            },
+            skip: limit * (page - 1),
+            take: limit,
+          },
+        },
+      });
+    }
+
+    return { data: result, pagination: pagination };
   }
 
   async createShop({

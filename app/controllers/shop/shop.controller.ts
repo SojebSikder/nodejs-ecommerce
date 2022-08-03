@@ -81,7 +81,6 @@ export class ShopController {
     const resultTime = endTime - startTime;
 
     result = await ShopService.getInstance().findAll({});
-    console.log(result.data);
     res.render("shop/index", {
       shops: result,
       page: page,
@@ -96,10 +95,40 @@ export class ShopController {
     //
     const name = req.params.name;
     res.locals.title = `${name} - ${env("APP_NAME")}`;
-    const result = await ShopService.getInstance().findOne({
-      name: name,
-      signedCookies: req.signedCookies,
+
+    //
+    const startTime = new Date().getTime();
+    const page = req.query.page == undefined ? 1 : req.query.page;
+    const q = req.query.q;
+    let result;
+    if (q != undefined) {
+      result = await ShopService.getInstance().findOne({
+        name: name,
+        signedCookies: req.signedCookies,
+        page: Number(page),
+        isSearch: true,
+        searchText: String(q),
+      });
+    } else {
+      result = await ShopService.getInstance().findOne({
+        name: name,
+        signedCookies: req.signedCookies,
+        page: Number(page),
+      });
+    }
+
+    const endTime = new Date().getTime();
+    const resultTime = endTime - startTime;
+    //
+
+    res.render("shop/showOne", {
+      shop: result,
+      page: page,
+      search: {
+        q: q,
+        count: result.data.Product.length,
+        time: resultTime + " ms",
+      },
     });
-    res.render("shop/showOne", { shop: result });
   }
 }

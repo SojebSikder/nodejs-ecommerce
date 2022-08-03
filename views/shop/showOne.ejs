@@ -16,12 +16,118 @@
   <div class="d-flex flex-column justify-content-center">
     <div class="p-5 mb-4 bg-light rounded-3">
       <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold"><%= shop.ShopDetails[0].displayName %></h1>
-        <p class="col-md-8 fs-4"><%= shop.ShopDetails[0].description %></p>
+        <h1 class="display-5 fw-bold"><%= shop.data.ShopDetails[0].displayName %></h1>
+        <p class="col-md-8 fs-4"><%= shop.data.ShopDetails[0].description %></p>
         <button class="btn btn-primary btn-lg" type="button">Buy now</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Product -->
+<div class="container">
+
+  <div class="d-flex flex-row justify-content-center">
+    <form class="row g-3" action="/shop/<%= shop.data.ShopDetails[0].name %>" method="get">
+
+      <% if(search.q){ %>
+      <div class="col-auto">
+        <input type="search" name="q" value="<%= search.q %>" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+      </div>
+      <% }else{%>
+      <div class="col-auto">
+        <input type="search" name="q" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+      </div>
+      <% } %>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-lg btn-outline-primary mb-3">Search</button>
+      </div>
+
+      <% if(search.q){ %>
+      <% if(search.count > 0) {%>
+      <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results! in <strong><%= search.time %></strong></div>
+      <% }else{ %>
+      <div>Searched for <strong><%= search.q %></strong> found <strong><%= search.count %></strong> results!</div>
+      <% } %>
+      <% } %>
+
+    </form>
+  </div>
+  <div class="row justify-content-md-center">
+    <% for(let post of shop.data.Product) { %>
+
+
+    <!-- product card start -->
+    <div class="card" style="width: 18rem; margin: 10px;">
+
+      <a href="/product/<%= post.id %>">
+
+        <!-- display images -->
+        <% for(let image in post.ProductImage){ %>
+        <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[image].url %>" alt=" <%= post.name %>" />
+        <% } %>
+      </a>
+
+      <div class="card-body">
+        <h5 class="card-title"> <a href="/product/<%= post.id %>">
+            <%= post.name %>
+          </a> </h5>
+        <p class="card-text">
+          <%= post.description %>
+        </p>
+        <p class="card-text">
+          Stock: <%= post.stock %>
+        </p>
+        <p class="card-text">
+          Price: <%= post.price %>
+        </p>
+
+        <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="/cart/add">
+
+          <input type="hidden" class="btn btn-primary" name="productId" value="<%= post.id %> "></a>
+          <input type="submit" class="btn btn-primary" value="Add to cart"></a>
+          <input type="number" style="width: 30%; text-align: center;" name="qnty" value="1"></a>
+        </form>
+      </div>
+    </div>
+    <!-- product card end -->
+    <br />
+    <% } %>
+
+    <% if(search.q){ %>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < shop.pagination; i++) {%>
+        <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/shop/<%= shop.data.ShopDetails[0].name %>?q=<%= search.q %>&page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
+          <a class="page-link" href="/shop/<%= shop.data.ShopDetails[0].name %>?q=<%= search.q %>&page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+    <% } else{ %>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <% for(let i=0; i < shop.pagination; i++) {%>
+        <li class="page-item">
+          <% if(page == i+1){ %>
+          <a class="page-link active" href="/shop/<%= shop.data.ShopDetails[0].name %>?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } else { %>
+          <a class="page-link" href="/shop/<%= shop.data.ShopDetails[0].name %>?page=<%= i+1 %>"><%= i+1 %></a>
+          <% } %>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <% } %>
+  </div>
+</div>
+<!-- End product -->
 <% } %>
 <%- include('../partials/footer'); -%>
