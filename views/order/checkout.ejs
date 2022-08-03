@@ -47,6 +47,8 @@
       <button class="btn btn-primary" type="submit">Pay</button>
     </form>
 
+    <div style="margin: 10px;"></div>
+    
     <form id="order_form" action="/order?pm=paypal" method="POST">
       <input type="hidden" name="orderItemId" value="<%= uuid %> "></a>
       <button class="btn btn-primary" type="submit">Pay With Paypal</button>

@@ -6,7 +6,7 @@ import { CartService } from "./cart.service";
 
 @Controller("/cart/", { middleware: [authorization()] })
 export class CartController {
-
+  //
   @Get("", { middleware: [decorateHtmlResponse("Cart")] })
   async index(req: Request, res: Response) {
     const result = await CartService.getInstance().index(req.signedCookies);
