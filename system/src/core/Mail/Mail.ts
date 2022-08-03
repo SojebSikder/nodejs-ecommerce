@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
-// import { mailConfig } from "../../../../config/mail";
-import { mailConfig } from "../../Config";
+import { mailConfig } from "../../../../config/mail";
+// import { mailConfig } from "../../Config";
 
 // mail attachment option
 type attachmentOption = {
