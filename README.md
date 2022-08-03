@@ -6,6 +6,7 @@ NodeJS multivendor ecommerce application
 
 - Written in Typescript
 - Multivendor support
+- Seller dashboard - for managing product inventory and orders
 - Paypal, stripe payment gateway integration
 - Order receipt pdf generation
 - And much more.
@@ -77,8 +78,6 @@ If you want to contribute fork the repo, create new branch and make pull request
 If you clone this repo then you have to setup these things manually.
 
 - Copy .env.example to .env And set up database credentials in env file
-- run this command for database migration:
-  `npx prisma db push`
 - Migrate database using this command:
   `npx prisma migrate dev`
 
