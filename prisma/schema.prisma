@@ -18,10 +18,12 @@ model Data {
 }
 
 model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+  id          Int       @id @default(autoincrement())
+  dateOfBirth DateTime?
+  mobile      String?
+  gender      String?
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int       @unique
 }
 
 model User {

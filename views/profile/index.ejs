@@ -1,8 +1,27 @@
 <%- include('../partials/header'); -%>
 <%- include('../partials/navbar'); -%>
 <div class="container">
-  <h1>Hello, <%= loggedInUser.username %> </h1>
-  <h2><a href="/order">My Order</a> </h2>
+  <h1>Hello, <%= loggedInUser.username %></h1>
+
+  <div class="d-flex">
+    <div class="card m-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Personal Profile</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="" class="btn btn-primary">Edit</a>
+      </div>
+    </div>
+
+    <div class="card m-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Address Book</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="" class="btn btn-primary">Edit</a>
+      </div>
+    </div>
+  </div>
+
+
 </div>
 
 <%- include('../partials/footer'); -%>
