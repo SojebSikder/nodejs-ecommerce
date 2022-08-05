@@ -94,7 +94,10 @@ export class UserController {
   @Get("profile", {
     middleware: [decorateHtmlResponse("Profile"), authorization()],
   })
-  showProfilePage(req: Request, res: Response) {
+  async showProfilePage(req: Request, res: Response) {
+    const result = await UserService.getInstance().findOne({
+      signedCookies: req.signedCookies,
+    });
     res.render("profile/index");
   }
 }

@@ -143,4 +143,17 @@ export class UserService {
       return false;
     }
   }
+
+  async findOne({ signedCookies }) {
+    const user = Auth.userByCookie(signedCookies);
+    const result = await prisma.user.findFirst({
+      where: {
+        id: user.userid,
+      },
+      include: {
+        profile: true,
+      },
+    });
+    return result;
+  }
 }

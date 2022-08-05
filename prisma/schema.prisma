@@ -22,6 +22,8 @@ model Profile {
   dateOfBirth DateTime?
   mobile      String?
   gender      String?
+  addressId   Int?
+  address     Address?  @relation(fields: [addressId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
   userId      Int       @unique
 }
@@ -95,6 +97,7 @@ model Address {
   zip         String?
   Order       Order[]
   ShopDetails ShopDetails[]
+  Profile     Profile[]
 }
 
 model Category {
