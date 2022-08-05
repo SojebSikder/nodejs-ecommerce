@@ -150,8 +150,16 @@ export class UserService {
       where: {
         id: user.userid,
       },
-      include: {
-        profile: true,
+      select: {
+        id: true,
+        full_name: true,
+        username: true,
+        email: true,
+        profile: {
+          select: {
+            address: true,
+          },
+        },
       },
     });
     return result;

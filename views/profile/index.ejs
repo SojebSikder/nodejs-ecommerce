@@ -7,7 +7,12 @@
     <div class="card m-2" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">Personal Profile</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text">
+        <ul>
+          <li><%= user.username %></li>
+          <li><%= user.email %></li>
+        </ul>
+        </p>
         <a href="" class="btn btn-primary">Edit</a>
       </div>
     </div>
@@ -15,7 +20,18 @@
     <div class="card m-2" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">Address Book</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text">
+          <% if(user.profile != null){ %>
+        <ul>
+          <li>Home</li>
+          <li>Work</li>
+          <li>Other</li>
+        </ul>
+        <% }else{ %>
+        <p>You have no addresses</p>
+        <% } %>
+
+        </p>
         <a href="" class="btn btn-primary">Edit</a>
       </div>
     </div>
