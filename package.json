@@ -31,7 +31,7 @@
     "cmd": "ts-node cmd.ts"
   },
   "dependencies": {
-    "@prisma/client": "^3.14.0",
+    "@prisma/client": "^4.1.1",
     "@types/html-pdf": "^3.0.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
@@ -69,7 +69,7 @@
     "@types/pg": "^8.6.5",
     "@types/supertest": "^2.0.12",
     "jest": "^28.1.1",
-    "prisma": "^3.14.0",
+    "prisma": "^4.1.1",
     "supertest": "^6.2.3",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.0",
