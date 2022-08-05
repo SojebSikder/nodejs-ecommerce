@@ -48,6 +48,14 @@ model User {
   SubOrder SubOrder[]
 }
 
+// table ucode for password recovery
+model Ucode {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique
+  email       String
+  dateExpired DateTime?
+}
+
 model ApiToken {
   id     Int    @id @default(autoincrement())
   token  String @unique

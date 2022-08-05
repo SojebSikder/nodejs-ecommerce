@@ -15,6 +15,7 @@ export class UserService {
     }
     return this._instance;
   }
+
   /**
    * Process login
    */
@@ -127,6 +128,19 @@ export class UserService {
         statusCode: 500,
         message: error,
       };
+    }
+  }
+
+  async checkEmail({ email }) {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: String(email),
+      },
+    });
+    if (user) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
