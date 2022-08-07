@@ -64,3 +64,34 @@ $("order_form").on("submit", function (e) {
     },
   });
 });
+
+// autocomplete search
+// autocomplete
+function getData(str) {
+  if (str.length == 0) {
+    document.getElementById("suggestion").innerHTML = "";
+    document.getElementById("suggestion").style.border = "0px";
+  }
+
+  // ajax call
+  http.ajax({
+    url: `/search?q=${str}`,
+    method: "GET",
+    dataType: "json",
+    success: (res) => {
+      let data = res.posts.data;
+      let html = "";
+      if (data.length > 0) {
+        for (let i = 0; i < data.length; i++) {
+          html += `<a href="/?q=${data[i].name}" class="list-group-item list-group-item-action">${data[i].name}</a>`;
+        }
+      } else {
+        html = "";
+      }
+      document.getElementById("suggestion").innerHTML = html;
+      document.getElementById("suggestion").style.border = "1px solid #A5ACB2";
+    },
+  });
+}
+
+const showResult = debounce(getData, 300);
