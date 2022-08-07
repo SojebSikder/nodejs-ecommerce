@@ -11,17 +11,14 @@
         <!-- Search box -->
         <div class="d-flex flex-row justify-content-center">
           <form class="row g-3" action="/" method="get">
-            <% if(search.q){ %>
             <div class="col-auto">
-              <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control-lg" id="q" placeholder="Search for products, brands and more">
+              <% if(search.q){ %>
+              <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control" id="q" placeholder="Search for products, brands and more">
+              <% } else { %>
+              <input type="search" name="q" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control" id="q" placeholder="Search for products, brands and more">
+              <% } %>
               <div class="search-suggestion" id="suggestion"></div>
             </div>
-            <% }else{%>
-            <div class="col-auto">
-              <input type="search" name="q" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control-lg" id="q" placeholder="Search for products, brands and more">
-              <div class="search-suggestion" id="suggestion"></div>
-            </div>
-            <% } %>
             <!-- <div class="col-auto">
               <button type="submit" class="btn btn-lg btn-outline-primary mb-3">Search</button>
             </div> -->
