@@ -83,7 +83,9 @@ function getData(str) {
       let html = "";
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
-          html += `<a href="/?q=${data[i].name}" class="list-group-item list-group-item-action">${data[i].name}</a>`;
+          html += `
+          <a class="dropdown-item" href="/?q=${data[i].name}">${data[i].name}</a>
+          `;
         }
       } else {
         html = "";
