@@ -6,7 +6,10 @@ import bodyParser from "body-parser";
 // middleware imports
 import { appConfig } from "../config/app";
 import { authorization, setUser } from "./middlewares/authorization";
-import { getShopDetails } from "./middlewares/common/decorateHtmlResponse";
+import {
+  decorateHtmlSearchResponse,
+  getShopDetails,
+} from "./middlewares/common/decorateHtmlResponse";
 import { isSeller } from "./middlewares/common/checkLogin";
 
 /**
@@ -17,6 +20,8 @@ export function boot(app: Express) {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser(appConfig.cookieSecret));
   // custom middleware here
+
+  app.use(decorateHtmlSearchResponse());
   app.use(setUser());
   app.use("/seller", authorization(), isSeller(), getShopDetails());
 }

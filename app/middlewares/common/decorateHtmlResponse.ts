@@ -29,6 +29,18 @@ export function decorateHtmlResponse(page_title = null) {
 }
 
 /**
+ * Middleware for decorating HTML Search response.
+ * @returns
+ */
+export function decorateHtmlSearchResponse() {
+  return function (req: Request, res: Response, next) {
+    res.locals.search = { q: null };
+
+    next();
+  };
+}
+
+/**
  * Middleware for get shop details for seller
  */
 export function getShopDetails() {

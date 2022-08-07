@@ -1,15 +1,38 @@
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><%= process.env.APP_NAME %> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0"> -->
       <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
+
+        <a class="navbar-brand" href="/"><%= process.env.APP_NAME %></a>
+        <!-- Search box -->
+        <div class="d-flex flex-row justify-content-center">
+          <form class="row g-3" action="/" method="get">
+            <% if(search.q){ %>
+            <div class="col-auto">
+              <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control-lg" id="q" placeholder="Search for products, brands and more">
+              <div class="search-suggestion" id="suggestion"></div>
+            </div>
+            <% }else{%>
+            <div class="col-auto">
+              <input type="search" name="q" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control-lg" id="q" placeholder="Search for products, brands and more">
+              <div class="search-suggestion" id="suggestion"></div>
+            </div>
+            <% } %>
+            <!-- <div class="col-auto">
+              <button type="submit" class="btn btn-lg btn-outline-primary mb-3">Search</button>
+            </div> -->
+          </form>
+        </div>
+        <!-- end search box -->
+
+
+        <!-- <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/"> <i class="bi bi-house-door"></i>Home</a>
-        </li>
+        </li> -->
 
         <% if(loggedInUser) {%>
         <li class="nav-item">
