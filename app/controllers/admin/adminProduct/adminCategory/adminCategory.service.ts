@@ -17,14 +17,21 @@ export class AdminCategoryService {
 
   async create({ name, published }) {
     const _name = name;
-    const _published = published;
     const _slug = _name.replace(/\s+/g, "-").toLowerCase();
+    let publishedValue;
+
+    // check published
+    if (published) {
+      publishedValue = true;
+    } else {
+      publishedValue = false;
+    }
 
     const result = await prisma.category.create({
       data: {
         name: _name,
         slug: _slug,
-        published: _published,
+        published: publishedValue,
       },
     });
     return result;
