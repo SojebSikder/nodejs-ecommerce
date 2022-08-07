@@ -13,6 +13,7 @@ export class ProductController {
     const startTime = new Date().getTime();
     const page = req.query.page == undefined ? 1 : req.query.page;
     const q = req.query.q;
+    const ajax = req.query.ajax;
     let result;
     if (q != undefined) {
       result = await ProductService.getInstance().index({
@@ -28,11 +29,51 @@ export class ProductController {
 
     const endTime = new Date().getTime();
     const resultTime = endTime - startTime;
-    res.render("index", {
-      posts: result,
-      page: page,
-      search: { q: q, count: result.data.length, time: resultTime + " ms" },
-    });
+
+    if (ajax) {
+      res.json({
+        posts: result,
+        page: page,
+        search: { q: q, count: result.data.length, time: resultTime + " ms" },
+      });
+    } else {
+      res.render("index", {
+        posts: result,
+        page: page,
+        search: { q: q, count: result.data.length, time: resultTime + " ms" },
+      });
+    }
+  }
+
+  @Get("search")
+  async search(req: Request, res: Response) {
+    //
+    const startTime = new Date().getTime();
+    const q = req.query.q;
+    let result;
+    if (q != undefined) {
+      if (q == "") {
+        result = { data: [] };
+      } else {
+        result = await ProductService.getInstance().search({
+          searchText: String(q),
+        });
+      }
+    }
+
+    const endTime = new Date().getTime();
+    const resultTime = endTime - startTime;
+
+    if (q == "") {
+      res.json({
+        posts: result,
+      });
+    } else {
+      res.json({
+        posts: result,
+        search: { q: q, count: result.data.length, time: resultTime + " ms" },
+      });
+    }
   }
 
   @Get("product/:id")

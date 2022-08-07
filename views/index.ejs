@@ -9,11 +9,12 @@
 
       <% if(search.q){ %>
       <div class="col-auto">
-        <input type="search" name="q" value="<%= search.q %>" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+        <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
       </div>
       <% }else{%>
       <div class="col-auto">
-        <input type="search" name="q" class="form-control form-control-lg" id="" placeholder="Search what you want...">
+        <input type="search" name="q" onkeyup="showResult(this.value)" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
+        <div class="search-suggestion" id="suggestion"></div>
       </div>
       <% } %>
       <div class="col-auto">
@@ -29,6 +30,39 @@
       <% } %>
 
     </form>
+    <script>
+      // autocomplete
+      function showResult(str) {
+        if (str.length == 0) {
+          document.getElementById("suggestion").innerHTML = "";
+          document.getElementById("suggestion").style.border = "0px";
+        }
+
+        // ajax call
+        http.ajax({
+          url: `/search?q=${str}`,
+          method: 'GET',
+          dataType: "json",
+          success: (res) => {
+
+            let data = res.posts.data
+            let html = '';
+            if (data.length > 0) {
+              for (let i = 0; i < data.length; i++) {
+                html += `<a href="/?q=${data[i].name}" class="list-group-item list-group-item-action">${data[i].name}</a>`;
+              }
+            } else {
+              html = '';
+            }
+
+
+            document.getElementById("suggestion").innerHTML = html;
+            document.getElementById("suggestion").style.border = "1px solid #A5ACB2";
+          }
+        });
+
+      }
+    </script>
   </div>
   <div class="row justify-content-md-center">
     <% for(let post of posts.data) { %>
@@ -51,7 +85,7 @@
           </a> </h5>
         <% if(post.shop) {%>
         <p class="card-text">
-         <a href="/shop/<%= post.shop.ShopDetails[0].name %>"><%= post.shop.ShopDetails[0].displayName %></a>
+          <a href="/shop/<%= post.shop.ShopDetails[0].name %>"><%= post.shop.ShopDetails[0].displayName %></a>
         </p>
         <% } %>
         <p class="card-text">

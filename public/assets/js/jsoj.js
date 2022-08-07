@@ -1,14 +1,13 @@
-/*
-*Author : Sojeb sikder
-*Update Date: 11.29 AM, Monday, September 28, 2020
-*/
-
+/**
+ * Author : Sojeb sikder
+ * Update Date: 11.29 AM, Monday, September 28, 2020
+ */
 
 /**
  * Replace text with high performance
- * @param {*} str 
- * @param {*} search 
- * @param {*} replacement 
+ * @param {*} str
+ * @param {*} search
+ * @param {*} replacement
  */
 function rep(str, search, replacement) {
   return str.split(search).join(replacement);
@@ -18,16 +17,14 @@ function rep(str, search, replacement) {
  * Soj class for defining bihongoJs
  */
 class Soj {
-
   /**
-   * Vue Initialize
-   * @param {*} arr Array
+   * framework Initialize
    */
-  constructor(arr) {
-    window.location.href = "#/"
+  constructor({ el, data }) {
+    window.location.href = "#/";
 
-    this.query = document.querySelector(arr.el);
-    this.data = arr.data;
+    this.query = document.querySelector(el);
+    this.data = data;
 
     this.perser(this.query, this.data);
   }
@@ -38,21 +35,23 @@ class Soj {
    * @param {*} data data
    */
   perser(query, data) {
-
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         var element = data[key];
-        query.innerHTML = rep(query.innerHTML, new RegExp("{{.*" + key + "*.}}"), element);
+        query.innerHTML = rep(
+          query.innerHTML,
+          new RegExp("{{.*" + key + "*.}}"),
+          element
+        );
       }
     }
     return this;
   }
 
-
   /**
    * Controller setup
    * @param {*} string
-   * @param {Function} callback 
+   * @param {Function} callback
    */
   controller(string, callback) {
     if (string == this.controll) {
@@ -61,29 +60,27 @@ class Soj {
     return this;
   }
 
-
   /**
    * Initialize Route
-   * @param {*} evt 
+   * @param {*} evt
    */
   config(evt) {
-
     window.onhashchange = function () {
       evt();
     };
-    
+
     return this;
   }
 
   /**
    * Define application route
-   * @param {string} path 
-   * @param {array} arr 
+   * @param {string} path
+   * @param {array} arr
    */
   route(path, arr) {
     this.path = path;
     var url = window.location.href;
-    var hashReplace = rep(url, "!","");
+    var hashReplace = rep(url, "!", "");
     //var server = hashReplace.indexOf("/");
 
     var sp = url.split("#");
@@ -125,14 +122,13 @@ class Soj {
       }
 
       xmlhttp.onreadystatechange = () => {
-
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           var res;
           res = xmlhttp.responseText;
           document.getElementsByTagName("s-view")[0].innerHTML = res;
           this.perser(this.query, this.data);
         }
-      }
+      };
       xmlhttp.open("GET", arr.templateUrl, true);
 
       xmlhttp.send();
@@ -140,7 +136,6 @@ class Soj {
       /**
        * End
        */
-
     }
 
     return this;
@@ -148,41 +143,37 @@ class Soj {
 
   /**
    * Show console error
-   * @param {*} str 
+   * @param {*} str
    */
   error(str) {
     console.error(str);
   }
   /**
    * Show console warn
-   * @param {*} str 
+   * @param {*} str
    */
   warn(str) {
     console.warn(str);
   }
   /**
    * Show console info
-   * @param {*} str 
+   * @param {*} str
    */
   info(str) {
     console.info(str);
   }
   //end console code
-
-
 }
 
 /**
  * Network class
  */
 class http {
-
   /**
    * Perform ajax requests
-   * @param {*} arr 
+   * @param {*} arr
    */
-  static ajax(arr) {
-
+  static ajax({ method, url, data, success, dataType }) {
     var xmlhttp;
     try {
       xmlhttp = new XMLHttpRequest();
@@ -198,35 +189,29 @@ class http {
       }
     }
 
-
     xmlhttp.onreadystatechange = function () {
-
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         var res;
 
-        if (arr.dataType == "json") {
+        if (dataType == "json") {
           res = JSON.parse(xmlhttp.responseText);
-        } else if (arr.dataType == "text") {
+        } else if (dataType == "text") {
           res = xmlhttp.responseText;
         } else {
           res = xmlhttp.responseText;
         }
-        arr.success(res);
+        success(res);
       }
+    };
+    xmlhttp.open(method, url, true);
 
-    }
-    xmlhttp.open(arr.method, arr.url, true);
-
-    if (arr.data == false) {
+    if (data == false) {
       xmlhttp.send();
     } else {
-      xmlhttp.send(arr.data);
+      xmlhttp.send(data);
     }
   }
-
-
 }
-
 
 //data binding
 function setModel(model, container) {
@@ -236,14 +221,13 @@ function setModel(model, container) {
   if (model) {
     model.onkeyup = function () {
       container.innerHTML = model.value;
-    }
+    };
   }
-
 }
 
 /**
  * Use javascript smartly
- * @param {*} selector 
+ * @param {*} selector
  */
 function j(selector) {
   const self = {
@@ -252,21 +236,18 @@ function j(selector) {
     html: () => self.element,
 
     on: (event, callback) => {
-      self.element.addEventListener(event, callback)
+      self.element.addEventListener(event, callback);
     },
     hide: () => {
-      self.element.style.display = "none"
+      self.element.style.display = "none";
     },
     show: () => {
-      self.element.style.display = ''
+      self.element.style.display = "";
     },
     attr: (name, value) => {
-      if (value == null)
-        return self.element.getAttribute(name)
-      else
-        return self.element.setAttribute(name, value)
+      if (value == null) return self.element.getAttribute(name);
+      else return self.element.setAttribute(name, value);
     },
-
 
     /**
      * Set image to target element
@@ -278,9 +259,9 @@ function j(selector) {
         var reader = new FileReader();
         reader.onload = function (e) {
           //set value of the input for profile picture
-          self.attr('value', file.name);
+          self.attr("value", file.name);
           //display the image
-          target.attr('src', e.target.result);
+          target.attr("src", e.target.result);
         };
         reader.readAsDataURL(file);
       }
@@ -313,27 +294,27 @@ function j(selector) {
       var editorContainer = document.querySelector(editorEl);
 
       //editor menu
-      var editorMenu = document.createElement('div');
+      var editorMenu = document.createElement("div");
       editorMenu.className = "editor-menu";
       editorContainer.appendChild(editorMenu);
 
       //button control
       for (var i = 0; i < 7; i++) {
-        var btn = document.createElement('button');
+        var btn = document.createElement("button");
         btn.id = "btn-" + i;
         btn.type = "button";
         editorMenu.appendChild(btn);
       }
-      document.querySelector('#btn-0').innerHTML = "Bold";
-      document.querySelector('#btn-1').innerHTML = "Italic";
-      document.querySelector('#btn-2').innerHTML = "Underline";
-      document.querySelector('#btn-3').innerHTML = "Unordered list";
-      document.querySelector('#btn-4').innerHTML = "Ordered list";
-      document.querySelector('#btn-5').innerHTML = "Picture";
-      document.querySelector('#btn-6').innerHTML = "Link";
+      document.querySelector("#btn-0").innerHTML = "Bold";
+      document.querySelector("#btn-1").innerHTML = "Italic";
+      document.querySelector("#btn-2").innerHTML = "Underline";
+      document.querySelector("#btn-3").innerHTML = "Unordered list";
+      document.querySelector("#btn-4").innerHTML = "Ordered list";
+      document.querySelector("#btn-5").innerHTML = "Picture";
+      document.querySelector("#btn-6").innerHTML = "Link";
 
       //editor
-      var editor = document.createElement('div');
+      var editor = document.createElement("div");
       editor.id = "b-editor";
       editor.className = "editor-text";
       editor.setAttribute("contenteditable", "true");
@@ -342,35 +323,27 @@ function j(selector) {
       editor.spellcheck = "true";
       editorContainer.appendChild(editor);
 
-
-
-
       /**
        * Initialize
        */
 
       //j('#b-editor').element.innerHTML = self.element.innerHTML;
-      j('#b-editor').element.innerHTML = self.element.value;
+      j("#b-editor").element.innerHTML = self.element.value;
       self.element.setAttribute("hidden", "hidden");
 
-      j('#b-editor').on('keyup', function () {
+      j("#b-editor").on("keyup", function () {
         //self.element.value = j('#b-editor').element.innerHTML;
-        self.element.innerHTML = j('#b-editor').element.innerHTML;
+        self.element.innerHTML = j("#b-editor").element.innerHTML;
       });
 
-      self.element.addEventListener('keyup', function () {
-        j('#b-editor').element.innerHTML = self.element.value;
+      self.element.addEventListener("keyup", function () {
+        j("#b-editor").element.innerHTML = self.element.value;
         //self.element.innerHTML = j('#b-editor').element.innerHTML;
       });
 
       function saveChange() {
-        self.element.innerHTML = j('#b-editor').element.innerHTML;
+        self.element.innerHTML = j("#b-editor").element.innerHTML;
       }
-
-
-
-
-
 
       //operations
       //header
@@ -380,67 +353,66 @@ function j(selector) {
       });
       */
 
-
       // Italic menu
-      document.querySelector('#btn-0').addEventListener('click', function () {
-        document.execCommand('bold');
+      document.querySelector("#btn-0").addEventListener("click", function () {
+        document.execCommand("bold");
         saveChange();
       });
       // Bold menu
-      document.querySelector('#btn-1').addEventListener('click', function () {
-        document.execCommand('italic');
+      document.querySelector("#btn-1").addEventListener("click", function () {
+        document.execCommand("italic");
         saveChange();
       });
       // Underline menu
-      document.querySelector('#btn-2').addEventListener('click', function () {
-        document.execCommand('underline');
+      document.querySelector("#btn-2").addEventListener("click", function () {
+        document.execCommand("underline");
         saveChange();
       });
       // List menu
-      document.querySelector('#btn-3').addEventListener('click', function () {
-        document.execCommand('insertUnorderedList');
+      document.querySelector("#btn-3").addEventListener("click", function () {
+        document.execCommand("insertUnorderedList");
         saveChange();
       });
-      document.querySelector('#btn-4').addEventListener('click', function () {
-        document.execCommand('insertOrderedList');
+      document.querySelector("#btn-4").addEventListener("click", function () {
+        document.execCommand("insertOrderedList");
         saveChange();
       });
       // Picture menu
-      document.querySelector('#btn-5').addEventListener('click', function () {
-        document.execCommand('insertImage', false, 'http://usefulangle.com/img/posts/17-1px.jpg');
+      document.querySelector("#btn-5").addEventListener("click", function () {
+        document.execCommand(
+          "insertImage",
+          false,
+          "http://usefulangle.com/img/posts/17-1px.jpg"
+        );
         saveChange();
       });
       // Link menu
-      document.querySelector('#btn-6').addEventListener('click', function () {
-        var url = prompt('Enter the link here: ', 'http://');
-        document.execCommand('createlink', false, url);
+      document.querySelector("#btn-6").addEventListener("click", function () {
+        var url = prompt("Enter the link here: ", "http://");
+        document.execCommand("createlink", false, url);
         saveChange();
       });
-
     },
     //end rich text editor
 
-
     //Stylesheet
     color: (value) => {
-      self.element.style.color = value
+      self.element.style.color = value;
     },
 
     background: (value) => {
-      self.element.style.background = value
+      self.element.style.background = value;
     },
 
     css: (name, value) => {
-      var col = ":"
-      self.element.style = name + col + value
+      var col = ":";
+      self.element.style = name + col + value;
     },
     //endStyleSheet
 
-
-
     //Effect
     fadeIn: (time) => {
-      var sel = selector.replace('#', '')
+      var sel = selector.replace("#", "");
 
       var el = document.getElementById(sel);
       // document.getElementById('h').innerHTML =el
@@ -452,7 +424,8 @@ function j(selector) {
         last = +new Date();
 
         if (+el.style.opacity < 1) {
-          (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+          (window.requestAnimationFrame && requestAnimationFrame(tick)) ||
+            setTimeout(tick, 16);
         }
       };
 
@@ -460,7 +433,7 @@ function j(selector) {
     },
 
     fadeOut: (time) => {
-      var sel = selector.replace('#', '')
+      var sel = selector.replace("#", "");
 
       el = document.getElementById(sel);
       el.style.opacity = 1;
@@ -471,12 +444,12 @@ function j(selector) {
         last = +new Date();
 
         if (+el.style.opacity > 0) {
-          (window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+          (window.requestAnimationFrame && requestAnimationFrame(tick)) ||
+            setTimeout(tick, 16);
         }
       };
 
       tick();
-
     },
     toggleSlide: (time) => {
       var minheight = 20;
@@ -487,42 +460,47 @@ function j(selector) {
 
       //function toggleSlide(time) {
       //time = 1000;
-      var controler = document.getElementById('slide');
-      var slider = document.getElementById('slider');
-      slider.style.height = minheight + 'px';
+      var controler = document.getElementById("slide");
+      var slider = document.getElementById("slider");
+      slider.style.height = minheight + "px";
       controler.onclick = function () {
         clearInterval(timer);
         var instanceheight = parseInt(slider.style.height);
-        var init = (new Date()).getTime();
+        var init = new Date().getTime();
         var height = (toggled = !toggled) ? maxheight : minheight;
 
         var disp = height - parseInt(slider.style.height);
         timer = setInterval(function () {
-          var instance = (new Date()).getTime() - init;
+          var instance = new Date().getTime() - init;
           if (instance < time) {
-            var pos = Math.floor(disp * instance / time);
+            var pos = Math.floor((disp * instance) / time);
             result = instanceheight + pos;
-            slider.style.height = result + 'px';
-            document.getElementById('log').innerHTML = 'Current Height : <b>' + result + '</b><br /> Current Time : <b>' + instance + '</b>';
+            slider.style.height = result + "px";
+            document.getElementById("log").innerHTML =
+              "Current Height : <b>" +
+              result +
+              "</b><br /> Current Time : <b>" +
+              instance +
+              "</b>";
           } else {
-            slider.style.height = height + 'px'; //safety side ^^
+            slider.style.height = height + "px"; //safety side ^^
             clearInterval(timer);
-            controler.value = toggled ? ' Slide Up ' : ' Slide Down ';
-            document.getElementById('log').innerHTML = 'Current Height : <b>' + height + '</b><br /> Current Time : <b>' + time + '</b>';
+            controler.value = toggled ? " Slide Up " : " Slide Down ";
+            document.getElementById("log").innerHTML =
+              "Current Height : <b>" +
+              height +
+              "</b><br /> Current Time : <b>" +
+              time +
+              "</b>";
           }
         }, 1);
       };
       //};
-    }
+    },
     //End effect
-
-
-  }
-  return self
+  };
+  return self;
 }
-
-
-
 
 // Example library calls
 /*
@@ -538,4 +516,3 @@ $('h3').on('click', function()
   alert("I was clicked")
 })
 */
-

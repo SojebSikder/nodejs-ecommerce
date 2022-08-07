@@ -13,6 +13,7 @@ export class ProductService {
     }
     return this._instance;
   }
+
   /**
    * show all data
    */
@@ -96,6 +97,60 @@ export class ProductService {
         },
       });
     }
+
+    return { data: result, pagination: pagination };
+  }
+
+  /**
+   * search data
+   */
+  public async search({ searchText = "" }) {
+    let paginationResult;
+
+    paginationResult = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { contains: searchText } },
+          { description: { contains: searchText } },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    let limit = 10;
+    let pagination = Math.ceil(paginationResult.length / limit);
+
+    let result;
+    // main query
+    result = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { contains: searchText } },
+          { description: { contains: searchText } },
+        ],
+      },
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        price: true,
+        stock: true,
+        ProductImage: true,
+        shop: {
+          include: {
+            ShopDetails: true,
+          },
+        },
+      },
+    });
 
     return { data: result, pagination: pagination };
   }
