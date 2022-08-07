@@ -50,6 +50,7 @@ model User {
   cart     cart[]
   Shop     Shop[]
   SubOrder SubOrder[]
+  Category Category[]
 }
 
 // table ucode for password recovery
@@ -104,6 +105,9 @@ model Category {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now())
+  author    User?     @relation(fields: [authorId], references: [id])
+  authorId  Int?
+  published Boolean   @default(false)
   name      String    @db.VarChar(255)
   slug      String    @db.VarChar(255)
   products  Product[]

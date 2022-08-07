@@ -1,4 +1,5 @@
 import { Module } from "../../system/src/core/decorator";
+import { AdminCategoryController } from "./admin/adminProduct/adminCategory/adminCategory.controller";
 import { AdminProductController } from "./admin/adminProduct/product.controller";
 import { IndexController } from "./admin/index/index.controller";
 import { CartController } from "./cart/cart.controller";
@@ -15,6 +16,7 @@ import { UserController } from "./user/user.controller";
 
 @Module({
   controllers: [
+    // app imports
     UserController,
     ProductController,
     CartController,
@@ -23,7 +25,8 @@ import { UserController } from "./user/user.controller";
     InvoiceController,
     ShopController,
     RecoverPasswordController,
-    // seller
+    // end app imports
+    // seller imports
     SellerDashboardController,
     SellerProductController,
     SellerOrderController,
@@ -31,6 +34,7 @@ import { UserController } from "./user/user.controller";
     // end seller imports
     // admin
     AdminProductController,
+    AdminCategoryController,
     // end admin imports
   ],
 })
