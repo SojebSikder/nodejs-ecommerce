@@ -10,6 +10,7 @@
       <% if(search.q){ %>
       <div class="col-auto">
         <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
+        <div class="search-suggestion" id="suggestion"></div>
       </div>
       <% }else{%>
       <div class="col-auto">
