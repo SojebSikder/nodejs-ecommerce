@@ -13,9 +13,9 @@
           <form class="row g-3" action="/" method="get">
             <div class="col-auto">
               <% if(search.q){ %>
-              <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" autocomplete="off" class="form-control" id="q" placeholder="Search for products, brands and more">
+              <input style="min-width: 340px;" type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" autocomplete="off" class="form-control" id="q" placeholder="Search for products, brands and more">
               <% } else { %>
-              <input type="search" name="q" onkeyup="showResult(this.value)" autocomplete="off" class="form-control" id="q" placeholder="Search for products, brands and more">
+              <input style="min-width: 340px;" type="search" name="q" onkeyup="showResult(this.value)" autocomplete="off" class="form-control" id="q" placeholder="Search for products, brands and more">
               <% } %>
               <div class="search-suggestion" id="suggestion"></div>
             </div>
