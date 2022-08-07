@@ -13,6 +13,37 @@ function rep(str, search, replacement) {
   return str.split(search).join(replacement);
 }
 
+// implements debounce
+// function debounce(func, wait = 20, immediate = true) {
+//   var timeout;
+//   return function () {
+//     var context = this,
+//       args = arguments;
+//     var later = function () {
+//       timeout = null;
+//       if (!immediate) func.apply(context, args);
+//     };
+//     var callNow = immediate && !timeout;
+//     clearTimeout(timeout);
+//     timeout = setTimeout(later, wait);
+//     if (callNow) func.apply(context, args);
+//   };
+// }
+
+// simple debouce
+const debounce = function (fn, delay) {
+  let timer;
+  return function () {
+    let context = this,
+      args = arguments;
+
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
+  };
+};
+
 /**
  * Soj class for defining bihongoJs
  */

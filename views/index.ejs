@@ -9,12 +9,12 @@
 
       <% if(search.q){ %>
       <div class="col-auto">
-        <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
+        <input type="search" name="q" value="<%= search.q %>" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
         <div class="search-suggestion" id="suggestion"></div>
       </div>
       <% }else{%>
       <div class="col-auto">
-        <input type="search" name="q" onkeyup="showResult(this.value)" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
+        <input type="search" name="q" onkeyup="showResult(this.value)" autocomplete="off" class="form-control form-control-lg" id="q" placeholder="Search what you want...">
         <div class="search-suggestion" id="suggestion"></div>
       </div>
       <% } %>
@@ -33,7 +33,7 @@
     </form>
     <script>
       // autocomplete
-      function showResult(str) {
+      function getData(str) {
         if (str.length == 0) {
           document.getElementById("suggestion").innerHTML = "";
           document.getElementById("suggestion").style.border = "0px";
@@ -45,7 +45,6 @@
           method: 'GET',
           dataType: "json",
           success: (res) => {
-
             let data = res.posts.data
             let html = '';
             if (data.length > 0) {
@@ -55,14 +54,13 @@
             } else {
               html = '';
             }
-
-
             document.getElementById("suggestion").innerHTML = html;
             document.getElementById("suggestion").style.border = "1px solid #A5ACB2";
           }
         });
-
       }
+
+      const showResult = debounce(getData, 300);
     </script>
   </div>
   <div class="row justify-content-md-center">
