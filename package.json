@@ -30,6 +30,9 @@
     "test:e2e": "jest --config ./tests/jest-e2e.json",
     "cmd": "ts-node cmd.ts"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^4.1.1",
     "@types/html-pdf": "^3.0.0",
