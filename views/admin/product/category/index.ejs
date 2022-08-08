@@ -18,12 +18,14 @@
         <table class="table table-striped table-hover">
           <tr>
             <th>
-              Product Name
+              Name
             </th>
             <th>
-              Price
+              Slug
             </th>
-            <th>Stock</th>
+            <th>
+              published
+            </th>
             <th>
               Action
             </th>
@@ -35,10 +37,10 @@
               <%= post.name %>
             </td>
             <td>
-              <%= post.price %>
+              <%= post.slug %>
             </td>
             <td>
-              <%= post.stock %>
+              <%= post.published %>
             </td>
             <td>
               <a href="/admin/product/category/edit/<%= post.id %>" class="btn btn-outline-primary">Edit</a>

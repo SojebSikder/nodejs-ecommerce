@@ -42,15 +42,38 @@ export class AdminCategoryService {
     return result;
   }
 
-  findOne(id: string) {
-    return "This action returns a {id} user";
+  async findOne(id) {
+    const _id = Number(id);
+    const result = await prisma.category.findFirst({
+      where: {
+        id: _id,
+      },
+    });
+    return result;
   }
 
-  update(id: string, data: any) {
-    return "This action updates a {id} user";
+  async update(id: string, { name }) {
+    const _id = Number(id);
+    const _name = name;
+    const _slug = _name.replace(/\s+/g, "-").toLowerCase();
+    const result = await prisma.category.update({
+      where: {
+        id: _id,
+      },
+      data: {
+        name: _name,
+        slug: _slug,
+      },
+    });
+    return result;
   }
 
-  remove(id: string) {
-    return "This action removes a {id} user";
+  async remove(id) {
+    const result = await prisma.category.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    return result;
   }
 }

@@ -5,6 +5,7 @@ import {
   Get,
   Patch,
   Post,
+  Put,
 } from "../../../../../system/src/core/decorator";
 import { decorateHtmlResponse } from "../../../../middlewares/common/decorateHtmlResponse";
 import { AdminCategoryService } from "./adminCategory.service";
@@ -40,20 +41,38 @@ export class AdminCategoryController {
     res.render("admin/product/category/index", { category: result });
   }
 
-  @Get(":id")
+  @Get("edit/:id")
   async findOne(req: Request, res: Response) {
-    res.send(await AdminCategoryService.getInstance().findOne(req.params.id));
+    const id = req.params.id;
+    const result = await AdminCategoryService.getInstance().findOne(id);
+    res.render("admin/product/category/edit", { category: result });
   }
 
-  @Patch(":id")
+  @Post("edit/:id")
   async update(req: Request, res: Response) {
     const id = req.params.id;
-    const data = req.body;
-    res.send(await AdminCategoryService.getInstance().update(id, data));
+    const { name } = req.body;
+    const result = await AdminCategoryService.getInstance().update(id, {
+      name: name,
+    });
+
+    res.render("admin/product/category/edit", {
+      category: result,
+      message: "Updated successfully",
+    });
   }
 
-  @Delete(":id")
+  @Get("delete/:id")
   async remove(req: Request, res: Response) {
-    res.send(await AdminCategoryService.getInstance().remove(req.params.id));
+    try {
+      const id = req.params.id;
+      await AdminCategoryService.getInstance().remove(id);
+
+      res.locals.message = "Deleted successfully";
+      res.redirect("/admin/product/category");
+    } catch (error) {
+      res.locals.message = "Something went wrong";
+      res.redirect("/admin/product/category");
+    }
   }
 }
