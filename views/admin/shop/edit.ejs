@@ -10,6 +10,15 @@
         Edit Shop
       </div>
     </div>
+    <!-- Message -->
+    <div>
+      <div id="message" class="alert alert-primary alert-dismissible fade show" role="alert">
+        <p id="messageText"></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+
+
     <br>
     <div class="row">
       <div class="row justify-content-md-center">
@@ -99,21 +108,28 @@
 
 <script>
   // edit shop
+  const message = document.getElementById("message");
+  const messageText = document.getElementById("messageText");
+  message.style.display = 'none'
+
+
   function edit(e) {
-    const id = '<%= shop.id %>';
     e.preventDefault();
 
+    const id = '<%= shop.id %>';
     const formData = new FormData(e.target);
-    console.log(formData);
+
     http.ajax({
       url: `/admin/shop/${id}`,
       method: 'PUT',
+      dataType: "json",
       data: formData,
       success: function(data) {
+        message.style.display = 'block';
+        messageText.innerHTML = data.message;
         window.location.href = `/admin/shop/edit/${id}`;
       }
     });
-
   }
   document.getElementById("form").addEventListener("submit", edit);
 </script>
