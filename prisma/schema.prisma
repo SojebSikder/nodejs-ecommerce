@@ -113,6 +113,26 @@ model Category {
   products  Product[]
 }
 
+model Tag {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  title      String
+  ProductTag ProductTag[]
+}
+
+model ProductTag {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
+
+  tag   Tag? @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId Int?
+}
+
 model Product {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
@@ -135,6 +155,7 @@ model Product {
   ProductImage ProductImage[]
   cart         cart[]
   SubOrderItem SubOrderItem[]
+  ProductTag   ProductTag[]
 }
 
 model ProductImage {
@@ -179,11 +200,11 @@ model ShopDetails {
   description String?
   logo        String?
   shopId      Int?
-  Shop        Shop?    @relation(fields: [shopId], references: [id])
+  Shop        Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
   shopUrlId   Int?
-  shopUrl     ShopUrl? @relation(fields: [shopUrlId], references: [id])
+  shopUrl     ShopUrl? @relation(fields: [shopUrlId], references: [id], onDelete: Cascade)
   addressId   Int?
-  address     Address? @relation(fields: [addressId], references: [id])
+  address     Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 }
 
 model ShopUrl {
