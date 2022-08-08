@@ -40,8 +40,9 @@ export class SellerProductController {
   }
 
   @Get("add", { middleware: [decorateHtmlResponse()] })
-  addProductPage(req: Request, res: Response) {
-    res.render("seller/product/add");
+  async addProductPage(req: Request, res: Response) {
+    const category = await SellerProductService.getInstance().getCategory();
+    res.render("seller/product/add", { categories: category });
   }
 
   @Post("", {
@@ -61,6 +62,7 @@ export class SellerProductController {
     const price = Number(req.body.price);
     const stock = Number(req.body.stock);
     const published = req.body.published;
+    const categoryId = req.body.category;
 
     const result = await SellerProductService.getInstance().create({
       productName: name,
@@ -69,10 +71,14 @@ export class SellerProductController {
       Stock: stock,
       Published: published,
       image: file,
+      categoryId: categoryId,
       signedCookies: req.signedCookies,
     });
+
+    const category = await SellerProductService.getInstance().getCategory();
     res.render("seller/product/add", {
       message: "Post has been added successfully",
+      categories: category,
     });
   }
 
@@ -91,7 +97,9 @@ export class SellerProductController {
       signedCookies: req.signedCookies,
     });
 
-    res.render("seller/product/edit", { post: result });
+    const category = await SellerProductService.getInstance().getCategory();
+
+    res.render("seller/product/edit", { post: result, categories: category });
   }
 
   @Post("edit/:id", {
@@ -111,13 +119,16 @@ export class SellerProductController {
     const description = req.body.description || "";
     const price = Number(req.body.price);
     const stock = Number(req.body.stock);
+    const categoryId = req.body.category;
     const published = req.body.published;
+
 
     await SellerProductService.getInstance().update(id, {
       productName: name,
       productDescription: description,
       Price: price,
       Stock: stock,
+      categoryId: categoryId,
       Published: published,
       image: file,
       signedCookies: req.signedCookies,

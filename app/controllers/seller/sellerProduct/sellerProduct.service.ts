@@ -107,12 +107,22 @@ export class SellerProductService {
     return { data: result, pagination: pagination };
   }
 
+  async getCategory() {
+    const result = await prisma.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
+    return result;
+  }
+
   async create({
     productName,
     productDescription,
     Price,
     Stock,
     Published,
+    categoryId,
     image,
     signedCookies,
   }) {
@@ -122,6 +132,7 @@ export class SellerProductService {
     const price = Number(Price);
     const stock = Number(Stock);
     const published = Published;
+    const _categoryId = Number(categoryId);
     let publishedValue;
 
     // check published
@@ -165,10 +176,16 @@ export class SellerProductService {
         },
       });
     }
+    if (categoryId) {
+      Object.assign(data, {
+        categoryId: _categoryId,
+      });
+    }
     // save data
     const result = await prisma.product.create({
       data: data,
     });
+    return result;
   }
 
   findOne(id: string) {
@@ -206,6 +223,7 @@ export class SellerProductService {
       productDescription,
       Price,
       Stock,
+      categoryId,
       Published,
       image,
       signedCookies,
@@ -217,6 +235,7 @@ export class SellerProductService {
     const description = productDescription;
     const price = Number(Price) || null;
     const stock = Number(Stock) || null;
+    const _categoryId = Number(categoryId);
     const published = Published || null;
     let publishedValue;
 
@@ -254,6 +273,9 @@ export class SellerProductService {
     }
     if (stock) {
       Object.assign(data, { stock });
+    }
+    if (_categoryId) {
+      Object.assign(data, { categoryId: _categoryId });
     }
     if (publishedValue) {
       Object.assign(data, { published: publishedValue });

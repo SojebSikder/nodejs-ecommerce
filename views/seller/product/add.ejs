@@ -43,6 +43,13 @@
             <div class="mb-3">
               <input class="form-control" placeholder="Enter stock" type="number" name="stock" />
             </div>
+            <div class="mb-3">
+              <select class="form-control" name="category" id="">
+                <% for(let category of categories) {%>
+                <option value="<%= category.id %>"><%= category.name %></option>
+                <% } %>
+              </select>
+            </div>
 
             <div class="mb-3">
               <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30" rows="10"></textarea>

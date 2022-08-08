@@ -48,6 +48,28 @@
             </div>
 
             <div class="mb-3">
+              <select class="form-control" name="category" id="category">
+                <% for(let category of categories) {%>
+                <option value="<%= category.id %>"><%= category.name %></option>
+                <% } %>
+              </select>
+
+              <script>
+                // script for select dropdown menu from database selected value
+                var statusValue = "<%= post.categoryId %>";
+                var statusEl = document.getElementById("category");
+                for (const key in statusEl.options) {
+                  if (Object.hasOwnProperty.call(statusEl.options, key)) {
+                    const element = statusEl.options[key];
+                    if (statusValue == element.value) {
+                      element.selected = true;
+                    }
+                  }
+                }
+              </script>
+            </div>
+
+            <div class="mb-3">
               <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30" rows="10"><%= post.name %></textarea>
               <input class="btn btn-primary" type="submit" value="Submit" />
             </div>
