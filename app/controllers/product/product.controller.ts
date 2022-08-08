@@ -7,6 +7,13 @@ import { ProductService } from "./product.service";
 @Controller("/", { middleware: [decorateHtmlResponse()] })
 export class ProductController {
   //
+
+  @Get("test")
+  async showCategory(req: Request, res: Response) {
+    const data = await ProductService.getInstance().showCategory();
+    res.json({ data });
+  }
+
   @Get()
   async index(req: Request, res: Response) {
     //
