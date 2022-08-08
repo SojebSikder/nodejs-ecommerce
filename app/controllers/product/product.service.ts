@@ -80,7 +80,7 @@ export class ProductService {
       })
     );
 
-    return result;
+    return f(t, 0);
   }
 
   /**
