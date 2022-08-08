@@ -74,7 +74,7 @@
   function distroy(id) {
     if (confirm('Are you sure you want to delete this shop?')) {
       http.ajax({
-        url: `/admin/shop/delete/${id}`,
+        url: `/admin/shop/${id}`,
         method: 'DELETE',
         success: function(data) {
           window.location.href = '/admin/shop';
