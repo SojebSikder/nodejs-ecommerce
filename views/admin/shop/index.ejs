@@ -1,0 +1,87 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<%- include('../partials/sidebar'); -%>
+
+<!-- Main section -->
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        All Shop
+      </div>
+    </div>
+    <div class="row">
+      <div class="row justify-content-md-center">
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>
+              Shop Name
+            </th>
+            <th>
+              Shop Display Name
+            </th>
+            <th>
+              Status
+            </th>
+            <th>
+              Shop Status
+            </th>
+            <th>Description</th>
+            <th>Seller</th>
+            <th>
+              Action
+            </th>
+          </tr>
+
+          <% for(let shop of shops) { %>
+          <tr>
+            <td>
+              <%= shop.ShopDetails[0].name %>
+            </td>
+            <td>
+              <%= shop.ShopDetails[0].displayName %>
+            </td>
+            <td>
+              <%= shop.status %>
+            </td>
+            <td>
+              <%= shop.sellerStatus %>
+            </td>
+            <td>
+              <%= shop.ShopDetails[0].description %>
+            </td>
+            <td>
+              <%= shop.user.username %>
+            </td>
+            <td>
+              <a href="/admin/shop/edit/<%= shop.id %>" class="btn btn-primary">Edit</a>
+              <button onclick="distroy('<%= shop.id %>')" href="/admin/shop/delete/<%= shop.id %>" class="btn btn-danger">Delete</button>
+            </td>
+          </tr>
+          <% } %>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+</main>
+<!-- End Main section -->
+
+<script>
+  // delete shop
+  function distroy(id) {
+    if (confirm('Are you sure you want to delete this shop?')) {
+      http.ajax({
+        url: `/admin/shop/delete/${id}`,
+        method: 'DELETE',
+        success: function(data) {
+          window.location.href = '/admin/shop';
+        }
+      });
+    }
+  }
+</script>
+
+<%- include('../../partials/footer'); -%>

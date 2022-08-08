@@ -1,0 +1,77 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<%- include('../partials/sidebar'); -%>
+
+<!-- Main section -->
+<main class="mt-5 pt-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 fw-bold fs-3">
+        Edit Shop
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="row justify-content-md-center">
+        <div class="align-items-center">
+          <form action="/admin/shop/edit" method="post">
+            <div class="form-check">
+              <% if(shop.sellerStatus == "active") {%>
+              <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="sellerStatus" checked>
+              <% } else { %>
+              <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="sellerStatus">
+              <% } %>
+              <label class="form-check-label" for="flexCheckDefault">
+                Publish Shop
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="name">Shop Display Name</label>
+              <input type="text" value="<%= shop.ShopDetails[0].displayName %>" class="form-control" id="name" name="displayname" placeholder="Shop Name">
+            </div>
+            <div class="form-group">
+              <label for="name">Shop Name (unique)</label>
+              <input type="text" placeholder="<%= shop.ShopDetails[0].name %>" class="form-control" id="name" name="name">
+            </div>
+            <!-- <div class="form-group">
+              <label for="address">Shop Address</label>
+              <input type="text" class="form-control" id="address" name="address" placeholder="Shop Address">
+            </div>
+            <div class="form-group">
+              <label for="city">Shop City</label>
+              <input type="text" class="form-control" id="city" name="city" placeholder="Shop City">
+            </div>
+            <div class="form-group">
+              <label for="state">Shop State</label>
+              <input type="text" class="form-control" id="state" name="state" placeholder="Shop State">
+            </div>
+            <div class="form-group">
+              <label for="zip">Shop Zip</label>
+              <input type="text" class="form-control" id="zip" name="zip" placeholder="Shop Zip">
+            </div>
+            <div class="form-group">
+              <label for="phone">Shop Phone</label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Shop Phone">
+            </div> -->
+            <div class="form-group">
+              <label for="email">Shop Email</label>
+              <input type="text" value="<%= shop.ShopDetails[0].email %>" class="form-control" id="email" name="email" placeholder="Shop Email">
+            </div>
+            <div class="form-group">
+              <label for="description">Shop Description</label>
+              <textarea class="form-control" id="description" name="description" rows="3"><%= shop.ShopDetails[0].description %></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+</main>
+<!-- End Main section -->
+
+<%- include('../partials/footer'); -%>
