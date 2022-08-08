@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import multer from "multer";
 import {
   Controller,
   Delete,
@@ -30,7 +31,9 @@ export class AdminShopController {
     res.render("admin/shop/edit", { shop: result });
   }
 
-  @Put(":id")
+  @Put(":id", {
+    middleware: [multer().any()],
+  })
   async update(req: Request, res: Response) {
     try {
       const id = req.params.id;
@@ -42,33 +45,31 @@ export class AdminShopController {
       const email = req.body.email;
       const description = req.body.description;
       const phone = req.body.phone;
-      const shopcommand = req.body.shopcommand || null;
+      const status = req.body.status || null;
 
       let result;
-      if (shopcommand) {
+      if (status) {
         result = await AdminShopService.getInstance().update(id, {
-          status: shopcommand,
-        });
-
-        res.redirect("/admin/shop");
-      } else {
-        result = await AdminShopService.getInstance().updateShopDetails({
-          shopId: id,
-          name,
-          displayName,
-          sellerStatus,
-          email,
-          description,
-          phone,
+          status: status,
         });
       }
+
+      result = await AdminShopService.getInstance().updateShopDetails({
+        shopId: id,
+        name,
+        displayName,
+        sellerStatus,
+        email,
+        description,
+        phone,
+      });
 
       res.status(201).json({
         message: "Updated successfully",
         success: true,
       });
     } catch (error) {
-      res.status(201).json({
+      res.json({
         message: "Something went wrong",
         success: false,
       });

@@ -103,7 +103,7 @@ export class AdminShopService {
     phone = null,
     status = null,
   }) {
-    let _shopId = shopId;
+    let _shopId = Number(shopId);
     let result;
     let data = {};
     let statusCode = 200;
@@ -160,7 +160,7 @@ export class AdminShopService {
 
     result = await prisma.shopDetails.updateMany({
       where: {
-        shopId: shopId,
+        shopId: _shopId,
       },
       data: data,
     });

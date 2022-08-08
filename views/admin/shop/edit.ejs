@@ -14,7 +14,30 @@
     <div class="row">
       <div class="row justify-content-md-center">
         <div class="align-items-center">
-          <form action="/admin/shop/edit" method="post">
+          <form id="form">
+            <div class="form-group">
+              <label for="name">Status:</label>
+              <select id="status" name="status">
+                <option value="pending">pending</option>
+                <option value="approved">approved</option>
+                <option value="banned">banned</option>
+                <option value="disabled">disabled</option>
+              </select>
+
+              <script>
+                // script for select dropdown menu from database selected value
+                var statusValue = "<%= shop.status %>";
+                var statusEl = document.getElementById("status");
+                for (const key in statusEl.options) {
+                  if (Object.hasOwnProperty.call(statusEl.options, key)) {
+                    const element = statusEl.options[key];
+                    if (statusValue == element.value) {
+                      element.selected = true;
+                    }
+                  }
+                }
+              </script>
+            </div>
             <div class="form-check">
               <% if(shop.sellerStatus == "active") {%>
               <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="sellerStatus" checked>
@@ -73,5 +96,27 @@
   </div>
 </main>
 <!-- End Main section -->
+
+<script>
+  // edit shop
+  function edit(e) {
+    const id = '<%= shop.id %>';
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    console.log(formData);
+    http.ajax({
+      url: `/admin/shop/${id}`,
+      method: 'PUT',
+      data: formData,
+      success: function(data) {
+        window.location.href = `/admin/shop/edit/${id}`;
+      }
+    });
+
+  }
+  document.getElementById("form").addEventListener("submit", edit);
+</script>
+
 
 <%- include('../partials/footer'); -%>
