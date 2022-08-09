@@ -379,11 +379,13 @@ function j(selector) {
               saveChange();
               break;
             case "btn-1-5":
-              document.execCommand(
-                "insertImage",
-                false,
-                "http://usefulangle.com/img/posts/17-1px.jpg"
-              );
+              // document.execCommand(
+              //   "insertImage",
+              //   false,
+              //   "http://usefulangle.com/img/posts/17-1px.jpg"
+              // );
+              var url = prompt("Enter the link here: ", "http://");
+              document.execCommand("insertImage", false, url);
               saveChange();
               break;
             case "btn-1-6":
