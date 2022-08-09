@@ -135,8 +135,6 @@ export class SellerProductController {
     const categoryId = req.body.category;
     const published = req.body.published;
 
-    console.log(description);
-
     await SellerProductService.getInstance().update(id, {
       productName: name,
       productDescription: description,
