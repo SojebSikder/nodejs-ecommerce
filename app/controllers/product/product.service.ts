@@ -98,6 +98,12 @@ export class ProductService {
       });
     }
 
+    // shorten length of description
+    result.map((item) => [
+      (item.description = item.description.substring(0, 400) + "..."),
+      ...result,
+    ]);
+
     return { data: result, pagination: pagination };
   }
 
