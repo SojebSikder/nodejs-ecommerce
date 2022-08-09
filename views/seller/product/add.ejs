@@ -52,7 +52,8 @@
             </div>
 
             <div class="mb-3">
-              <textarea class="form-control" placeholder="Enter description" name="description" id="" cols="30" rows="10"></textarea>
+              <textarea class="form-control" placeholder="Enter description" name="description" id="description" cols="30" rows="10"></textarea>
+              <div id="container"></div>
               <input class="btn btn-primary" type="submit" value="Submit" />
             </div>
 
@@ -77,6 +78,11 @@
 
 
 <script>
+  // set bihongo editor
+  j('#description').beditor("#container", {
+    select: [""]
+  });
+
   //show image from local image upload
   j("#image").on("change", function() {
     j("#image").imageSet(j("#img"));

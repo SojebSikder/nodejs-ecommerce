@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post } from "../../../../system/src/core/decorator";
+import { Controller, Get } from "../../../../system/src/core/decorator";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
-import { IndexService } from "./index.service";
+import { AdminDashboardService } from "./adminDashboard.service";
 
 @Controller("/admin/")
-export class IndexController {
+export class AdminDashboardController {
   //
   @Get("", { middleware: [decorateHtmlResponse()] })
   async index(req: Request, res: Response) {

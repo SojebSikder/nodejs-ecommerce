@@ -317,35 +317,140 @@ function j(selector) {
     /**
      * Set Html Editor
      */
-    beditor: (editorEl) => {
-      /**
-       * Create Element Autometically
-       */
-
-      //editor container
-      var editorContainer = document.querySelector(editorEl);
+    beditor: (editorEl, { select: [] }) => {
+      //create container
+      const editorContainer = document.querySelector(editorEl);
 
       //editor menu
-      var editorMenu = document.createElement("div");
-      editorMenu.className = "editor-menu";
-      editorContainer.appendChild(editorMenu);
+      // var editorMenu = document.createElement("div");
+      // editorMenu.className = "editor-menu";
+      // editorContainer.appendChild(editorMenu);
 
-      //button control
-      for (var i = 0; i < 7; i++) {
+      //editor menu conainer
+      var menuContainer = document.createElement("div");
+      menuContainer.className = "editor-menu";
+      editorContainer.appendChild(menuContainer);
+
+      // create first manu row
+      var editorMenuFirstRow = document.createElement("div");
+      editorMenuFirstRow.className = "editor-menu";
+      menuContainer.appendChild(editorMenuFirstRow);
+      // create second manu row
+      var editorMenuSecondRow = document.createElement("div");
+      editorMenuSecondRow.className = "editor-menu";
+      menuContainer.appendChild(editorMenuSecondRow);
+
+      //button control for first row
+      const firstRowMenu = [
+        "bold",
+        "italic",
+        "underline",
+        "unordered list",
+        "ordered list",
+        "picture",
+        "link",
+      ];
+      for (var i = 0; i < firstRowMenu.length; i++) {
         var btn = document.createElement("button");
-        btn.id = "btn-" + i;
+        btn.id = "btn-1-" + i;
         btn.type = "button";
-        editorMenu.appendChild(btn);
-      }
-      document.querySelector("#btn-0").innerHTML = "Bold";
-      document.querySelector("#btn-1").innerHTML = "Italic";
-      document.querySelector("#btn-2").innerHTML = "Underline";
-      document.querySelector("#btn-3").innerHTML = "Unordered list";
-      document.querySelector("#btn-4").innerHTML = "Ordered list";
-      document.querySelector("#btn-5").innerHTML = "Picture";
-      document.querySelector("#btn-6").innerHTML = "Link";
+        btn.innerText = firstRowMenu[i];
+        btn.onclick = function (e) {
+          const el = e.target.id;
+          switch (el) {
+            case "btn-1-0":
+              document.execCommand("bold");
+              saveChange();
+              break;
+            case "btn-1-1":
+              document.execCommand("italic");
+              saveChange();
+              break;
+            case "btn-1-2":
+              document.execCommand("underline");
+              saveChange();
+              break;
+            case "btn-1-3":
+              document.execCommand("insertUnorderedList");
+              saveChange();
+              break;
+            case "btn-1-4":
+              document.execCommand("insertOrderedList");
+              saveChange();
+              break;
+            case "btn-1-5":
+              document.execCommand(
+                "insertImage",
+                false,
+                "http://usefulangle.com/img/posts/17-1px.jpg"
+              );
+              saveChange();
+              break;
+            case "btn-1-6":
+              var url = prompt("Enter the link here: ", "http://");
+              document.execCommand("createlink", false, url);
+              saveChange();
+              break;
 
-      //editor
+            default:
+              break;
+          }
+        };
+        // editorMenu.appendChild(btn);
+        editorMenuFirstRow.appendChild(btn);
+      }
+
+      //button control for second row
+      const secondRowMenu = [
+        { el: "button", type: "button", label: "h1" },
+        { el: "button", type: "button", label: "h2" },
+        { el: "button", type: "button", label: "h3" },
+        { el: "button", type: "button", label: "h4" },
+        { el: "button", type: "button", label: "h5" },
+        { el: "button", type: "button", label: "h6" },
+      ];
+
+      for (var i = 0; i < secondRowMenu.length; i++) {
+        var el = document.createElement(secondRowMenu[i].el);
+        el.id = "btn-2-" + i;
+        el.innerHTML = secondRowMenu[i].label;
+        el.type = secondRowMenu[i].type;
+        el.onclick = function (e) {
+          const el = e.target.id;
+          switch (el) {
+            case "btn-2-0":
+              document.execCommand("formatBlock", false, "h1");
+              saveChange();
+              break;
+            case "btn-2-1":
+              document.execCommand("formatBlock", false, "h2");
+              saveChange();
+              break;
+            case "btn-2-2":
+              document.execCommand("formatBlock", false, "h3");
+              saveChange();
+              break;
+            case "btn-2-3":
+              document.execCommand("formatBlock", false, "h4");
+              saveChange();
+              break;
+            case "btn-2-4":
+              document.execCommand("formatBlock", false, "h5");
+              saveChange();
+              break;
+            case "btn-2-5":
+              document.execCommand("formatBlock", false, "h6");
+              saveChange();
+              break;
+
+            default:
+              break;
+          }
+        };
+        editorMenuSecondRow.appendChild(el);
+      }
+
+      //editor setup
       var editor = document.createElement("div");
       editor.id = "b-editor";
       editor.className = "editor-text";
@@ -355,10 +460,7 @@ function j(selector) {
       editor.spellcheck = "true";
       editorContainer.appendChild(editor);
 
-      /**
-       * Initialize
-       */
-
+      // data binding
       //j('#b-editor').element.innerHTML = self.element.innerHTML;
       j("#b-editor").element.innerHTML = self.element.value;
       self.element.setAttribute("hidden", "hidden");
@@ -372,7 +474,7 @@ function j(selector) {
         j("#b-editor").element.innerHTML = self.element.value;
         //self.element.innerHTML = j('#b-editor').element.innerHTML;
       });
-
+      // set data to target element
       function saveChange() {
         self.element.innerHTML = j("#b-editor").element.innerHTML;
       }
@@ -384,46 +486,6 @@ function j(selector) {
         document.execCommand('formatBlock', false, 'h1');
       });
       */
-
-      // Italic menu
-      document.querySelector("#btn-0").addEventListener("click", function () {
-        document.execCommand("bold");
-        saveChange();
-      });
-      // Bold menu
-      document.querySelector("#btn-1").addEventListener("click", function () {
-        document.execCommand("italic");
-        saveChange();
-      });
-      // Underline menu
-      document.querySelector("#btn-2").addEventListener("click", function () {
-        document.execCommand("underline");
-        saveChange();
-      });
-      // List menu
-      document.querySelector("#btn-3").addEventListener("click", function () {
-        document.execCommand("insertUnorderedList");
-        saveChange();
-      });
-      document.querySelector("#btn-4").addEventListener("click", function () {
-        document.execCommand("insertOrderedList");
-        saveChange();
-      });
-      // Picture menu
-      document.querySelector("#btn-5").addEventListener("click", function () {
-        document.execCommand(
-          "insertImage",
-          false,
-          "http://usefulangle.com/img/posts/17-1px.jpg"
-        );
-        saveChange();
-      });
-      // Link menu
-      document.querySelector("#btn-6").addEventListener("click", function () {
-        var url = prompt("Enter the link here: ", "http://");
-        document.execCommand("createlink", false, url);
-        saveChange();
-      });
     },
     //end rich text editor
 

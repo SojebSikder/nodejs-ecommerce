@@ -1,8 +1,8 @@
 import { Module } from "../../system/src/core/decorator";
+import { AdminDashboardController } from "./admin/adminDashboard/adminDashboard.controller";
 import { AdminCategoryController } from "./admin/adminProduct/adminCategory/adminCategory.controller";
 import { AdminProductController } from "./admin/adminProduct/product.controller";
 import { AdminShopController } from "./admin/adminShop/adminShop.controller";
-import { IndexController } from "./admin/index/index.controller";
 import { CartController } from "./cart/cart.controller";
 import { CategoryController } from "./category/category.controller";
 import { InvoiceController } from "./invoice/invoice.controller";
@@ -23,7 +23,6 @@ import { UserController } from "./user/user.controller";
     ProductController,
     CartController,
     OrderController,
-    IndexController,
     InvoiceController,
     ShopController,
     CategoryController,
@@ -36,6 +35,7 @@ import { UserController } from "./user/user.controller";
     SellerShopController,
     // end seller imports
     // admin
+    AdminDashboardController,
     AdminProductController,
     AdminCategoryController,
     AdminShopController,

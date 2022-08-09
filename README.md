@@ -6,6 +6,7 @@ NodeJS multivendor ecommerce application
 
 - Written in Typescript
 - Multivendor support
+- Admin dashboard
 - Seller dashboard - for managing product inventory and orders
 - Paypal, stripe payment gateway integration
 - Order receipt pdf generation
