@@ -86,14 +86,18 @@ export class OrderController {
     middleware: [decorateHtmlResponse(), authorization()],
   })
   async pay(req: Request, res: Response) {
-    // pay for existing order
-    const id = req.params.id;
-    const data = await OrderService.getInstance().pay({
-      orderID: id,
-      signedCookies: req.signedCookies,
-      req,
-      res,
-    });
+    try {
+      // pay for existing order
+      const id = req.params.id;
+      const data = await OrderService.getInstance().pay({
+        orderID: id,
+        signedCookies: req.signedCookies,
+        req,
+        res,
+      });
+    } catch (error) {
+      res.redirect("/error");
+    }
   }
 
   @Post("/cancel/:id", {

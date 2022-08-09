@@ -35,8 +35,19 @@
             <% } %>
 
             <div class="mb-3">
-              <input class="form-control" placeholder="Enter name" type="text" name="name" />
+              <input class="form-control" placeholder="Enter category name" type="text" name="name" />
             </div>
+
+            <div class="mb-3">
+              <select class="form-control" name="parent" id="">
+                <option value="0">No parent</option>
+                <% for(let category of categories) {%>
+                <option value="<%= category.id %>"><%= category.name %></option>
+                <% } %>
+              </select>
+            </div>
+
+
 
             <div class="mb-3">
               <input class="btn btn-primary" type="submit" value="Submit" />

@@ -11,6 +11,7 @@ import {
   getShopDetails,
 } from "./middlewares/common/decorateHtmlResponse";
 import { isSeller } from "./middlewares/common/checkLogin";
+import { getCategory } from "./middlewares/product/category";
 
 /**
  * Use any middleware here
@@ -22,6 +23,7 @@ export function boot(app: Express) {
   // custom middleware here
 
   app.use(decorateHtmlSearchResponse());
+  app.use(getCategory());
   app.use(setUser());
   app.use("/seller", authorization(), isSeller(), getShopDetails());
 }

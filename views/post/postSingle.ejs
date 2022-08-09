@@ -13,9 +13,11 @@
         <h5 class="card-title">
           <%= post.name %>
         </h5>
+        <% if(post.shop) {%>
         <p class="card-text">
-          <%= post.shop.ShopDetails[0].displayName %>
+          <a href="/shop/<%= post.shop.ShopDetails[0].name %>"><%= post.shop.ShopDetails[0].displayName %></a>
         </p>
+        <% } %>
         <p class="card-text">
           <%= post.description %>
         </p>

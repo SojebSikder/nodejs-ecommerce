@@ -12,23 +12,35 @@ import { AdminCategoryService } from "./adminCategory.service";
 })
 export class AdminCategoryController {
   //
+  @Get("test")
+  async showCategory(req: Request, res: Response) {
+    const data = await AdminCategoryService.getInstance().showCategory();
+    res.json({ data });
+  }
+
   @Get("add")
   async createPage(req: Request, res: Response) {
-    res.render("admin/product/category/add");
+    const result = await AdminCategoryService.getInstance().findAll();
+    res.render("admin/product/category/add", { categories: result });
   }
 
   @Post()
   async create(req: Request, res: Response) {
     const name = req.body.name;
+    const parentId = req.body.parent;
     const published = req.body.published;
 
     const result = await AdminCategoryService.getInstance().create({
       name: name,
+      parentId: parentId,
       published: published,
     });
 
+    const category = await AdminCategoryService.getInstance().findAll();
+
     res.render("admin/product/category/add", {
       message: "Category created successfully",
+      categories: category,
     });
   }
 

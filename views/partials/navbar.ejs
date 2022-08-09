@@ -39,6 +39,22 @@
         </li>
         <% } %>
 
+        <!-- Product category -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Category
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <% for(let category of categories){ %>
+            <li><a class="dropdown-item" href="/category/<%= category.slug %>"><%= category.name %></a></li>
+            <% } %>
+          </ul>
+
+          <script>
+            // implement multilevel category
+          </script>
+        </li>
+        <!-- End Product category -->
 
         <li class="nav-item">
           <a class="nav-link" href="/shop">

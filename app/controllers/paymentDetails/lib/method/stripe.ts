@@ -42,24 +42,6 @@ export class StripeMethod implements IMethod {
     });
 
     redirect_callback(session.url);
-
-    // return await this.stripe.paymentIntents
-    //   .create({
-    //     // payment_method: "pm_card_visa",
-    //     // payment_method_types: ["card"],
-    //     customer: this.customer.id,
-    //     setup_future_usage: "off_session",
-    //     amount: TotalPrice,
-    //     currency: "USD",
-    //     confirm: true,
-    //     automatic_payment_methods: {
-    //       enabled: true,
-    //     },
-    //     return_url: this.redirect_urls.return_url,
-    //   })
-    //   .then((paymentIntent) => {
-    //     redirect_callback(this.redirect_urls.return_url);
-    //   });
   }
 
   async success({ price, success_callback, PayerID, PaymentID }) {

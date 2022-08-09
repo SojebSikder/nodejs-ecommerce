@@ -1,8 +1,12 @@
-<%- include('partials/header'); -%>
-<%- include('partials/navbar'); -%>
+<%- include('../../partials/header'); -%>
+<%- include('../../partials/navbar'); -%>
 
 <div class="container">
-  <h1>Buy here with joy</h1>
+  <h2><%= categoryName %> category</h2>
+
+  <% if(posts.data.length == 0){ %>
+  <div>Products not found for <%= categoryName %> category</div>
+  <% } %>
 
 
   <% if(search.q){ %>
@@ -104,4 +108,4 @@
   </div>
 </div>
 
-<%- include('partials/footer'); -%>
+<%- include('../../partials/footer'); -%>

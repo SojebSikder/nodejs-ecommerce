@@ -64,14 +64,15 @@
 
         <!-- display images -->
         <% for(let image in post.ProductImage){ %>
-        <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[image].url %>" alt=" <%= post.name %>" />
+        <img class="card-img-top" src="/uploads/products/<%= post.ProductImage[image].url %>" alt="<%= post.name %>" />
         <% } %>
       </a>
-
       <div class="card-body">
-        <h5 class="card-title"> <a href="/product/<%= post.id %>">
+        <h5 class="card-title">
+          <a href="/product/<%= post.id %>">
             <%= post.name %>
-          </a> </h5>
+          </a>
+        </h5>
         <p class="card-text">
           <%= post.description %>
         </p>

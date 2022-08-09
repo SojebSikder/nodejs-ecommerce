@@ -36,9 +36,13 @@ export class AdminProductController {
 
   @Get(":id", { middleware: [decorateHtmlResponse()] })
   async show(req: Request, res: Response) {
-    const id = req.params.id;
-    const result = await ProductService.getInstance().show(id);
-    res.locals.title = `${result.name} - ${env("APP_NAME")}`;
-    res.render("post/postSingle", { post: result });
+    try {
+      const id = req.params.id;
+      const result = await ProductService.getInstance().show(id);
+      res.locals.title = `${result.name} - ${env("APP_NAME")}`;
+      res.render("post/postSingle", { post: result });
+    } catch (error) {
+      res.redirect("/error");
+    }
   }
 }

@@ -21,8 +21,6 @@ export class PaypalMethod implements IMethod {
         payment_method: "paypal",
       },
       redirect_urls: {
-        // return_url: "http://localhost:3000/order/success?amount=" + totalPrice,
-        // cancel_url: "http://localhost:3000/order/cancel",
         return_url: `${env(
           "APP_URL"
         )}/order/success?amount=${totalPrice}&orderID=${orderid}`,
@@ -31,20 +29,11 @@ export class PaypalMethod implements IMethod {
       transactions: [
         {
           item_list: {
-            // items: [
-            //   {
-            //     name: "Redhock Bar Soap",
-            //     price: "55.00",
-            //     currency: "USD",
-            //     quantity: 1,
-            //   },
-            // ],
             items: itemsArray,
           },
           amount: {
             currency: "USD",
             total: totalPrice,
-            // total: "55.00",
           },
           description: "Buy products",
         },
@@ -57,7 +46,6 @@ export class PaypalMethod implements IMethod {
         for (let i = 0; i < payment.links.length; i++) {
           if (payment.links[i].rel === "approval_url") {
             redirect_callback(payment.links[i].href);
-            // res.redirect(payment.links[i].href);
           }
         }
       }
