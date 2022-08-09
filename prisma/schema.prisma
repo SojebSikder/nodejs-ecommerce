@@ -14,7 +14,7 @@ datasource db {
 model Data {
   id    Int     @id @default(autoincrement())
   title String?
-  text  String?
+  text  String? @db.Text
 }
 
 model Profile {
@@ -144,7 +144,7 @@ model Product {
   price       Int
   stock       Int?
   brand       String?  @db.VarChar(255)
-  description String?
+  description String?  @db.Text
   published   Boolean  @default(false)
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
@@ -200,7 +200,7 @@ model ShopDetails {
   name        String?
   phone       String?
   email       String?
-  description String?
+  description String?  @db.Text
   logo        String?
   shopId      Int?
   Shop        Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
@@ -257,7 +257,7 @@ model Order {
   // * 'order_paused'
   // */
   status    String?
-  comment   String?
+  comment   String? @db.Text
   addressId Int?
   address   Address? @relation(fields: [addressId], references: [id])
 

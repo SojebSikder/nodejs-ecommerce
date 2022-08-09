@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { body } from "express-validator";
 import { Controller, Get, Post } from "../../../../system/src/core/decorator";
 import { decorateHtmlResponse } from "../../../middlewares/common/decorateHtmlResponse";
 import { attachmentUpload } from "../../../middlewares/common/upload";
@@ -48,6 +49,12 @@ export class SellerProductController {
   @Post("", {
     middleware: [
       decorateHtmlResponse(),
+      body("name").isString().isLength({ min: 1 }).trim().escape(),
+      body("description").isLength({ min: 1 }).escape(),
+      body("price").isLength({ min: 1 }).escape(),
+      body("stock").isLength({ min: 1 }).escape(),
+      body("published").isLength({ min: 1 }).escape(),
+      body("categoryId").isLength({ min: 1 }).escape(),
       attachmentUpload({
         fieldname: [{ name: "image", maxCount: 1 }],
         distination: "products",
@@ -105,6 +112,12 @@ export class SellerProductController {
   @Post("edit/:id", {
     middleware: [
       decorateHtmlResponse(),
+      body("name").isString().isLength({ min: 1 }).trim().escape(),
+      body("description").isLength({ min: 1 }).escape(),
+      body("price").isLength({ min: 1 }).escape(),
+      body("stock").isLength({ min: 1 }).escape(),
+      body("published").isLength({ min: 1 }).escape(),
+      body("categoryId").isLength({ min: 1 }).escape(),
       attachmentUpload({
         distination: "products",
         fieldname: [{ name: "image", maxCount: 1 }],
@@ -122,6 +135,7 @@ export class SellerProductController {
     const categoryId = req.body.category;
     const published = req.body.published;
 
+    console.log(description);
 
     await SellerProductService.getInstance().update(id, {
       productName: name,
