@@ -41,6 +41,9 @@ ul,
   list-style-type: none;
 }
 
+#ccontainer {
+  padding-left: 0;
+}
 /* Remove margins and padding from the parent ul */
 #myUL {
   margin: 0;
