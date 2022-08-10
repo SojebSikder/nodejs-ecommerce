@@ -9,7 +9,7 @@ NodeJS multivendor ecommerce application
   - Multiple seller can sell their products
 - Admin dashboard
   - Shop management
-  - Manage multilevel category for product
+  - Manage multi level category for product
 - Seller dashboard
   - Product inventory management
   - order management

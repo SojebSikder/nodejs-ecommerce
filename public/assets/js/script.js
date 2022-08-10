@@ -110,10 +110,13 @@ function toggleMultilevelCategory() {
       this.classList.toggle("caret-down");
     });
   }
+
   document.addEventListener("click", function () {
-    this.parentElement.querySelector(".nested").classList.toggle("active");
-    this.classList.toggle("caret-down");
-  });
+    const el = document.getElementById("ccontainer");
+    if(el.classList.contains("active")){
+      el.classList.remove("active")
+    }
+  },true);
   // var toggler = document.getElementsByClassName("caret");
   // var i;
 
