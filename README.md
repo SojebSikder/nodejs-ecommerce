@@ -15,7 +15,7 @@ NodeJS multivendor ecommerce application
   - order management
 - Payment gateway integration
   - Paypal
-  - Stripte
+  - Stripe
 - Order receipt pdf generation
 - And much more.
 
