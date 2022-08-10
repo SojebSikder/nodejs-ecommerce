@@ -319,6 +319,12 @@ export class ShopService {
       });
     }
 
+    // shorten length of description
+    result.Product.map((item) => [
+      (item.description = item.description.substring(0, 400) + "..."),
+      ...result.Product,
+    ]);
+
     return { data: result, pagination: pagination };
   }
 
