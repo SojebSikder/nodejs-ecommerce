@@ -46,8 +46,13 @@ export class AdminCategoryController {
 
   @Get()
   async findAll(req: Request, res: Response) {
+    const ajax = req.query.ajax;
     const result = await AdminCategoryService.getInstance().findAll();
-    res.render("admin/product/category/index", { category: result });
+    if (ajax) {
+      res.json({ category: result });
+    } else {
+      res.render("admin/product/category/index", { category: result });
+    }
   }
 
   @Get("edit/:id")

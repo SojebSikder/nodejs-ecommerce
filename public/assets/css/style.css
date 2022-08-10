@@ -34,6 +34,73 @@ a {
   z-index: 1;
 }
 
+/* multi level category */
+/* Remove default bullets */
+ul,
+#myUL {
+  list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+  /* content: "\25B6"; */
+  content: "";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+/* .nested {
+  display: none;
+} */
+.nested {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  width: max-content;
+}
+
+.nested li {
+  padding: 12px;
+  /* background-color: #f6f6f6; */
+  border-bottom: 1px solid #ddd;
+}
+
+.nested li:hover {
+  background-color: #f1f1f1;
+}
+
+.nested li:active {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: block;
+}
+/* end multi level category */
 
 @media (min-width: 992px) {
   body {

@@ -22,57 +22,59 @@ export class AdminCategoryService {
       },
     });
 
-    // Example data from the question
-    var nodes = result;
-    // We construct `t`, the array of parents, so that `t[i] === x` means that `x`
-    // is the parent of `i`
-    var t = [];
-    for (var i = 0; i < nodes.length; i++) {
-      // t[nodes[i].id] = nodes[i].parentId;
-      // t[nodes[i].id] = { parentId: nodes[i].parentId, data: nodes[i] };
-      t[nodes[i].id] = { parentId: nodes[i].parentId, ...nodes[i] };
-    }
+    // // Example data from the question
+    // var nodes = result;
+    // // We construct `t`, the array of parents, so that `t[i] === x` means that `x`
+    // // is the parent of `i`
+    // var t = [];
+    // for (var i = 0; i < nodes.length; i++) {
+    //   // t[nodes[i].id] = nodes[i].parentId;
+    //   // t[nodes[i].id] = { parentId: nodes[i].parentId, data: nodes[i] };
+    //   t[nodes[i].id] = { parentId: nodes[i].parentId, ...nodes[i] };
+    // }
 
-    // `t` represents the array of parents
-    // `c` represents the parent whose children should be put in the outputted array
-    function f(t, c) {
-      // The output structure
-      var a = [];
+    // // `t` represents the array of parents
+    // // `c` represents the parent whose children should be put in the outputted array
+    // function f(t, c) {
+    //   // The output structure
+    //   var a = [];
 
-      // We loop through all the nodes to fill `a`
-      for (var i = 0; i < t.length; i++) {
-        // If the node has the parent `c`
-        // if (t[i] === c) {
-        if (t[i] != undefined) {
-          if (t[i].parentId === c) {
-            // Create an object with the `id` and `sub` properties and push it
-            // to the `a` array
-            a.push({
-              id: i,
-              data: t[i],
-              // The `sub` property's value is generated recursively
-              sub: f(t, i),
-            });
-          }
-        }
-      }
+    //   // We loop through all the nodes to fill `a`
+    //   for (var i = 0; i < t.length; i++) {
+    //     // If the node has the parent `c`
+    //     // if (t[i] === c) {
+    //     if (t[i] != undefined) {
+    //       if (t[i].parentId === c) {
+    //         // Create an object with the `id` and `sub` properties and push it
+    //         // to the `a` array
+    //         a.push({
+    //           id: i,
+    //           data: t[i],
+    //           // The `sub` property's value is generated recursively
+    //           sub: f(t, i),
+    //         });
+    //       }
+    //     }
+    //   }
 
-      // Finish by returning the `a` array
-      return a;
-    }
+    //   // Finish by returning the `a` array
+    //   return a;
+    // }
 
-    // Print the outputted array in a pretty way
-    // We call the `f` function with the 0 parameter because 0 is the parent of the
-    // nodes that should be directly put in the returned array
-    var util = require("util");
-    console.log(
-      util.inspect(f(t, 0), {
-        colors: true,
-        depth: null,
-      })
-    );
+    // // Print the outputted array in a pretty way
+    // // We call the `f` function with the 0 parameter because 0 is the parent of the
+    // // nodes that should be directly put in the returned array
+    // var util = require("util");
+    // console.log(
+    //   util.inspect(f(t, 0), {
+    //     colors: true,
+    //     depth: null,
+    //   })
+    // );
 
-    return f(t, 0);
+    // return f(t, 0);
+
+    return result;
   }
 
   async create({ name, parentId, published }) {

@@ -39,22 +39,29 @@
         </li>
         <% } %>
 
-        <!-- Product category -->
+
+        <!-- multilevel category -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link caret">
             Category
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <% for(let category of categories){ %>
-            <li><a class="dropdown-item" href="/category/<%= category.slug %>"><%= category.name %></a></li>
-            <% } %>
-          </ul>
+          <ul id="myUL">
+            <li>
+              <!-- <span class="caret">Category</span> -->
+              <ul id="ccontainer" class="nested">
+                <li>Water</li>
+                <li>
+                  <span class="caret">Tea</span>
+                  <ul class="nested">
+                    <li>Black Tea</li>
+                  </ul>
+                </li>
 
-          <script>
-            // implement multilevel category
-          </script>
+              </ul>
+            </li>
+          </ul>
         </li>
-        <!-- End Product category -->
+        <!-- multilevel category -->
 
         <li class="nav-item">
           <a class="nav-link" href="/shop">
@@ -103,3 +110,49 @@
     </div>
   </div>
 </nav>
+
+
+<script>
+  attachMultiLevelDropdown();
+
+  function attachMultiLevelDropdown() {
+    // fetch category
+    http.ajax({
+      url: `/admin/product/category?ajax=true`,
+      method: 'GET',
+      dataType: "json",
+      success: function(data) {
+        // implement multilevel category
+        var nodes = data.category;
+        var t = [];
+        for (var i = 0; i < nodes.length; i++) {
+          t[nodes[i].id] = {
+            parentId: nodes[i].parentId,
+            ...nodes[i]
+          };
+        }
+
+        function f(t, c) {
+          // The output structure
+          var html = '';
+          html += '<ul>';
+          for (var i = 0; i < t.length; i++) {
+            if (t[i] != undefined) {
+              if (t[i].parentId === c) {
+                html += `<li>
+                  <a class="dropdown-item" href="/category/${t[i].slug}">${t[i].name}</a>`
+                html += f(t, i);
+                html += `</li>`
+              }
+            }
+          }
+          html += '</ul>';
+          return html;
+        }
+
+        const el = f(t, 0);
+        document.getElementById("ccontainer").innerHTML = el;
+      }
+    })
+  }
+</script>
