@@ -25,6 +25,11 @@ export class ProductService {
           OR: [
             { name: { contains: searchText } },
             { description: { contains: searchText } },
+            {
+              shop: {
+                ShopDetails: { every: { name: { contains: searchText } } },
+              },
+            },
           ],
         },
         orderBy: {
@@ -50,6 +55,11 @@ export class ProductService {
           OR: [
             { name: { contains: searchText } },
             { description: { contains: searchText } },
+            {
+              shop: {
+                ShopDetails: { every: { name: { contains: searchText } } },
+              },
+            },
           ],
         },
         orderBy: [
@@ -173,6 +183,11 @@ export class ProductService {
         OR: [
           { name: { contains: searchText } },
           { description: { contains: searchText } },
+          {
+            shop: {
+              ShopDetails: { every: { name: { contains: searchText } } },
+            },
+          },
         ],
       },
       orderBy: {
@@ -190,6 +205,11 @@ export class ProductService {
         OR: [
           { name: { contains: searchText } },
           { description: { contains: searchText } },
+          {
+            shop: {
+              ShopDetails: { every: { name: { contains: searchText } } },
+            },
+          },
         ],
       },
       orderBy: [
