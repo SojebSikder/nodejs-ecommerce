@@ -22,8 +22,9 @@ NodeJS multivendor ecommerce application
 ## Configure
 
 - Set up database credentials in env file
-- Migrate database using this command:
+- Migrate database using:
   `yarn prisma migrate dev`
+- Database seeding using: `yarn prisma db seed`
 
 ## Installing
 
