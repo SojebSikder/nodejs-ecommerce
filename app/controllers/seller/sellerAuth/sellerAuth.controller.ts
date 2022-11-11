@@ -15,6 +15,6 @@ export class SellerAuthController {
       httpOnly: true,
       signed: true,
     });
-    res.redirect("/seller/dashboard");
+    res.redirect("/seller");
   }
 }
