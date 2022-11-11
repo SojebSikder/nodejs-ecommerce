@@ -9,6 +9,7 @@ import { InvoiceController } from "./invoice/invoice.controller";
 import { OrderController } from "./order/order.controller";
 import { ProductController } from "./product/product.controller";
 import { RecoverPasswordController } from "./recoverPassword/recoverPassword.controller";
+import { SellerAuthController } from "./seller/sellerAuth/sellerAuth.controller";
 import { SellerDashboardController } from "./seller/sellerDashboard/sellerDashboard.controller";
 import { SellerOrderController } from "./seller/sellerOrder/sellerOrder.controller";
 import { SellerProductController } from "./seller/sellerProduct/sellerProduct.controller";
@@ -29,6 +30,7 @@ import { UserController } from "./user/user.controller";
     RecoverPasswordController,
     // end app imports
     // seller imports
+    SellerAuthController,
     SellerDashboardController,
     SellerProductController,
     SellerOrderController,

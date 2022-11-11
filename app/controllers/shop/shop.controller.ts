@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { env } from "../../../system/src";
+import { Auth, env } from "../../../system/src";
 import { Controller, Get, Post, Put } from "../../../system/src/core/decorator";
 import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
@@ -16,9 +16,12 @@ export class ShopController {
       signedCookies: req.signedCookies,
     });
 
+    const user = Auth.userByCookie(req.signedCookies);
+
     res.render("shop/shop-list", {
       message: "",
       shops: results,
+      user: user,
     });
   }
 
