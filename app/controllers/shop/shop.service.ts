@@ -38,6 +38,31 @@ export class ShopService {
   }
 
   /**
+   * check show while visiting to seller dashboard
+   */
+  public async checkShop({ domain, signedCookies, status = null }) {
+    const user = Auth.userByCookie(signedCookies);
+
+    const result = await prisma.shop.findFirst({
+      where: {
+        AND: [
+          {
+            userId: user.userid,
+          },
+          { domain: domain },
+          { status: status },
+        ],
+      },
+      include: {
+        ShopDetails: true,
+      },
+    });
+    console.log(result);
+
+    return result;
+  }
+
+  /**
    * show all data
    */
   public async index({ signedCookies, status = null }) {
