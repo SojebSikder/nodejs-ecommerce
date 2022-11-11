@@ -174,7 +174,7 @@ model Shop {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
-  userId    Int      @unique
+  userId    Int
 
   // subdomain name for store
   domain String?

@@ -445,11 +445,15 @@ export class ShopService {
         },
       });
 
-      result = await prisma.shop.delete({
-        where: {
-          userId: user.userid,
-        },
-      });
+      // delete shop
+      // const email = 'emelie@prisma.io'
+      // const result = await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email}`
+
+      // result = await prisma.shop.delete({
+      //   where: {
+      //     userId: user.userid,
+      //   },
+      // });
       message = "Shop deleted";
     } else {
       if (status) {
