@@ -5,12 +5,9 @@
     <div>
       <h1>Create Shop</h1>
     </div>
-
-    <% if(isShop){ %>
-    <div class="alert alert-primary" role="alert">
-      You already submitted. And shop status is: <strong><%= message %></strong>
+    <div>
+      <a class="btn btn-primary" href="/shop/shop-list">View Shops</a>
     </div>
-    <% }else{ %>
 
     <div class="align-items-center">
       <form action="/shop/createshop" method="post">
@@ -54,7 +51,6 @@
 
       </form>
     </div>
-    <% } %>
 
   </div>
 

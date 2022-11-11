@@ -18,6 +18,28 @@ export class ShopService {
   /**
    * show all data
    */
+  public async indexAll({ signedCookies, status = null }) {
+    const user = Auth.userByCookie(signedCookies);
+
+    const result = await prisma.shop.findMany({
+      where: {
+        AND: [
+          {
+            userId: user.userid,
+          },
+          status != null ? { status: status } : {},
+        ],
+      },
+      include: {
+        ShopDetails: true,
+      },
+    });
+    return result;
+  }
+
+  /**
+   * show all data
+   */
   public async index({ signedCookies, status = null }) {
     const user = Auth.userByCookie(signedCookies);
 

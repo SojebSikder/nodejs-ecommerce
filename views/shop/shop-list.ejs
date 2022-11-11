@@ -1,0 +1,38 @@
+<%- include('../partials/header'); -%>
+<%- include('../partials/navbar'); -%>
+<div class="container">
+  <div class="d-flex flex-column justify-content-center">
+    <div>
+      <div>
+        <h1>Shops</h1>
+      </div>
+    </div>
+
+    <div>
+      <% for(let shop of shops){ %>
+      <a href="/seller">
+        <div class="card">
+          <div class="card-body">
+            <%= shop.ShopDetails[0].name %>
+            <%= shop.status %>
+          </div>
+        </div>
+      </a>
+      <% } %>
+    </div>
+
+
+  </div>
+
+</div>
+
+<script>
+  //show image from local image upload
+  j("#image").on("change", function() {
+    j("#image").imageSet(j("#img"));
+    j('#img').css('width', '500px');
+    j('#img').css('height', '500px');
+  });
+</script>
+
+<%- include('../partials/footer'); -%>

@@ -8,23 +8,27 @@ import { ShopService } from "./shop.service";
 @Controller("/shop/")
 export class ShopController {
   //
+  @Get("shop-list", {
+    middleware: [authorization(), decorateHtmlResponse("Shop list")],
+  })
+  async shopListPage(req: Request, res: Response) {
+    const results = await ShopService.getInstance().indexAll({
+      signedCookies: req.signedCookies,
+    });
+
+    res.render("shop/shop-list", {
+      message: "",
+      shops: results,
+    });
+  }
+
   @Get("createshop", {
     middleware: [authorization(), decorateHtmlResponse("Create shop")],
   })
   async createshopPage(req: Request, res: Response) {
-    let isShop = false;
-    const result = await ShopService.getInstance().index({
-      signedCookies: req.signedCookies,
+    res.render("shop/create-shop", {
+      message: "",
     });
-    if (result) {
-      isShop = true;
-      res.render("shop/create-shop", {
-        message: result.status,
-        isShop: isShop,
-      });
-    } else {
-      res.render("shop/create-shop", { message: "", isShop: isShop });
-    }
   }
 
   @Post("createshop", {
@@ -48,7 +52,7 @@ export class ShopController {
     });
 
     if (result.success == true) {
-      res.redirect("/shop/createshop");
+      res.redirect("/shop/shop-list");
     } else {
       res.render("shop/create-shop", {
         message: result.message,
