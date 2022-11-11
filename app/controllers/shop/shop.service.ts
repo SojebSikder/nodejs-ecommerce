@@ -384,9 +384,16 @@ export class ShopService {
   }) {
     const user = Auth.userByCookie(signedCookies);
 
+    const _name = name.toLowerCase();
+    const domain = _name;
+    const checkShopDomainExist = await prisma.shop.findFirst({
+      where: {
+        domain: domain,
+      },
+    });
     const checkShopNameExist = await prisma.shopDetails.findFirst({
       where: {
-        name: name,
+        name: _name,
       },
     });
 
@@ -395,7 +402,11 @@ export class ShopService {
     let message = "";
     let success = true;
 
-    if (checkShopNameExist) {
+    if (checkShopDomainExist) {
+      statusCode = 400;
+      message = "Shop domain already exist";
+      success = false;
+    } else if (checkShopNameExist) {
       statusCode = 400;
       message = "Shop name already exist";
       success = false;
@@ -403,9 +414,10 @@ export class ShopService {
       result = await prisma.shop.create({
         data: {
           userId: user.userid,
+          domain: domain,
           ShopDetails: {
             create: {
-              name: name,
+              name: _name,
               displayName: displayName,
               email: email,
               description: description,
