@@ -23,11 +23,13 @@ export class SellerProductController {
         isSearch: true,
         searchText: String(q),
         signedCookies: req.signedCookies,
+        domain: req['subDomain'],
       });
     } else {
       result = await SellerProductService.getInstance().findAll({
         page: Number(page),
         signedCookies: req.signedCookies,
+        domain: req['subDomain'],
       });
     }
 
@@ -80,6 +82,7 @@ export class SellerProductController {
       image: file,
       categoryId: categoryId,
       signedCookies: req.signedCookies,
+      domain: req['subDomain'],
     });
 
     const category = await SellerProductService.getInstance().getCategory();
@@ -102,6 +105,7 @@ export class SellerProductController {
     const result = await SellerProductService.getInstance().edit({
       Id: id,
       signedCookies: req.signedCookies,
+      domain: req['subDomain'],
     });
 
     const category = await SellerProductService.getInstance().getCategory();
@@ -144,6 +148,7 @@ export class SellerProductController {
       Published: published,
       image: file,
       signedCookies: req.signedCookies,
+      domain: req['subDomain'],
     });
 
     res.redirect(`/seller/product/edit/${id}`);
@@ -154,6 +159,7 @@ export class SellerProductController {
     const id = req.params.id;
     await SellerProductService.getInstance().remove(id, {
       signedCookies: req.signedCookies,
+      domain: req['subDomain'],
     });
     res.redirect("/seller/product");
   }
