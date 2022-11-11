@@ -98,7 +98,6 @@ export class UserController {
     const result = await UserService.getInstance().findOne({
       signedCookies: req.signedCookies,
     });
-    console.log(result);
     res.render("profile/index", { user: result });
   }
 }

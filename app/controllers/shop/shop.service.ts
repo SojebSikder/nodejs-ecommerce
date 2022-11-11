@@ -57,7 +57,6 @@ export class ShopService {
         ShopDetails: true,
       },
     });
-    console.log(result);
 
     return result;
   }
