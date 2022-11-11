@@ -3,7 +3,7 @@ import { env } from "../../../../system/src";
 import { Controller, Get } from "../../../../system/src/core/decorator";
 import { SellerAuthService } from "./sellerAuth.service";
 
-@Controller("/seller/auth/")
+@Controller("/auth/")
 export class SellerAuthController {
   //
   @Get("login")

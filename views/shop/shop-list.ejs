@@ -10,7 +10,7 @@
 
     <div>
       <% for(let shop of shops){ %>
-      <a target="_blank" href="http://<%= shop.domain %>.<%= process.env.APP_SUBHOST %>/seller/auth/login?token=<%= token %>">
+      <a target="_blank" href="http://<%= shop.domain %>.<%= process.env.APP_SUBHOST %>/auth/login?token=<%= token %>">
         <div class="card mb-2">
           <div class="card-body">
             <%= shop.ShopDetails[0].name %>

@@ -27,5 +27,7 @@ export function boot(app: Express) {
   app.use(decorateHtmlSearchResponse());
   app.use(getCategory());
   app.use(setUser());
+
+  // app.use("/seller", authorization(), isSeller(), getShopDetails());
   app.use("/seller", authorization(), isSeller(), getShopDetails());
 }
