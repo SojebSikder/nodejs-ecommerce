@@ -1,32 +1,44 @@
 import { IStorage } from "./iStorage";
 import fs from "fs/promises";
+import { DiskOption } from "../Option";
 
 /**
  * LocalAdapter for local file storage
  */
 export class LocalAdapter implements IStorage {
-  /**
-   * root url for file storage
-   */
-  rootUrl: string;
+  private _config: DiskOption;
 
-  constructor(rootUrl: string) {
-    this.rootUrl = rootUrl;
+  constructor(config: DiskOption) {
+    this._config = config;
   }
+
+  /**
+   * returns file url
+   * @param key
+   * @returns
+   */
+  url(key: string): string {
+    return `${process.env.APP_URL}/${key}`;
+  }
+
   /**
    * get data
    * @param key
    */
   async get(key: string) {
     try {
-      const data = await fs.readFile(`${this.rootUrl}/${key}`, {
-        encoding: "utf8",
-      });
+      const data = await fs.readFile(
+        `${this._config.connection.rootUrl}/${key}`,
+        {
+          encoding: "utf8",
+        }
+      );
       return data;
     } catch (err) {
       console.log(err);
     }
   }
+
   /**
    * put data
    * @param key
@@ -34,18 +46,17 @@ export class LocalAdapter implements IStorage {
    */
   async put(key: string, value: any) {
     try {
-      await fs.writeFile(`${this.rootUrl}/${key}`, value);
+      await fs.writeFile(`${this._config.connection.rootUrl}/${key}`, value);
     } catch (err) {
       console.log(err);
     }
   }
+
   /**
    * delete data
    * @param key
    */
   async delete(key: string) {
-    await fs.unlink(`${this.rootUrl}/${key}`);
+    await fs.unlink(`${this._config.connection.rootUrl}/${key}`);
   }
 }
-
-// module.exports = MySQLAdapter;

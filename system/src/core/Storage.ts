@@ -1,7 +1,7 @@
-// import filesystemConfig from "../../config/filesystems";
-import { filesystemConfig } from "../Config";
 import { StorageClass } from "./Disk/StorageClass";
 import { LocalAdapter } from "./Disk/drivers/LocalAdapter";
+import { DiskOption } from "./Disk/Option";
+import { S3Adapter } from "./Disk/drivers/S3Adapter";
 
 /**
  * Storage class for handling storage
@@ -9,19 +9,22 @@ import { LocalAdapter } from "./Disk/drivers/LocalAdapter";
  * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class Storage {
-  private static _instance: Storage;
-  // Default filesystem disk
-  public defaultDisk: string = filesystemConfig.default;
+  private static _config: DiskOption;
 
   /**
-   * Create instance
-   * @returns
+   * Storage configuration
+   * @param config
    */
-  public static instance(): Storage {
-    if (!this._instance) {
-      this._instance = new Storage();
-    }
-    return this._instance;
+  public static config(config: DiskOption) {
+    this._config = config;
+  }
+
+  /**
+   * Returns configuration
+   * @returns {DiskOption}
+   */
+  public static getConfig(): DiskOption {
+    return this._config;
   }
 
   /**
@@ -29,8 +32,8 @@ export class Storage {
    * @param disk
    * @returns
    */
-  public disk(disk: string): Storage {
-    this.defaultDisk = disk;
+  public static disk(disk: string): Storage {
+    this._config.driver = disk;
     return this;
   }
   /**
@@ -39,9 +42,19 @@ export class Storage {
    * @param value
    * @returns
    */
-  public put(key: string, value: any): Storage {
+  public static async put(key: string, value: any) {
     const disk = this.storageDisk();
     return disk.put(key, value);
+  }
+
+  /**
+   * get data url
+   * @param key
+   * @returns
+   */
+  public static async url(key: string) {
+    const disk = this.storageDisk();
+    return await disk.url(key);
   }
 
   /**
@@ -49,9 +62,9 @@ export class Storage {
    * @param key
    * @returns
    */
-  public async get(key: string) {
+  public static async get(key: string) {
     const disk = this.storageDisk();
-    return disk.get(key);
+    return await disk.get(key);
   }
 
   /**
@@ -59,33 +72,32 @@ export class Storage {
    * @param key
    * @returns
    */
-  public async delete(key: string) {
+  public static async delete(key: string) {
     const disk = this.storageDisk();
-    return disk.delete(key);
+    return await disk.delete(key);
   }
 
   /**
    * process storage disk type
    * @returns
    */
-  private storageDisk() {
-    const defaultDiskValue: string = this.defaultDisk;
-    const driver: string = filesystemConfig.disks[defaultDiskValue].driver;
-    const rootUrl: string = filesystemConfig.disks[defaultDiskValue].root;
+  private static storageDisk() {
+    const driver: string = this._config.driver;
+    const config: DiskOption = this._config;
 
     let driverAdapter;
     switch (driver) {
       // for local filesystem
       case "local":
-        driverAdapter = new LocalAdapter(rootUrl);
+        driverAdapter = new LocalAdapter(config);
         break;
-        
-      // case "s3":
-      //   driverAdapter = new S3Adapter();
-      //   break;
+
+      case "s3":
+        driverAdapter = new S3Adapter(config);
+        break;
 
       default:
-        driverAdapter = new LocalAdapter(rootUrl);
+        driverAdapter = new LocalAdapter(config);
         break;
     }
     return new StorageClass(driverAdapter);

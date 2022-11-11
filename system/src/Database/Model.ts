@@ -1,5 +1,6 @@
 import { Builder } from "./Builder";
 import { Dbase } from "./database/Dbase";
+import { Sorm } from "./Sorm";
 
 /**
  * Model class
@@ -15,13 +16,15 @@ export class Model extends Builder {
 
   constructor() {
     super();
+    this.config(Sorm.getConfig());
     this.db = this.DBSwitcher();
   }
 
   /**
    * Switching database driver
    */
-  public DBSwitch($switch = false) {
-    return this.DBSwitcher($switch);
+  public DBSwitch(toggle) {
+    this.config(Sorm.getConfig());
+    return this.DBSwitcher(toggle);
   }
 }

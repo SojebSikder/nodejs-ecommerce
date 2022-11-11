@@ -1,8 +1,14 @@
 import mysql from "mysql";
 
-import { dbConfig } from "../../../Config";
 import { IAdapter } from "./iAdapter";
 
+type Option = {
+  host?: string;
+  user?: string;
+  password?: string;
+  dbname?: string;
+  databaseUrl?: string;
+};
 /**
  * MySQL adapter class
  * @class MySQLAdapter
@@ -10,18 +16,25 @@ import { IAdapter } from "./iAdapter";
  * @author Sojeb Sikder <sojebsikder@gmail.com>
  */
 export class MySQLAdapter implements IAdapter {
-  public host = dbConfig.connection.mysql.host;
-  public user = dbConfig.connection.mysql.username;
-  public pass = dbConfig.connection.mysql.password;
-  public dbname = dbConfig.connection.mysql.database;
-
-  public databaseUrl = dbConfig.connection.mysql.url;
+  private host: string;
+  private user: string;
+  private pass: string;
+  private dbname: string;
+  private databaseUrl: string;
 
   public connection;
   public error;
 
-  constructor() {
-    this.connectDB();
+  constructor(connection: Option) {
+    this.host = connection.host;
+    this.user = connection.user;
+    this.pass = connection.password;
+    this.dbname = connection.dbname;
+    this.databaseUrl = connection.databaseUrl;
+
+    if (this.databaseUrl != null) {
+      this.connectDB();
+    }
   }
 
   private connectDB = () => {

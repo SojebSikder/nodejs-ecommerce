@@ -7,28 +7,39 @@ export class StorageClass {
   }
 
   /**
+   * get data url
+   * @param key
+   * @returns
+   */
+  public async url(key: string) {
+    return await this.adapter.url(key);
+  }
+
+  /**
    * read data
    * @param key
    * @returns
    */
-  public get(key: string) {
-    return this.adapter.get(key);
+  public async get(key: string) {
+    return await this.adapter.get(key);
   }
+
   /**
    * store data
    * @param key
    * @param value
    * @returns
    */
-  public put(key: string, value: any) {
-    return this.adapter.put(key, value);
+  public async put(key: string, value: any) {
+    return await this.adapter.put(key, value);
   }
+
   /**
    * delete data
    * @param key
    * @returns
    */
-  delete(key: string) {
-    return this.adapter.delete(key);
+  public async delete(key: string) {
+    return await this.adapter.delete(key);
   }
 }

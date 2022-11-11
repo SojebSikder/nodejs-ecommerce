@@ -9,6 +9,7 @@ export const appConfig = {
     "COOKIE_SECRET",
     "c0a4e53c6991d8c0917a942de9cec9ffeed227cc"
   ),
+
   /**
    * Application security.
    */
@@ -17,11 +18,12 @@ export const appConfig = {
       enable: true,
       options: {},
     },
+
     /**
      * Helmet helps you secure your Express apps by setting various HTTP headers.
      */
     helmet: {
-      enable: false,
+      enable: true,
       options: {
         contentSecurityPolicy:
           process.env.NODE_ENV === "production" ? undefined : false,

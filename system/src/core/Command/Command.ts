@@ -81,36 +81,42 @@ export class Command {
   public static comment(text) {
     console.log(`${this.yellow}${text}\n${this.white}`);
   }
+
   /**
    * Output comment with color green
    */
   public static success(text) {
     console.log(`${this.green}${text}\n${this.white}`);
   }
+
   /**
    * Output comment with color red
    */
   public static danger(text) {
     console.log(`${this.red}${text}\n${this.white}`);
   }
+
   /**
    * Output comment with color white
    */
   public static line(text) {
     console.log(`${this.white}${text}\n${this.white}`);
   }
+
   /**
    * Output comment with color blue
    */
   public static info(text) {
     console.log(` ${this.blue} ${text}\n${this.white}`);
   }
+
   /**
    * Output comment
    */
   public static plain(text) {
     console.log(`${text}\n`);
   }
+
   /**
    * Get value from command prompt
    */

@@ -23,7 +23,7 @@ NodeJS multivendor ecommerce application
 
 - Set up database credentials in env file
 - Migrate database using this command:
-  `npx prisma migrate dev`
+  `yarn prisma migrate dev`
 
 ## Installing
 
@@ -59,18 +59,6 @@ yarn start
 yarn start:dev
 ```
 
-Or Install nodemon globally
-
-```
-yarn global add nodemon
-```
-
-Then run using this
-
-```
-nodemon app.ts
-```
-
 ## Technology used
 
 - (Boilerplate) http://github.com/sojebsikder/create-sojeb-express-ts-app
@@ -87,7 +75,7 @@ If you clone this repo then you have to setup these things manually.
 
 - Copy .env.example to .env And set up database credentials in env file
 - Migrate database using this command:
-  `npx prisma migrate dev`
+  `yarn prisma migrate dev`
 
 ## For help and support
 

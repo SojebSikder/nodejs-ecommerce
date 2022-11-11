@@ -1,5 +1,5 @@
 import { appConfig } from "./config/app";
-import { Bihongo } from "./system/src";
+import { Bihongo } from "./system/src/core/Bihongo";
 
 const app = Bihongo.app();
 // run server

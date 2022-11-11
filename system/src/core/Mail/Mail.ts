@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
-import { mailConfig } from "../../../../config/mail";
-// import { mailConfig } from "../../Config";
+import { MailOption } from "./Option";
 
 // mail attachment option
 type attachmentOption = {
@@ -25,13 +24,14 @@ type attachmentOption = {
  *  .send();
  */
 export class Mail {
-  private static host = mailConfig.mailers.smtp.host;
-  private static port = mailConfig.mailers.smtp.port;
-  private static user = mailConfig.mailers.smtp.username;
-  private static pass = mailConfig.mailers.smtp.password;
+  private static host;
+  private static port;
+  private static user;
+  private static pass;
+  private static secure;
 
   // mail options
-  private static from = mailConfig.from.address;
+  private static from;
   // to: recepient
   private static recepient = "";
   // subject
@@ -41,6 +41,29 @@ export class Mail {
   // attachment
   private static _attachment;
   private static _isAttachment = false;
+
+  /**
+   * Mail configuration
+   * @param config
+   */
+  public static config(config: MailOption) {
+    if (config.connection.host) {
+      this.host = config.connection.host;
+    }
+    if (config.connection.username) {
+      this.user = config.connection.username;
+    }
+    if (config.connection.password) {
+      this.pass = config.connection.password;
+    }
+    if (config.connection.port) {
+      this.port = config.connection.port;
+    }
+    if (config.connection.from.address) {
+      this.from = config.connection.from.address;
+    }
+    this.secure = config.connection.secure;
+  }
 
   /**
    * Mail recepient
@@ -93,10 +116,9 @@ export class Mail {
   public static send(html = false) {
     try {
       let transporter = nodemailer.createTransport({
-        // host: "smtp.gmail.com",
-        host: this.host,
-        port: 465,
-        secure: true,
+        host: this.host || "smtp.gmail.com",
+        port: this.port || 465,
+        secure: this.secure,
         auth: {
           user: this.user,
           pass: this.pass,
