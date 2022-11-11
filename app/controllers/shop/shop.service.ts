@@ -38,7 +38,20 @@ export class ShopService {
   }
 
   /**
-   * check show while visiting to seller dashboard
+   * check domain
+   */
+  public async checkDomain({ domain, status = "approved" }) {
+    const result = await prisma.shop.findFirst({
+      where: {
+        AND: [{ domain: domain }, { status: status }],
+      },
+    });
+
+    return result;
+  }
+
+  /**
+   * check shop while visiting to seller dashboard
    */
   public async checkShop({ domain, signedCookies, status = null }) {
     const user = Auth.userByCookie(signedCookies);
