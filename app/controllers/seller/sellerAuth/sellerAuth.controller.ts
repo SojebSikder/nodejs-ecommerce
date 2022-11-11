@@ -7,7 +7,8 @@ export class SellerAuthController {
   //
   @Get("login")
   async login(req: Request, res: Response) {
+    const token = req.query.token;
     const login = await SellerAuthService.getInstance().login();
-    res.send("login successfully");
+    res.send(`token: ${token}`);
   }
 }
