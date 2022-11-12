@@ -44,9 +44,10 @@ export function decorateHtmlSearchResponse() {
  * Middleware for get shop details for seller
  */
 export function getShopDetails() {
-  return async function (req: Request, res: Response, next) {
+  return async function (req, res, next) {
     const shop = await ShopService.getInstance().index({
       signedCookies: req.signedCookies,
+      domain: req.subDomain,
     });
     res.locals.shopDetails = shop;
     next();
