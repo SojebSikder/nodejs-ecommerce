@@ -74,7 +74,7 @@ export class ProductService {
           name: true,
           description: true,
           price: true,
-          stock: true,
+          quantity: true,
           ProductImage: true,
           shop: {
             include: {
@@ -97,7 +97,7 @@ export class ProductService {
           name: true,
           description: true,
           price: true,
-          stock: true,
+          quantity: true,
           ProductImage: true,
           shop: {
             include: {
@@ -158,7 +158,7 @@ export class ProductService {
         name: true,
         description: true,
         price: true,
-        stock: true,
+        quantity: true,
         ProductImage: true,
         shop: {
           include: {
@@ -223,7 +223,7 @@ export class ProductService {
         name: true,
         description: true,
         price: true,
-        stock: true,
+        quantity: true,
         ProductImage: true,
         shop: {
           include: {
@@ -250,7 +250,7 @@ export class ProductService {
         name: true,
         description: true,
         price: true,
-        stock: true,
+        quantity: true,
         ProductImage: true,
         shop: {
           include: {
