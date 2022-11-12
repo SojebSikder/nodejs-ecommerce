@@ -25,10 +25,14 @@ export class SellerProductService {
     isSearch = false,
     searchText = "",
     signedCookies,
+    domain,
   }) {
     let paginationResult;
     // get store id
-    const shop = await ShopService.getInstance().index({ signedCookies });
+    const shop = await ShopService.getInstance().index({
+      domain: domain,
+      signedCookies,
+    });
     if (isSearch == true) {
       paginationResult = await prisma.product.findMany({
         where: {
@@ -125,6 +129,7 @@ export class SellerProductService {
     categoryId,
     image,
     signedCookies,
+    domain,
   }) {
     const file = image;
     const name = productName;
@@ -154,6 +159,7 @@ export class SellerProductService {
     // get user shop id
     const shop = await ShopService.getInstance().index({
       signedCookies: signedCookies,
+      domain: domain,
     });
 
     //
@@ -195,9 +201,12 @@ export class SellerProductService {
   /**
    * show specific data for editing
    */
-  async edit({ Id, signedCookies }) {
+  async edit({ domain, Id, signedCookies }) {
     const id = Id;
-    const store = await ShopService.getInstance().index({ signedCookies });
+    const store = await ShopService.getInstance().index({
+      domain: domain,
+      signedCookies,
+    });
     const result = await prisma.product.findFirst({
       where: {
         AND: [
@@ -227,6 +236,7 @@ export class SellerProductService {
       Published,
       image,
       signedCookies,
+      domain,
     }
   ) {
     const file = image;
@@ -258,6 +268,7 @@ export class SellerProductService {
     // get user store id
     const shop = await ShopService.getInstance().index({
       signedCookies: signedCookies,
+      domain: domain,
     });
 
     //
@@ -310,7 +321,7 @@ export class SellerProductService {
   /**
    * delete data
    */
-  async remove(Id, { signedCookies }) {
+  async remove(Id, { domain, signedCookies }) {
     const id = Id;
 
     // check user
@@ -319,6 +330,7 @@ export class SellerProductService {
     // get user store id
     const shop = await ShopService.getInstance().index({
       signedCookies: signedCookies,
+      domain: domain,
     });
 
     // delete data

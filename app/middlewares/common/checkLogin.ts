@@ -71,9 +71,10 @@ export function requireRole(role) {
 // guard to protect routes that those have shop.
 export function isSeller() {
   return async function (req, res, next) {
-    const shop = await ShopService.getInstance().index({
+    const shop = await ShopService.getInstance().checkShop({
       signedCookies: req.signedCookies,
       status: "approved",
+      domain: req.subDomain || "",
     });
     if (shop && shop.ShopDetails.length > 0) {
       next();

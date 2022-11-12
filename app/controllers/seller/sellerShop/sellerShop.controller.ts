@@ -11,6 +11,7 @@ export class SellerShopController {
   async indexPage(req: Request, res: Response) {
     const result = await SellerShopService.getInstance().index({
       signedCookies: req.signedCookies,
+      domain: req["subDomain"],
     });
     res.render("seller/shop/index", { shop: result });
   }
@@ -21,6 +22,7 @@ export class SellerShopController {
   async updatePage(req: Request, res: Response) {
     const result = await SellerShopService.getInstance().index({
       signedCookies: req.signedCookies,
+      domain: req["subDomain"],
     });
 
     res.render("seller/shop/edit", { shop: result });
@@ -44,11 +46,13 @@ export class SellerShopController {
       result = await SellerShopService.getInstance().updateShop({
         status: shopcommand,
         signedCookies: req.signedCookies,
+        domain: req["subDomain"],
       });
 
       res.redirect("/seller/shop");
     } else {
       result = await SellerShopService.getInstance().updateShopDetails({
+        domain: req["subDomain"],
         name,
         displayName,
         sellerStatus,
@@ -60,6 +64,7 @@ export class SellerShopController {
 
       const updated = await SellerShopService.getInstance().index({
         signedCookies: req.signedCookies,
+        domain: req["subDomain"],
       });
 
       // res.render("seller/shop/edit", {

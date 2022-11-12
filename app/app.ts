@@ -12,6 +12,7 @@ import {
 } from "./middlewares/common/decorateHtmlResponse";
 import { isSeller } from "./middlewares/common/checkLogin";
 import { getCategory } from "./middlewares/product/category";
+import { subdomainMiddleware } from "./middlewares/common/subdomain";
 
 /**
  * Use any middleware here
@@ -22,6 +23,7 @@ export function boot(app: Express) {
   app.use(cookieParser(appConfig.cookieSecret));
   // custom middleware here
 
+  app.use(subdomainMiddleware);
   app.use(decorateHtmlSearchResponse());
   app.use(getCategory());
   app.use(setUser());

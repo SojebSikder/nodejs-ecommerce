@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { env } from "../../../system/src";
+import { appConfig } from "../../../config/app";
+import { Auth, env } from "../../../system/src";
 import { Controller, Get, Post, Put } from "../../../system/src/core/decorator";
 import { authorization } from "../../middlewares/authorization";
 import { decorateHtmlResponse } from "../../middlewares/common/decorateHtmlResponse";
@@ -16,9 +17,18 @@ export class ShopController {
       signedCookies: req.signedCookies,
     });
 
+    // access token from cookies
+    let token = null;
+    const cookies =
+      Object.keys(req.signedCookies).length > 0 ? req.signedCookies : null;
+    if (cookies) {
+      token = cookies[appConfig.cookieName];
+    }
+
     res.render("shop/shop-list", {
       message: "",
       shops: results,
+      token: token,
     });
   }
 

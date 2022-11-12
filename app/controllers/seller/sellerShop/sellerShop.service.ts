@@ -16,7 +16,7 @@ export class SellerShopService {
     return this._instance;
   }
 
-  public async index({ signedCookies, status = null }) {
+  public async index({ domain, signedCookies, status = null }) {
     const user = Auth.userByCookie(signedCookies);
 
     const result = await prisma.shop.findFirst({
@@ -24,6 +24,9 @@ export class SellerShopService {
         AND: [
           {
             userId: user.userid,
+          },
+          {
+            domain: domain,
           },
           status != null ? { status: status } : {},
         ],
@@ -35,7 +38,7 @@ export class SellerShopService {
     return result;
   }
 
-  async updateShop({ status = null, signedCookies }) {
+  async updateShop({ domain, status = null, signedCookies }) {
     const user = Auth.userByCookie(signedCookies);
     let result;
     let data = {};
@@ -43,13 +46,14 @@ export class SellerShopService {
     let message = "";
     let success = true;
 
-    if (status == "delete") {
-      const ShopInfo = await prisma.shop.findFirst({
-        where: {
-          userId: user.userid,
-        },
-      });
+    const ShopInfo = await prisma.shop.findFirst({
+      where: {
+        userId: user.userid,
+        domain: domain,
+      },
+    });
 
+    if (status == "delete") {
       result = await prisma.shopDetails.deleteMany({
         where: {
           shopId: ShopInfo.id,
@@ -58,7 +62,7 @@ export class SellerShopService {
 
       result = await prisma.shop.delete({
         where: {
-          userId: user.userid,
+          id: ShopInfo.id,
         },
       });
       message = "Shop deleted";
@@ -70,6 +74,7 @@ export class SellerShopService {
       result = await prisma.shop.updateMany({
         where: {
           userId: user.userid,
+          id: ShopInfo.id,
         },
         data: data,
       });
@@ -84,6 +89,7 @@ export class SellerShopService {
 
   //
   async updateShopDetails({
+    domain,
     name = null,
     displayName = null,
     sellerStatus = null,
@@ -100,7 +106,7 @@ export class SellerShopService {
     let message = "";
     let success = true;
 
-    const ShopInfo = await this.index({ signedCookies: signedCookies });
+    const ShopInfo = await this.index({ domain, signedCookies: signedCookies });
 
     if (displayName) {
       Object.assign(data, { displayName });
@@ -109,6 +115,7 @@ export class SellerShopService {
       result = await prisma.shop.updateMany({
         where: {
           userId: user.userid,
+          domain: domain,
         },
         data: {
           sellerStatus: sellerStatus,

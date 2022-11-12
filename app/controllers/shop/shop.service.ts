@@ -38,9 +38,22 @@ export class ShopService {
   }
 
   /**
-   * show all data
+   * check domain
    */
-  public async index({ signedCookies, status = null }) {
+  public async checkDomain({ domain, status = "approved" }) {
+    const result = await prisma.shop.findFirst({
+      where: {
+        AND: [{ domain: domain }, { status: status }],
+      },
+    });
+
+    return result;
+  }
+
+  /**
+   * check shop while visiting to seller dashboard
+   */
+  public async checkShop({ domain, signedCookies, status = null }) {
     const user = Auth.userByCookie(signedCookies);
 
     const result = await prisma.shop.findFirst({
@@ -48,6 +61,33 @@ export class ShopService {
         AND: [
           {
             userId: user.userid,
+          },
+          { domain: domain },
+          { status: status },
+        ],
+      },
+      include: {
+        ShopDetails: true,
+      },
+    });
+
+    return result;
+  }
+
+  /**
+   * show all data
+   */
+  public async index({ domain, signedCookies, status = null }) {
+    const user = Auth.userByCookie(signedCookies);
+
+    const result = await prisma.shop.findFirst({
+      where: {
+        AND: [
+          {
+            userId: user.userid,
+          },
+          {
+            domain: domain,
           },
           status != null ? { status: status } : {},
         ],
@@ -360,9 +400,16 @@ export class ShopService {
   }) {
     const user = Auth.userByCookie(signedCookies);
 
+    const _name = name.toLowerCase();
+    const domain = _name;
+    const checkShopDomainExist = await prisma.shop.findFirst({
+      where: {
+        domain: domain,
+      },
+    });
     const checkShopNameExist = await prisma.shopDetails.findFirst({
       where: {
-        name: name,
+        name: _name,
       },
     });
 
@@ -371,7 +418,11 @@ export class ShopService {
     let message = "";
     let success = true;
 
-    if (checkShopNameExist) {
+    if (checkShopDomainExist) {
+      statusCode = 400;
+      message = "Shop domain already exist";
+      success = false;
+    } else if (checkShopNameExist) {
       statusCode = 400;
       message = "Shop name already exist";
       success = false;
@@ -379,9 +430,10 @@ export class ShopService {
       result = await prisma.shop.create({
         data: {
           userId: user.userid,
+          domain: domain,
           ShopDetails: {
             create: {
-              name: name,
+              name: _name,
               displayName: displayName,
               email: email,
               description: description,
@@ -421,11 +473,15 @@ export class ShopService {
         },
       });
 
-      result = await prisma.shop.delete({
-        where: {
-          userId: user.userid,
-        },
-      });
+      // delete shop
+      // const email = 'emelie@prisma.io'
+      // const result = await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email}`
+
+      // result = await prisma.shop.delete({
+      //   where: {
+      //     userId: user.userid,
+      //   },
+      // });
       message = "Shop deleted";
     } else {
       if (status) {

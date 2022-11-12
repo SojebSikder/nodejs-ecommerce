@@ -10,6 +10,7 @@ export class SellerOrderController {
   async findAll(req: Request, res: Response) {
     const result = await SellerOrderService.getInstance().findAll({
       signedCookies: req.signedCookies,
+      domain: req["subDomain"],
     });
     res.render("seller/order/index", { orders: result });
   }
@@ -19,6 +20,7 @@ export class SellerOrderController {
     const id = req.params.id;
     const result = await SellerOrderService.getInstance().findOne(id, {
       signedCookies: req.signedCookies,
+      domain: req["subDomain"],
     });
     res.render("seller/order/show", { orders: result });
   }
@@ -31,6 +33,7 @@ export class SellerOrderController {
     const result = await SellerOrderService.getInstance().markOrder(id, {
       signedCookies: req.signedCookies,
       status: status,
+      domain: req["subDomain"],
     });
     res.redirect("/seller/order");
   }

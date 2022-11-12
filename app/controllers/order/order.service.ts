@@ -178,6 +178,7 @@ export class OrderService {
         data: {
           orderId: `${order_id}`,
           sellerId: cart.product.authorId,
+          shopId: cart.product.shopId,
           total: `${subprice}`,
         },
       });
