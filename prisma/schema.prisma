@@ -227,6 +227,9 @@ model OptionSet {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
+  shopId Int?
+  shop   Shop? @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
   name             String?            @db.VarChar(255)
   description      String?            @db.Text
   status           Int?               @default(0)
@@ -292,6 +295,7 @@ model Shop {
   ShopDetails  ShopDetails[]
   Product      Product[]
   SubOrder     SubOrder[]
+  OptionSet    OptionSet[]
 }
 
 // contains shop details
