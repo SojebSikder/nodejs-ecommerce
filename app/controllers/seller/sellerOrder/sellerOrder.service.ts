@@ -37,8 +37,13 @@ export class SellerOrderService {
     return result;
   }
 
-  async findOne(id: string, { signedCookies }) {
+  async findOne(id: string, { domain, signedCookies }) {
     //
+    const ShopInfo = await SellerShopService.getInstance().index({
+      domain,
+      signedCookies: signedCookies,
+    });
+
     const user = Auth.userByCookie(signedCookies);
     const items = await prisma.subOrder.findFirst({
       where: {
@@ -48,6 +53,9 @@ export class SellerOrderService {
           },
           {
             sellerId: user.userid,
+          },
+          {
+            shopId: ShopInfo.id,
           },
         ],
       },
@@ -68,8 +76,12 @@ export class SellerOrderService {
     return items;
   }
 
-  async markOrder(id: string, { status, signedCookies }) {
+  async markOrder(id: string, { domain, status, signedCookies }) {
     //
+    const ShopInfo = await SellerShopService.getInstance().index({
+      domain,
+      signedCookies: signedCookies,
+    });
     const user = Auth.userByCookie(signedCookies);
     const result = await prisma.subOrder.updateMany({
       where: {
@@ -79,6 +91,9 @@ export class SellerOrderService {
           },
           {
             sellerId: user.userid,
+          },
+          {
+            shopId: ShopInfo.id,
           },
         ],
       },
