@@ -2,12 +2,16 @@
 
 Node.js multivendor e-commerce application
 
+![alt](./ss/home.PNG)
+![alt](./ss/admin.PNG)
+![alt](./ss/seller-product.PNG)
+
 ## Features:
 
 - Written in Typescript
-- Multivendor support
+- Multi vendor support
   - Multiple seller can sell their products
-- Multidomain support
+- Multi domain support
 - Admin dashboard
   - Shop management
   - Manage multi level category for product
