@@ -10,6 +10,7 @@ export class SellerOrderController {
   async findAll(req: Request, res: Response) {
     const result = await SellerOrderService.getInstance().findAll({
       signedCookies: req.signedCookies,
+      domain: req["subDomain"],
     });
     res.render("seller/order/index", { orders: result });
   }

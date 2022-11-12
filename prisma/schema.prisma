@@ -191,6 +191,7 @@ model Shop {
   sellerStatus String?       @default("active")
   ShopDetails  ShopDetails[]
   Product      Product[]
+  SubOrder     SubOrder[]
 }
 
 // contains shop details
@@ -292,10 +293,12 @@ model SubOrder {
   id           Int            @id @default(autoincrement())
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
-  order        Order?         @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  orderId      String
-  seller       User?          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  sellerId     Int
+  order        Order?         @relation(fields: [orderId], references: [orderId], onDelete: SetNull)
+  orderId      String?
+  seller       User?          @relation(fields: [sellerId], references: [id], onDelete: SetNull)
+  sellerId     Int?
+  shopId       Int?
+  shop         Shop?          @relation(fields: [shopId], references: [id], onDelete: SetNull)
   status       String?
   total        String?
   SubOrderItem SubOrderItem[]

@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Auth } from "../../../../system/src";
+import { SellerShopService } from "../sellerShop/sellerShop.service";
 
 const prisma = new PrismaClient();
 
@@ -16,12 +17,18 @@ export class SellerOrderService {
     return this._instance;
   }
 
-  async findAll({ signedCookies }) {
+  async findAll({ domain, signedCookies }) {
     //
     const user = Auth.userByCookie(signedCookies);
+
+    const ShopInfo = await SellerShopService.getInstance().index({
+      domain,
+      signedCookies: signedCookies,
+    });
     const result = await prisma.subOrder.findMany({
       where: {
         sellerId: user.userid,
+        shopId: ShopInfo.id,
       },
       orderBy: {
         createdAt: "desc",
