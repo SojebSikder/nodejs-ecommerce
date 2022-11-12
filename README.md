@@ -2,6 +2,8 @@
 
 Node.js multivendor e-commerce application
 
+> Note: I Didn't focus on frontend much
+
 ![alt](./ss/home.PNG)
 ![alt](./ss/admin.PNG)
 ![alt](./ss/seller-product.PNG)
