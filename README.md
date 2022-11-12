@@ -1,12 +1,13 @@
 # node-ecommerce
 
-NodeJS multivendor ecommerce application
+Node.js multivendor e-commerce application
 
 ## Features:
 
 - Written in Typescript
 - Multivendor support
   - Multiple seller can sell their products
+- Multidomain support
 - Admin dashboard
   - Shop management
   - Manage multi level category for product
