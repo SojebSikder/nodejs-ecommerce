@@ -3,6 +3,7 @@ import { AdminDashboardController } from "./admin/adminDashboard/adminDashboard.
 import { AdminCategoryController } from "./admin/adminProduct/adminCategory/adminCategory.controller";
 import { AdminProductController } from "./admin/adminProduct/product.controller";
 import { AdminShopController } from "./admin/adminShop/adminShop.controller";
+import { AuthController } from "./auth/auth.controller";
 import { CartController } from "./cart/cart.controller";
 import { CategoryController } from "./category/category.controller";
 import { InvoiceController } from "./invoice/invoice.controller";
@@ -20,6 +21,7 @@ import { UserController } from "./user/user.controller";
 @Module({
   controllers: [
     // app imports
+    AuthController,
     UserController,
     ProductController,
     CartController,

@@ -27,8 +27,12 @@ CREATE TABLE `User` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `email` VARCHAR(191) NOT NULL,
     `username` VARCHAR(191) NULL,
-    `full_name` VARCHAR(191) NULL,
-    `password` VARCHAR(255) NOT NULL,
+    `lname` VARCHAR(191) NULL,
+    `fname` VARCHAR(191) NULL,
+    `fullName` VARCHAR(191) NULL,
+    `password` VARCHAR(191) NULL,
+    `provider` VARCHAR(191) NULL,
+    `providerId` VARCHAR(191) NULL,
     `role` VARCHAR(191) NULL DEFAULT 'user',
 
     UNIQUE INDEX `User_email_key`(`email`),
@@ -53,7 +57,6 @@ CREATE TABLE `ApiToken` (
     `userId` INTEGER NOT NULL,
 
     UNIQUE INDEX `ApiToken_token_key`(`token`),
-    UNIQUE INDEX `ApiToken_userId_key`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -211,6 +214,7 @@ CREATE TABLE `OptionSet` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `shopId` INTEGER NULL,
     `name` VARCHAR(255) NULL,
     `description` TEXT NULL,
     `status` INTEGER NULL DEFAULT 0,
@@ -421,6 +425,9 @@ ALTER TABLE `ProductImage` ADD CONSTRAINT `ProductImage_productId_fkey` FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE `ProductVariantImage` ADD CONSTRAINT `ProductVariantImage_productVariantId_fkey` FOREIGN KEY (`productVariantId`) REFERENCES `ProductVariant`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `OptionSet` ADD CONSTRAINT `OptionSet_shopId_fkey` FOREIGN KEY (`shopId`) REFERENCES `Shop`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `OptionSetElement` ADD CONSTRAINT `OptionSetElement_optionSetId_fkey` FOREIGN KEY (`optionSetId`) REFERENCES `OptionSet`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

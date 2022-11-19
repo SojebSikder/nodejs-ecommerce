@@ -11,6 +11,9 @@ Node.js multivendor e-commerce application
 ## Features:
 
 - Written in Typescript
+- Authentication
+  - Login using email and password
+  - Login using google
 - Multi vendor support
   - Multiple seller can sell their products
 - Multi domain support

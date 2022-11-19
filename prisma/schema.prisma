@@ -28,29 +28,50 @@ model Profile {
   userId      Int       @unique
 }
 
+// model AuthProvider {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @default(now())
+
+//   // values: google, facebook
+//   provider   String?
+//   // google id, or facebook id here
+//   providerId String?
+
+//   user   User? @relation(fields: [userId], references: [id])
+//   userId Int?
+// }
+
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now())
+  emailVerifiedAt DateTime?
 
-  email     String   @unique
-  username  String?
-  full_name String?
-  password  String   @db.VarChar(255)
-  profile   Profile?
+  email    String   @unique
+  username String?
+  lname    String?
+  fname    String?
+  fullName String?
+  password String?
+  profile  Profile?
 
+  // values: google, facebook
+  provider   String?
+  // google id, or facebook id here
+  providerId String?
   // available value:
   // user
   // seller
   // admin
-  role     String?    @default("user")
-  orders   Order[]
-  Product  Product[]
-  ApiToken ApiToken[]
-  cart     cart[]
-  Shop     Shop[]
-  SubOrder SubOrder[]
-  Category Category[]
+  role       String?    @default("user")
+  orders     Order[]
+  Product    Product[]
+  ApiToken   ApiToken[]
+  cart       cart[]
+  Shop       Shop[]
+  SubOrder   SubOrder[]
+  Category   Category[]
 }
 
 // table ucode for password recovery
@@ -65,7 +86,7 @@ model ApiToken {
   id     Int    @id @default(autoincrement())
   token  String @unique
   user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
+  userId Int
 }
 
 model City {
