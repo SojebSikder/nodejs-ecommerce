@@ -2,6 +2,8 @@
 
 Node.js multivendor e-commerce application
 
+> Note: I Didn't focus on frontend much
+
 ![alt](./ss/home.PNG)
 ![alt](./ss/admin.PNG)
 ![alt](./ss/seller-product.PNG)
@@ -9,6 +11,9 @@ Node.js multivendor e-commerce application
 ## Features:
 
 - Written in Typescript
+- Authentication
+  - Login using email and password
+  - Login using google
 - Multi vendor support
   - Multiple seller can sell their products
 - Multi domain support
@@ -73,7 +78,7 @@ yarn start:dev
 
 ---
 
-If you want to contribute fork the repo, create new branch and make pull request.
+If you want to contribute you are welcome here.
 
 ## Setup (Contributing)
 
@@ -82,10 +87,6 @@ If you clone this repo then you have to setup these things manually.
 - Copy .env.example to .env And set up database credentials in env file
 - Migrate database using this command:
   `yarn prisma migrate dev`
-
-## For help and support
-
-Email: sojebsikder@gmail.com
 
 ## Issue
 

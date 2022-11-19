@@ -169,7 +169,7 @@ export class SellerProductService {
       name: name,
       description: description,
       price: price,
-      stock: stock,
+      quantity: stock,
       published: publishedValue,
     };
     // check if file is empty or not
@@ -283,7 +283,7 @@ export class SellerProductService {
       Object.assign(data, { price });
     }
     if (stock) {
-      Object.assign(data, { stock });
+      Object.assign(data, { quantity: stock });
     }
     if (_categoryId) {
       Object.assign(data, { categoryId: _categoryId });

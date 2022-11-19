@@ -13,8 +13,12 @@
       <a target="_blank" href="http://<%= shop.domain %>.<%= process.env.APP_SUBHOST %>/auth/login?token=<%= token %>">
         <div class="card mb-2">
           <div class="card-body">
-            <%= shop.ShopDetails[0].name %>
-            <%= shop.status %>
+            <div>
+              <%= shop.ShopDetails[0].name %>
+            </div>
+            <div>
+              Status: <%= shop.status %>
+            </div>
           </div>
         </div>
       </a>

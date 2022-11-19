@@ -28,29 +28,49 @@ model Profile {
   userId      Int       @unique
 }
 
+// model AuthProvider {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @default(now())
+
+//   // values: google, facebook
+//   provider   String?
+//   // google id, or facebook id here
+//   providerId String?
+
+//   user   User? @relation(fields: [userId], references: [id])
+//   userId Int?
+// }
+
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now())
+  emailVerifiedAt DateTime?
 
-  email     String   @unique
-  username  String?
-  full_name String?
-  password  String   @db.VarChar(255)
-  profile   Profile?
+  email    String?  @unique
+  username String?
+  lname    String?
+  fname    String?
+  password String?
+  profile  Profile?
 
+  // values: google, facebook
+  provider   String?
+  // google id, or facebook id here
+  providerId String?
   // available value:
   // user
   // seller
   // admin
-  role     String?    @default("user")
-  orders   Order[]
-  Product  Product[]
-  ApiToken ApiToken[]
-  cart     cart[]
-  Shop     Shop[]
-  SubOrder SubOrder[]
-  Category Category[]
+  role       String?    @default("user")
+  orders     Order[]
+  Product    Product[]
+  ApiToken   ApiToken[]
+  cart       cart[]
+  Shop       Shop[]
+  SubOrder   SubOrder[]
+  Category   Category[]
 }
 
 // table ucode for password recovery
@@ -65,7 +85,7 @@ model ApiToken {
   id     Int    @id @default(autoincrement())
   token  String @unique
   user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
+  userId Int
 }
 
 model City {
@@ -137,35 +157,138 @@ model ProductTag {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  name        String   @db.VarChar(255)
-  price       Int
-  stock       Int?
-  brand       String?  @db.VarChar(255)
-  description String?  @db.Text
-  published   Boolean  @default(false)
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    Int
-  shopId      Int?
-  shop        Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-  category     Category?      @relation(fields: [categoryId], references: [id])
-  categoryId   Int?
-  keywords     String?
-  OrderItem    OrderItem[]
-  ProductImage ProductImage[]
-  cart         cart[]
-  SubOrderItem SubOrderItem[]
-  ProductTag   ProductTag[]
+  optionSet   OptionSet? @relation(fields: [optionSetId], references: [id])
+  optionSetId Int?
+
+  name String  @db.VarChar(255)
+  slug String? @db.VarChar(255)
+
+  // SEO
+  metaTitle       String? @db.Text
+  metaDescription String? @db.Text // max limit 320
+  metaKeyword     String? @db.Text
+
+  defaultVariant           Int?    @default(0)
+  isSale                   Int?    @default(0)
+  price                    Decimal
+  quantity                 Int?
+  trackQuantity            Int?    @default(1)
+  allowOutOfStockPurchases Int?    @default(0)
+  brand                    String? @db.VarChar(255)
+  description              String? @db.Text
+  published                Boolean @default(true)
+  author                   User    @relation(fields: [authorId], references: [id])
+  authorId                 Int
+  shopId                   Int?
+  shop                     Shop?   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  category       Category?        @relation(fields: [categoryId], references: [id])
+  categoryId     Int?
+  keywords       String?
+  OrderItem      OrderItem[]
+  ProductImage   ProductImage[]
+  cart           cart[]
+  SubOrderItem   SubOrderItem[]
+  ProductTag     ProductTag[]
+  ProductVariant ProductVariant[]
+}
+
+model ProductVariant {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  price               Decimal?
+  discount            Decimal?
+  quantity            Int?
+  sku                 Int?
+  barcode             String?
+  status              Int?                  @default(0)
+  sortOrder           Int?                  @default(0)
+  ProductVariantImage ProductVariantImage[]
 }
 
 model ProductImage {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
   url       String?
+  altText   String?
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+  status    Int?    @default(0)
+  sortOrder Int?    @default(0)
+}
+
+model ProductVariantImage {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  url              String?
+  altText          String?
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
+  productVariantId Int
+  status           Int?           @default(0)
+  sortOrder        Int?           @default(0)
+}
+
+// Custom option set
+model OptionSet {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  shopId Int?
+  shop   Shop? @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  name             String?            @db.VarChar(255)
+  description      String?            @db.Text
+  status           Int?               @default(0)
+  sortOrder        Int?               @default(0)
+  OptionSetElement OptionSetElement[]
+  Product          Product[]
+}
+
+// Custom option set item
+model OptionSetElement {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  optionSetId Int?
+  optionSet   OptionSet? @relation(fields: [optionSetId], references: [id], onDelete: Cascade)
+
+  // available values:
+  // text, select, textarea
+  type        String? @db.VarChar(255)
+  // ----general----
+  label       String? @db.VarChar(255)
+  name        String? @db.VarChar(255)
+  required    Int?    @default(0)
+  style       String? @db.LongText // custom inline css
+  placeholder String? @db.Text
+  helpText    String? @db.Text
+  limit       Int?
+  // ----condition----
+  // if condition fullfilled then this element will be show up
+  // condition format: {action: show/hide, match: all/any,
+  // condition:[{element_name:name, condition:condition, value:value}]}
+  isCondition Int?    @default(0)
+  condition   String? @db.LongText
+  // ----select type----
+  optionValue String? @db.LongText // option format: [{price:price,value:value,text:text}]
+
+  status    Int? @default(0)
+  sortOrder Int? @default(0)
 }
 
 // User can create own shop to selling products
@@ -192,6 +315,7 @@ model Shop {
   ShopDetails  ShopDetails[]
   Product      Product[]
   SubOrder     SubOrder[]
+  OptionSet    OptionSet[]
 }
 
 // contains shop details

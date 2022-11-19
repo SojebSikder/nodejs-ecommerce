@@ -27,8 +27,12 @@ CREATE TABLE `User` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `email` VARCHAR(191) NOT NULL,
     `username` VARCHAR(191) NULL,
-    `full_name` VARCHAR(191) NULL,
-    `password` VARCHAR(255) NOT NULL,
+    `lname` VARCHAR(191) NULL,
+    `fname` VARCHAR(191) NULL,
+    `fullName` VARCHAR(191) NULL,
+    `password` VARCHAR(191) NULL,
+    `provider` VARCHAR(191) NULL,
+    `providerId` VARCHAR(191) NULL,
     `role` VARCHAR(191) NULL DEFAULT 'user',
 
     UNIQUE INDEX `User_email_key`(`email`),
@@ -53,7 +57,6 @@ CREATE TABLE `ApiToken` (
     `userId` INTEGER NOT NULL,
 
     UNIQUE INDEX `ApiToken_token_key`(`token`),
-    UNIQUE INDEX `ApiToken_userId_key`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -138,12 +141,21 @@ CREATE TABLE `Product` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `optionSetId` INTEGER NULL,
     `name` VARCHAR(255) NOT NULL,
-    `price` INTEGER NOT NULL,
-    `stock` INTEGER NULL,
+    `slug` VARCHAR(255) NULL,
+    `metaTitle` TEXT NULL,
+    `metaDescription` TEXT NULL,
+    `metaKeyword` TEXT NULL,
+    `defaultVariant` INTEGER NULL DEFAULT 0,
+    `isSale` INTEGER NULL DEFAULT 0,
+    `price` DECIMAL(65, 30) NOT NULL,
+    `quantity` INTEGER NULL,
+    `trackQuantity` INTEGER NULL DEFAULT 1,
+    `allowOutOfStockPurchases` INTEGER NULL DEFAULT 0,
     `brand` VARCHAR(255) NULL,
     `description` TEXT NULL,
-    `published` BOOLEAN NOT NULL DEFAULT false,
+    `published` BOOLEAN NOT NULL DEFAULT true,
     `authorId` INTEGER NOT NULL,
     `shopId` INTEGER NULL,
     `categoryId` INTEGER NULL,
@@ -153,10 +165,83 @@ CREATE TABLE `Product` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `ProductVariant` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `productId` INTEGER NULL,
+    `price` DECIMAL(65, 30) NULL,
+    `discount` DECIMAL(65, 30) NULL,
+    `quantity` INTEGER NULL,
+    `sku` INTEGER NULL,
+    `barcode` VARCHAR(191) NULL,
+    `status` INTEGER NULL DEFAULT 0,
+    `sortOrder` INTEGER NULL DEFAULT 0,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `ProductImage` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `url` VARCHAR(191) NULL,
+    `altText` VARCHAR(191) NULL,
     `productId` INTEGER NOT NULL,
+    `status` INTEGER NULL DEFAULT 0,
+    `sortOrder` INTEGER NULL DEFAULT 0,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ProductVariantImage` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `url` VARCHAR(191) NULL,
+    `altText` VARCHAR(191) NULL,
+    `productVariantId` INTEGER NOT NULL,
+    `status` INTEGER NULL DEFAULT 0,
+    `sortOrder` INTEGER NULL DEFAULT 0,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `OptionSet` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `shopId` INTEGER NULL,
+    `name` VARCHAR(255) NULL,
+    `description` TEXT NULL,
+    `status` INTEGER NULL DEFAULT 0,
+    `sortOrder` INTEGER NULL DEFAULT 0,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `OptionSetElement` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `optionSetId` INTEGER NULL,
+    `type` VARCHAR(255) NULL,
+    `label` VARCHAR(255) NULL,
+    `name` VARCHAR(255) NULL,
+    `required` INTEGER NULL DEFAULT 0,
+    `style` LONGTEXT NULL,
+    `placeholder` TEXT NULL,
+    `helpText` TEXT NULL,
+    `limit` INTEGER NULL,
+    `isCondition` INTEGER NULL DEFAULT 0,
+    `condition` LONGTEXT NULL,
+    `optionValue` LONGTEXT NULL,
+    `status` INTEGER NULL DEFAULT 0,
+    `sortOrder` INTEGER NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -246,8 +331,9 @@ CREATE TABLE `SubOrder` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `orderId` VARCHAR(191) NOT NULL,
-    `sellerId` INTEGER NOT NULL,
+    `orderId` VARCHAR(191) NULL,
+    `sellerId` INTEGER NULL,
+    `shopId` INTEGER NULL,
     `status` VARCHAR(191) NULL,
     `total` VARCHAR(191) NULL,
 
@@ -320,6 +406,9 @@ ALTER TABLE `ProductTag` ADD CONSTRAINT `ProductTag_productId_fkey` FOREIGN KEY 
 ALTER TABLE `ProductTag` ADD CONSTRAINT `ProductTag_tagId_fkey` FOREIGN KEY (`tagId`) REFERENCES `Tag`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `Product` ADD CONSTRAINT `Product_optionSetId_fkey` FOREIGN KEY (`optionSetId`) REFERENCES `OptionSet`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `Product` ADD CONSTRAINT `Product_authorId_fkey` FOREIGN KEY (`authorId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -329,7 +418,19 @@ ALTER TABLE `Product` ADD CONSTRAINT `Product_shopId_fkey` FOREIGN KEY (`shopId`
 ALTER TABLE `Product` ADD CONSTRAINT `Product_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `ProductVariant` ADD CONSTRAINT `ProductVariant_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `ProductImage` ADD CONSTRAINT `ProductImage_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `Product`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProductVariantImage` ADD CONSTRAINT `ProductVariantImage_productVariantId_fkey` FOREIGN KEY (`productVariantId`) REFERENCES `ProductVariant`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `OptionSet` ADD CONSTRAINT `OptionSet_shopId_fkey` FOREIGN KEY (`shopId`) REFERENCES `Shop`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `OptionSetElement` ADD CONSTRAINT `OptionSetElement_optionSetId_fkey` FOREIGN KEY (`optionSetId`) REFERENCES `OptionSet`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Shop` ADD CONSTRAINT `Shop_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -359,10 +460,13 @@ ALTER TABLE `OrderItem` ADD CONSTRAINT `OrderItem_productId_fkey` FOREIGN KEY (`
 ALTER TABLE `OrderItem` ADD CONSTRAINT `OrderItem_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Order`(`orderId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `SubOrder` ADD CONSTRAINT `SubOrder_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Order`(`orderId`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `SubOrder` ADD CONSTRAINT `SubOrder_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Order`(`orderId`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `SubOrder` ADD CONSTRAINT `SubOrder_sellerId_fkey` FOREIGN KEY (`sellerId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `SubOrder` ADD CONSTRAINT `SubOrder_sellerId_fkey` FOREIGN KEY (`sellerId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `SubOrder` ADD CONSTRAINT `SubOrder_shopId_fkey` FOREIGN KEY (`shopId`) REFERENCES `Shop`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `SubOrderItem` ADD CONSTRAINT `SubOrderItem_subOrderId_fkey` FOREIGN KEY (`subOrderId`) REFERENCES `SubOrder`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

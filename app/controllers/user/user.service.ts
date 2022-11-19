@@ -152,7 +152,6 @@ export class UserService {
       },
       select: {
         id: true,
-        full_name: true,
         username: true,
         email: true,
         profile: {

@@ -43,7 +43,7 @@
               <%= shop.ShopDetails[0].description %>
             </td>
             <td>
-              <a href="/shop/<%= shop.ShopDetails[0].name %>" class="btn btn-outline-primary">View</a>
+              <a target="_blank" href="<%= process.env.APP_URL %>/shop/<%= shop.ShopDetails[0].name %>" class="btn btn-outline-primary">View</a>
               <a href="/seller/shop/edit/" class="btn btn-outline-primary">Edit</a>
             </td>
           </tr>
