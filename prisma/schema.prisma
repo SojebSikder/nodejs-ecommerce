@@ -48,11 +48,10 @@ model User {
   updatedAt       DateTime  @default(now())
   emailVerifiedAt DateTime?
 
-  email    String   @unique
+  email    String?  @unique
   username String?
   lname    String?
   fname    String?
-  fullName String?
   password String?
   profile  Profile?
 

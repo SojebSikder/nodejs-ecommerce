@@ -54,7 +54,8 @@ export class AuthService {
               data: {
                 provider: "google",
                 providerId: profile.id,
-                fullName: profile.displayName,
+                fname: profile.name.givenName,
+                lname: profile.name.familyName,
                 email: profile.emails[0].value,
                 emailVerifiedAt: new Date().toISOString(),
               },
