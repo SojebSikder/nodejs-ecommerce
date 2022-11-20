@@ -38,7 +38,7 @@ export class CartService {
             id: true,
             name: true,
             price: true,
-            stock: true,
+            quantity: true,
             brand: true,
             description: true,
             keywords: true,

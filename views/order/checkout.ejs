@@ -42,9 +42,16 @@
 
   <div style="background: rebeccapurple;" class="shadow p-3 mb-5 rounded p-4 h-100 d-flex align-items-center justify-content-center">
 
+    <form style="display: inline;" id="order_form" action="/order?pm=cod" method="POST">
+      <input type="hidden" name="orderItemId" value="<%= uuid %> "></a>
+      <button class="btn btn-primary" type="submit">Cash on delivery</button>
+    </form>
+
+    <div style="margin: 10px;"></div>
+
     <form style="display: inline;" id="order_form" action="/order?pm=stripe" method="POST">
       <input type="hidden" name="orderItemId" value="<%= uuid %> "></a>
-      <button class="btn btn-primary" type="submit">Pay</button>
+      <button class="btn btn-primary" type="submit">Pay with stripe</button>
     </form>
 
     <div style="margin: 10px;"></div>
