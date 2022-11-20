@@ -117,7 +117,9 @@ export class OrderService {
       },
     });
 
-    let prices = carts.map((cart) => cart.product.price * cart.quantity);
+    let prices = carts.map(
+      (cart) => Number(cart.product.price) * cart.quantity
+    );
 
     price = prices.reduce(
       (previousValue, currentValue) => previousValue + currentValue
@@ -173,7 +175,7 @@ export class OrderService {
       });
 
       // insert to suborders
-      let subprice = cart.product.price * cart.quantity;
+      let subprice = Number(cart.product.price) * cart.quantity;
       const suborders = await prisma.subOrder.create({
         data: {
           orderId: `${order_id}`,
@@ -272,7 +274,7 @@ export class OrderService {
           product_data: {
             name: orderItem.product.name,
           },
-          unit_amount: String(orderItem.product.price * 100),
+          unit_amount: String(Number(orderItem.product.price) * 100),
         },
         quantity: orderItem.quantity,
       });
@@ -293,7 +295,7 @@ export class OrderService {
             res.redirect(value);
           },
         });
-      } else {
+      } else if (paymentMethod == "paypal") {
         paymentMethods = new PaypalMethod();
         const paymentService = new PaymentService(paymentMethods);
         paymentService.init();
@@ -306,6 +308,8 @@ export class OrderService {
             res.redirect(value);
           },
         });
+      } else if (paymentMethod == "cod") {
+        res.redirect("order/success?pm=cod");
       }
     } catch (error) {
       console.log(error);
@@ -411,7 +415,7 @@ export class OrderService {
               id: orderItem.product.id,
             },
             data: {
-              stock: orderItem.product.stock - orderItem.quantity,
+              quantity: orderItem.product.quantity - orderItem.quantity,
             },
           });
         }

@@ -23,13 +23,13 @@ export class SellerProductController {
         isSearch: true,
         searchText: String(q),
         signedCookies: req.signedCookies,
-        domain: req['subDomain'],
+        domain: req["subDomain"],
       });
     } else {
       result = await SellerProductService.getInstance().findAll({
         page: Number(page),
         signedCookies: req.signedCookies,
-        domain: req['subDomain'],
+        domain: req["subDomain"],
       });
     }
 
@@ -82,7 +82,7 @@ export class SellerProductController {
       image: file,
       categoryId: categoryId,
       signedCookies: req.signedCookies,
-      domain: req['subDomain'],
+      domain: req["subDomain"],
     });
 
     const category = await SellerProductService.getInstance().getCategory();
@@ -105,7 +105,7 @@ export class SellerProductController {
     const result = await SellerProductService.getInstance().edit({
       Id: id,
       signedCookies: req.signedCookies,
-      domain: req['subDomain'],
+      domain: req["subDomain"],
     });
 
     const category = await SellerProductService.getInstance().getCategory();
@@ -139,19 +139,23 @@ export class SellerProductController {
     const categoryId = req.body.category;
     const published = req.body.published;
 
-    await SellerProductService.getInstance().update(id, {
-      productName: name,
-      productDescription: description,
-      Price: price,
-      Stock: stock,
-      categoryId: categoryId,
-      Published: published,
-      image: file,
-      signedCookies: req.signedCookies,
-      domain: req['subDomain'],
-    });
+    try {
+      await SellerProductService.getInstance().update(id, {
+        productName: name,
+        productDescription: description,
+        Price: price,
+        Stock: stock,
+        categoryId: categoryId,
+        Published: published,
+        image: file,
+        signedCookies: req.signedCookies,
+        domain: req["subDomain"],
+      });
 
-    res.redirect(`/seller/product/edit/${id}`);
+      res.redirect(`/seller/product/edit/${id}`);
+    } catch (error) {
+      res.send(error.message);
+    }
   }
 
   @Get("delete/:id")
@@ -159,7 +163,7 @@ export class SellerProductController {
     const id = req.params.id;
     await SellerProductService.getInstance().remove(id, {
       signedCookies: req.signedCookies,
-      domain: req['subDomain'],
+      domain: req["subDomain"],
     });
     res.redirect("/seller/product");
   }

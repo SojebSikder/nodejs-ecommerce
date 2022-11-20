@@ -46,9 +46,13 @@ export class OrderController {
     let paymentMethods;
     if (paymentMethod == "stripe") {
       paymentMethods = new StripeMethod();
-    } else {
+    } else if (paymentMethod == "paypal") {
       paymentMethods = new PaypalMethod();
+    } else if (paymentMethod == "cod") {
+      // implement cash on delivery
     }
+    
+    //
     const paymentService = new PaymentService(paymentMethods);
     paymentService.init();
     await paymentService.success({

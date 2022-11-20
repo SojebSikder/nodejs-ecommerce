@@ -82,7 +82,7 @@ export class ProductService {
         name: name,
         description: description,
         price: price,
-        stock: stock,
+        quantity: stock,
         published: publishedValue,
       },
     });

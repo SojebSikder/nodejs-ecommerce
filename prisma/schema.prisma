@@ -356,7 +356,7 @@ model Order {
 
   orderId      String  @unique
   orderItemId  String
-  price        Int
+  price        Decimal
   delivery_fee String?
   discount     String?
   total        String
@@ -403,7 +403,7 @@ model OrderItem {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
   quantity    Int
-  price       Int
+  price       Decimal
   orderItemId String
   product     Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId   Int
@@ -434,7 +434,7 @@ model SubOrderItem {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @default(now())
   quantity   Int
-  price      Int
+  price      Decimal
   subOrderId Int?
   subOrder   SubOrder? @relation(fields: [subOrderId], references: [id], onDelete: Cascade)
   product    Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
