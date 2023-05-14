@@ -103,8 +103,16 @@ export class OrderService {
    */
   async store(req: Request, res: Response) {
     let price = req.body.price;
+    const paymentMethod = req.query.pm;
     const orderItemId = req.body.orderItemId;
     let totalPrice;
+
+    if (!paymentMethod) {
+      console.log("pm", paymentMethod);
+      res.back({
+        error_message: "hello world error",
+      });
+    }
 
     const user = Auth.userByCookie(req.signedCookies);
     // get price from cart
@@ -126,7 +134,6 @@ export class OrderService {
     );
 
     //
-
     let order_id;
     let discount = "0";
     let delivery_fee = "0";
